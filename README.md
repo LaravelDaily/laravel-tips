@@ -11,6 +11,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 - [Views](#views)
 - [Routing](#routing)
 - [Validation](#validation)
+- [Policies](#policies)
 - [Collection](#collection)
 - [Auth](#auth)
 - [Mails](#mails)
@@ -24,6 +25,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 
 - [Single Action Controllers](#single-action-controllers)
 - [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
+- [API Return "Everything went ok"](#api-return-everything-went-ok)
 
 ### Single Action Controllers
 
@@ -60,6 +62,22 @@ You can `redirect()` not only to URL or specific route, but to a specific Contro
 return redirect()->action('SomeController@method', ['param' => $value]);
 ```
 
+### API Return "Everything went ok"
+
+If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
+content". In Laravel, it's easy: `return response()->noContent();`.
+
+```php
+public function reorder(Request $request)
+{
+    foreach ($request->input('rows', []) as $row) {
+        Country::find($row['id'])->update(['position' => $row['position']]);
+    }
+
+    return response()->noContent();
+}
+```
+
 ## Models
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Controllers)](#controllers) ➡️ [Next (Models Relations)](#models-relations)
@@ -73,7 +91,15 @@ return redirect()->action('SomeController@method', ['param' => $value]);
 - [To Fail or not to Fail](#to-fail-or-not-to-fail)
 - [Column name change](#column-name-change)
 - [Map query results](#map-query-results)
-- [Change Default Timestamp Fields](#)
+- [Change Default Timestamp Fields](#change-default-timestamp-fields)
+- [Quick Order by created_at](#quick-order-by-created_at)
+- [Automatic Column Value When Creating Records](#automatic-column-value-when-creating-records)
+- [DB Raw Query Calculations Run Faster](#db-raw-query-calculations-run-faster)
+- [More than One Scope](#more-than-one-scope)
+- [No Need to Convert Carbon](#no-need-to-convert-carbon)
+- [Grouping by First Letter](#grouping-by-first-letter)
+- [Never Update the Column](#never-update-the-column)
+- [Find Many](#find-many)
 
 ### Eloquent where date methods
 
@@ -176,11 +202,131 @@ class Role extends Model
 }
 ```
 
+### Quick Order by created_at
+
+Instead of:
+```php
+User::orderBy('created_at', 'desc')->get();
+```
+
+You can do it quicker:
+```php
+User::latest()->get();
+```
+
+By default, `latest()` will order by `created_at`.
+
+There is an opposite method `oldest()` which would order by `created_at` ascending:
+```php
+User::oldest()->get();
+```
+
+Also, you can specify another column to order by. For example, if you want to use `updated_at`, you can do this:
+```php
+$lastUpdatedUser = User::newest('updated_at')->first();
+```
+
+### Automatic Column Value When Creating Records
+
+If you want to generate some DB column value when creating record, add it to model's `boot()` method.
+For example, if you have a field "position" and want to assign the next available position to the new record (like `Country::max('position') + 1)`, do this:
+
+```php
+class Country extends Model {
+    protected static function boot()
+    {
+        parent::boot();
+
+        Country::creating(function($model) {
+            $model->position = Country::max('position') + 1;
+        });
+    }
+}
+```
+
+### DB Raw Query Calculations Run Faster
+
+Use SQL raw queries like `whereRaw()` method, to make some DB-specific calculations directly in query, and not in Laravel, usually the result will be faster. Like, if you want to get users that were active 30+ days after their registration, here's the code:
+
+```php
+User::where('active', 1)
+    ->whereRaw('TIMESTAMPDIFF(DAY, created_at, updated_at) > ?', 30)
+    ->get();
+```
+
+### More than One Scope
+
+You can combine and chain Query Scopes in Eloquent, using more than one scope in a query.
+
+Model:
+```php
+public function scopeActive($query) {
+    return $query->where('active', 1);
+}
+
+public function scopeRegisteredWithinDays($query, $days) {
+    return $query->where('created_at', '>=', now()->subDays($days));
+}
+```
+
+Some Controller:
+```php
+$users = User::registeredWithinDays(30)->active()->get();
+```
+
+### No Need to Convert Carbon
+
+If you're performing `whereDate()` and check today's records, you can use Carbon's `now()` and it will automatically be transformed to date. No need to do `->toDateString()`.
+
+```php
+// Instead of
+$todayUsers = User::whereDate('created_at', now()->toDateString())->get();
+// No need to convert, just use now()
+$todayUsers = User::whereDate('created_at', now())->get();
+```
+
+### Grouping by First Letter
+
+You can group Eloquent results by any custom condition, here's how to group by first letter of user's name:
+```php
+$users = User::all()->groupBy(function($item) {
+    return $item->name[0];
+});
+```
+
+### Never Update the Column
+
+If you have DB column which you want to be set only once and never updated again, you can set that restriction on Eloquent Model, with a mutator:
+```php
+class User extends Model
+{
+    public function setEmailAttribute($value)
+    {
+        if ($this->email) {
+            return;
+        }
+
+        $this->attributes['email'] = $value;
+    }
+}
+```
+
+### Find Many
+
+Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found, not just one Model:
+```php
+// Will return Eloquent Model
+$user = User::find(1);
+// Will return Eloquent Collection
+$users = User::find([1,2,3]);
+```
+
 ## Models Relations
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Models)](#models) ➡️ [Next (Migrations)](#migrations)
 
 - [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
+- [Conditional relationships](#conditional-relationships)
 - [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
 - [Eloquent has() deeper](#eloquent-has-deeper)
 - [Has Many. How many exactly?](#has-many-how-many-exactly)
@@ -190,6 +336,10 @@ class Role extends Model
 - [Touch parent updated_at easily](#touch-parent-updated_at-easily)
 - [Always Check if Relationship Exists](#always-check-if-relationship-exists)
 - [Use withCount() to Calculate Child Relationships Records](#use-withcount-to-calculate-child-relationships-records)
+- [Extra Filter Query on Relationships](#extra-filter-query-on-relationships)
+- [Load Relationships Always, but Dynamically](#load-relationships-always-but-dynamically)
+- [Instead of belongsTo, use hasMany](#instead-of-belongsto-use-hasmany)
+- [Rename Pivot Table](#rename-pivot-table)
 
 ### OrderBy on Eloquent relationships
 
@@ -204,6 +354,23 @@ public function products()
 public function productsByName()
 {
     return $this->hasMany(Product::class)->orderBy('name');
+}
+```
+
+### Conditional relationships
+
+If you notice that you use same relationship often with additional "where" condition, you can create a separate relationship method.
+
+Model:
+```php
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
+
+public function approved_comments()
+{
+    return $this->hasMany(Comment::class)->where('approved', 1);
 }
 ```
 
@@ -309,6 +476,79 @@ And then, in your Blade file, you will access those number with `{relationship}_
     <td class="text-center">{{ $user->comments_count }}</td>
 </tr>
 @endforeach
+```
+
+### Extra Filter Query on Relationships
+
+If you want to load relationship data, you can specify some limitations or ordering in a closure function. For example, if you want to get Countries with only three of their biggest cities, here's the code.
+
+```php
+$countries = Country::with(['cities' => function($query) {
+    $query->orderBy('population', 'desc');
+    $query->take(3);
+}])->get();
+```
+
+### Load Relationships Always, but Dynamically
+
+You can not only specify what relationships to ALWAYS load with the model, but you can do it dynamically, in the constructor method:
+
+```php
+class ProductTag extends Model
+{
+    protected $with = ['product'];
+
+    public function __construct() {
+        parent::__construct();
+        $this->with = ['product'];
+        
+        if (auth()->check()) {
+            $this->with[] = 'user';
+        }
+    }
+}
+```
+
+### Instead of belongsTo, use hasMany
+
+For `belongsTo` relationship, instead of passing parent's ID when creating child record, use `hasMany` relationship to make a shorter sentence.
+
+```php
+// if Post -> belongsTo(User), and User -> hasMany(Post)...
+// Then instead of passing user_id...
+Post::create([
+    'user_id' => auth()->id(),
+    'title' => request()->input('title'),
+    'post_text' => request()->input('post_text'),
+]);
+
+// Do this
+auth()->user()->posts()->create([
+    'title' => request()->input('title'),
+    'post_text' => request()->input('post_text'),
+]);
+```
+
+### Rename Pivot Table
+
+If you want to rename "pivot" word and call your relationship something else, you just use `->as('name')` in your relationship.
+
+Model:
+```php
+public function podcasts() {
+    return $this->belongsToMany('App\Podcast')
+        ->as('subscription')
+        ->withTimestamps();
+}
+```
+
+Controller:
+```php
+$podcasts = $user->podcasts();
+foreach ($podcasts as $podcast) {
+    // instead of $podcast->pivot->created_at ...
+    echo $podcast->subscription->created_at;
+}
 ```
 
 ## Migrations
@@ -523,7 +763,10 @@ This will try to load adminlte.header, if missing - will load default.header
 - [What's behind the routes?](#whats-behind-the-routes)
 - [Route Model Binding: You can define a key](#route-model-binding-you-can-define-a-key)
 - [Quickly Navigate from Routes file to Controller](#quickly-navigate-from-routes-file-to-controller)
-- [Route Fallback - When no Other Route is Matched](#route-fallback---when-no-other-route-is-matched)
+- [Route Fallback: When no Other Route is Matched](#route-fallback-when-no-other-route-is-matched)
+- [Route Parameters Validation with RegExp](#route-parameters-validation-with-regexp)
+- [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
+- [Query string parameters to Routes](#)
 
 ### Route group within a group
 
@@ -613,7 +856,7 @@ Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
 
 Then you will be able to click on **PageController** in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
 
-### Route Fallback - When no Other Route is Matched
+### Route Fallback: When no Other Route is Matched
 
 If you want to specify additional logic for not-found routes, instead of just throwing default 404 page, you may create a special Route for that, at the very end of your Routes file.
 
@@ -629,13 +872,72 @@ Route::fallback(function() {
 });
 ```
 
+### Route Parameters Validation with RegExp
+
+We can validate parameters directly in the route, with “where” parameter. A pretty typical case is to prefix your routes by language locale, like `fr/blog` and `en/article/333`. How do we ensure that those two first letters are not used for some other than language?
+
+`routes/web.php`:
+```php
+Route::group([
+    'prefix' => '{locale}',
+    'where' => ['locale' => '[a-zA-Z]{2}']
+], function () {
+    Route::get('/', 'HomeController@index');
+    Route::get('article/{id}', 'ArticleController@show');
+});
+```
+
+### Rate Limiting: Global and for Guests/Users
+
+You can limit some URL to be called a maximum of 60 times per minute, with `throttle:60,1`:
+```php
+Route::middleware('auth:api', 'throttle:60,1')->group(function () {
+    Route::get('/user', function () {
+        //
+    });
+});
+```
+
+But also, you can do it separately for public and for logged-in users:
+```php
+// maximum of 10 requests for guests, 60 for authenticated users
+Route::middleware('throttle:10|60,1')->group(function () {
+    //
+});
+```
+
+Also, you can have a DB field users.rate_limit and limit the amount for specific user:
+```php
+Route::middleware('auth:api', 'throttle:rate_limit,1')->group(function () {
+    Route::get('/user', function () {
+        //
+    });
+});
+```
+
+### Query string parameters to Routes
+
+If you pass additional parameters to the route, in the array, those key / value pairs will automatically be added to the generated URL's query string.
+
+```php
+Route::get('user/{id}/profile', function ($id) {
+    //
+})->name('profile');
+
+$url = route('profile', ['id' => 1, 'photos' => 'yes']); // Result: /user/1/profile?photos=yes
+```
+
 ## Validation
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collection)](#collection)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Policies)](#policies)
 
 - [Image validation](#image-validation)
 - [Custom validation error messages](#custom-validation-error-messages)
 - [Validate dates with "now" or "yesterday" words](#validate-dates-with-now-or-yesterday-words)
+- [Validation Rule with Some Conditions](#validation-rule-with-some-conditions)
+- [Change Default Validation Messages](#change-default-validation-messages)
+- [Prepare for Validation](#prepare-for-validation)
+- [Stop on First Validation Error](#stop-on-first-validation-error)
 
 ### Image validation
 
@@ -668,12 +970,88 @@ $rules = [
 ];
 ```
 
+### Validation Rule with Some Conditions
+
+If your validation rules depend on some condition, you can modify the rules by adding `withValidator()` to your `FormRequest` class, and specify your custom logic there. Like, if you want to add validation rule only for some user role.
+
+```php
+use Illuminate\Validation\Validator;
+class StoreBlogCategoryRequest extends FormRequest {
+    public function withValidator(Validator $validator) {
+        if (auth()->user()->is_admin) {
+            $validator->addRules(['some_secret_password' => 'required']);
+        }
+    }
+}
+```
+
+### Change Default Validation Messages
+
+If you want to change default validation error message for specific field and specific validation rule, just add a `messages()` method into your `FormRequest` class.
+
+```php
+class StoreUserRequest extends FormRequest
+{
+    public function rules()
+    {
+        return ['name' => 'required'];
+    }
+    
+    public function messages()
+    {
+        return ['name.required' => 'User name should be real name'];
+    }
+}
+```
+
+### Prepare for Validation
+
+If you want to modify some field before default Laravel validation, or, in other words, "prepare" that field, guess what - there's a method `prepareForValidation()` in `FormRequest` class:
+
+```php
+protected function prepareForValidation()
+{
+    $this->merge([
+        'slug' => Illuminate\Support\Str::slug($this->slug),
+    ]);
+}
+``` 
+
+### Stop on First Validation Error
+
+By default, Laravel validation errors will be returned in a list, checking all validation rules. But if you want the process to stop after the first error, use validation rule called `bail`:
+```php
+$request->validate([
+    'title' => 'bail|required|unique:posts|max:255',
+    'body' => 'required',
+]);
+```
+
+### Policies
+
+⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Collection)](#collection)
+
+- [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
+
+### Check Multiple Permissions at Once
+
+In addition to `@can` Blade directive, did you know you can check multiple permissions at once with `@canany` directive?
+
+```blade
+@canany(['update', 'view', 'delete'], $post)
+    // The current user can update, view, or delete the post
+@elsecanany(['create'], \App\Post::class)
+    // The current user can create a post
+@endcanany
+```
+
 ## Collection
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Policies)](#policies) ➡️ [Next (Auth)](#auth)
 
 - [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
+- [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 
 ### Don’t Filter by NULL in Collections
 
@@ -704,6 +1082,16 @@ $users = User::all()->groupBy(function($item) {
 
 ⚠️ Notice: it is done on a `Collection` class, so performed **AFTER** the results are fetched from the database.
 
+### Multiple Collection Methods in a Row
+
+If you query all results with `->all()` or `->get()`, you may then perform various Collection operations on the same result, it won’t query database every time.
+```php
+$users = User::all();
+echo 'Max ID: ' . $users->max('id');
+echo 'Average age: ' . $users->avg('age');
+echo 'Total budget: ' . $users->sum('budget');
+```
+
 ## Auth
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Collection)](#collection) ➡️ [Next (Mails)](#mails)
@@ -728,6 +1116,7 @@ if (Auth::once($credentials)) {
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
 - [Default Email Subject in Laravel Notifications](#default-email-subject-in-laravel-notifications)
+- [Send Notifications to Anyone](#send-notifications-to-anyone)
 
 ### Testing email into laravel.log
 
@@ -757,6 +1146,17 @@ class UserRegistrationEmail extends Notification {
 
 Then you will receive an email with subject **User Registration Email**.
 
+### Send Notifications to Anyone
+
+You can send Laravel Notifications not only to a certain user with `$user->notify()`, but also to anyone you want, via `Notification::route()`, with so-called "on-demand" notifications:
+
+```php
+Notification::route('mail', 'taylor@example.com')
+        ->route('nexmo', '5555555555')
+        ->route('slack', 'https://hooks.slack.com/services/...')
+        ->notify(new InvoicePaid($invoice));
+```
+
 ## Artisan
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Mails)](#mails) ➡️ [Next (Factories)](#factories)
@@ -785,6 +1185,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Log and debug)](#log-and-debug)
 
 - [Factory callbacks](#factory-callbacks)
+- [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
 
 ### Factory callbacks
 
@@ -793,6 +1194,23 @@ While using factories for seeding data, you can provide Factory Callback functio
 ```php
 $factory->afterCreating(App\User::class, function ($user, $faker) {
     $user->accounts()->save(factory(App\Account::class)->make());
+});
+```
+
+### Generate Images with Seeds/Factories
+
+Did you know that Faker can generate not only text values but also IMAGES? See `avatar` field here - it will generate 50x50 image:
+
+```php
+$factory->define(User::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'email' => $faker->unique()->safeEmail,
+        'email_verified_at' => now(),
+        'password' => bcrypt('password'),
+        'remember_token' => Str::random(10),
+        'avatar' => $faker->image(storage_path('images'), 50, 50)
+    ];
 });
 ```
 
