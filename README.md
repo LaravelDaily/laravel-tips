@@ -6,6 +6,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 
 - [Controllers](#controllers)
 - [Models](#models)
+- [Models Relations](#models-relations)
 - [Migrations](#migrations)
 - [Views](#views)
 - [Routing](#routing)
@@ -13,6 +14,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 - [Mails](#mails)
 - [Artisan](#artisan)
 - [Factories](#factories)
+- [Logging](#logging)
 
 ## Controllers
 
@@ -43,40 +45,14 @@ class ShowProfile extends Controller
 
 ⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
 
-- [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
-- [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
 - [No timestamp columns](#no-timestamp-columns)
-- [Eloquent has() deeper](#eloquent-has-deeper)
 - [Set logged in user with Observers](#set-logged-in-user-with-observers)
 - [Soft-deletes: multiple restore](#soft-deletes-multiple-restore)
-- [Has Many. How many exactly?](#has-many-how-many-exactly)
 - [Model all: columns](#model-all-columns)
-
-### OrderBy on Eloquent relationships
-
-You can specify orderBy() directly on your Eloquent relationships.
-
-```php
-public function products()
-{
-    return $this->hasMany(Product::class);
-}
-
-public function productsByName()
-{
-    return $this->hasMany(Product::class)->orderBy('name');
-}
-```
-
-### Raw DB Queries: havingRaw()
-
-You can use RAW DB queries in various places, including `havingRaw()` function after `groupBy()`.
-
-```php
-Product::groupBy('category_id')->havingRaw('COUNT(*) > 1')->get();
-```
+- [To Fail or not to Fail](#to-fail-or-not-to-fail)
+- [Column name change](#column-name-change)
 
 ### Eloquent where date methods
 
@@ -110,16 +86,6 @@ class Company extends Model
 }
 ```
 
-### Eloquent has() deeper
-
-You can use Eloquent `has()` function to query relationships even two layers deep!
-
-```php
-// Author -> hasMany(Book::class);
-// Book -> hasMany(Rating::class);
-$authors = Author::has('books.ratings')->get();
-```
-
 ### Set logged in user with Observers
 
 Use `make:observer` and fill in `creating()` method to automatically set up `user_id` field for current logged in user.
@@ -142,6 +108,74 @@ When using soft-deletes, you can restore multiple rows in one sentence.
 Post::withTrashed()->where('author_id', 1)->restore();
 ```
 
+### Model all: columns
+
+When calling Eloquent's `Model::all()`, you can specify which columns to return.
+
+```php
+$users = User::all(['id', 'name', 'email']);
+```
+
+### To Fail or not to Fail
+
+In addition to `findOrFail()`, there's also Eloquent method `firstOrFail()` which will return 404 page if no records for query are found.
+
+```php
+$user = User::where('email', 'povilas@laraveldaily.com')->firstOrFail();
+```
+
+### Column name change
+
+In Eloquent Query Builder, you can specify "as" to return any column with a different name, just like in plain SQL query.
+
+```php
+$users = DB::table('users')->select('name', 'email as user_email')->get();
+```
+
+## Models Relations
+
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
+- [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
+- [Eloquent has() deeper](#eloquent-has-deeper)
+- [Has Many. How many exactly?](#has-many-how-many-exactly)
+- [Default model](#default-model)
+
+### OrderBy on Eloquent relationships
+
+You can specify orderBy() directly on your Eloquent relationships.
+
+```php
+public function products()
+{
+    return $this->hasMany(Product::class);
+}
+
+public function productsByName()
+{
+    return $this->hasMany(Product::class)->orderBy('name');
+}
+```
+
+### Raw DB Queries: havingRaw()
+
+You can use RAW DB queries in various places, including `havingRaw()` function after `groupBy()`.
+
+```php
+Product::groupBy('category_id')->havingRaw('COUNT(*) > 1')->get();
+```
+
+### Eloquent has() deeper
+
+You can use Eloquent `has()` function to query relationships even two layers deep!
+
+```php
+// Author -> hasMany(Book::class);
+// Book -> hasMany(Rating::class);
+$authors = Author::has('books.ratings')->get();
+```
+
 ### Has Many. How many exactly?
 
 In Eloquent `hasMany()` relationships, you can filter out records that have X amount of children records.
@@ -151,12 +185,27 @@ In Eloquent `hasMany()` relationships, you can filter out records that have X am
 $authors = Author::has('books', '>', 5)->get();
 ```
 
-### Model all: columns
+### Default model
 
-When calling Eloquent's `Model::all()`, you can specify which columns to return.
+You can assign a default model in `belongsTo` relationship, to avoid fatal errors when calling it like `{{ $post->user->name }}` if $post->user doesn't exist.
 
 ```php
-$users = User::all(['id', 'name', 'email']);
+public function user()
+{
+    return $this->belongsTo('App\User')->withDefault();
+}
+```
+
+### Use hasMany to create Many
+
+If you have `hasMany()` relationship, you can use `saveMany()` to save multiple "child" entries from your "parent" object, all in one sentence.
+
+```php
+$post = Post::find(1);
+$post->comments()->saveMany([
+    new Comment(['message' => 'First comment']),
+    new Comment(['message' => 'Second comment']),
+]);
 ```
 
 ## Migrations
@@ -314,6 +363,7 @@ The opposite is `@guest` directive:
 
 - [Route group within a group](#route-group-within-a-group)
 - [Wildcard subdomains](#wildcard-subdomains)
+- [What's behind the routes?](#whats-behind-the-routes)
 
 ### Route group within a group
 
@@ -341,6 +391,42 @@ Route::domain('{username}.workspace.com')->group(function () {
     });
 });
 ```
+
+### What's behind the routes?
+
+Want to know what routes are actually behind `Auth::routes()`?
+From Laravel 7, it’s in a separate package, so check the file `/vendor/laravel/ui/src/AuthRouteMethods.php`.
+
+```php
+public function auth()
+{
+    return function ($options = []) {
+        // Authentication Routes...
+        $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+        $this->post('login', 'Auth\LoginController@login');
+        $this->post('logout', 'Auth\LoginController@logout')->name('logout');
+        // Registration Routes...
+        if ($options['register'] ?? true) {
+            $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+            $this->post('register', 'Auth\RegisterController@register');
+        }
+        // Password Reset Routes...
+        if ($options['reset'] ?? true) {
+            $this->resetPassword();
+        }
+        // Password Confirmation Routes...
+        if ($options['confirm'] ?? class_exists($this->prependGroupNamespace('Auth\ConfirmPasswordController'))) {
+            $this->confirmPassword();
+        }
+        // Email Verification Routes...
+        if ($options['verify'] ?? false) {
+            $this->emailVerification();
+        }
+    };
+}
+```
+
+Before Laravel 7, check the file `/vendor/laravel/framework/src/illuminate/Routing/Router.php`.
 
 ## Validation
 
@@ -413,4 +499,18 @@ While using factories for seeding data, you can provide Factory Callback functio
 $factory->afterCreating(App\User::class, function ($user, $faker) {
     $user->accounts()->save(factory(App\Account::class)->make());
 });
+```
+
+## Logging
+
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Logging with parameters](#logging-with-parameters)
+
+### Logging with parameters
+
+You can write `Log::info()`, or shorter `info()` message with additional parameters, for more context about what happened.
+
+```php
+Log::info('User failed to login.', ['id' => $user->id]);
 ```
