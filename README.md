@@ -329,7 +329,7 @@ $table->timestamp('updated_at')->useCurrent();
 
 ## Views
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Views)](#views) ➡️ [Next (Routing)](#routing)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Migrations)](#migrations) ➡️ [Next (Routing)](#routing)
 
 - [$loop variable in foreach](#loop-variable-in-foreach)
 - [Does view file exist?](#does-view-file-exist)
@@ -458,7 +458,7 @@ public function boot()
 
 ## Routing
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Validation)](#validation)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Views)](#views) ➡️ [Next (Validation)](#validation)
 
 - [Route group within a group](#route-group-within-a-group)
 - [Wildcard subdomains](#wildcard-subdomains)
@@ -573,7 +573,7 @@ Route::fallback(function() {
 
 ## Validation
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Auth)](#auth)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collection)](#collection)
 
 - [Image validation](#image-validation)
 - [Custom validation error messages](#custom-validation-error-messages)
