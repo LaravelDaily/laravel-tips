@@ -1162,6 +1162,7 @@ Notification::route('mail', 'taylor@example.com')
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Mails)](#mails) ➡️ [Next (Factories)](#factories)
 
 - [Artisan command parameters](#artisan-command-parameters)
+- [Maintenance Mode](#maintenance-mode)
 
 ### Artisan command parameters
 
@@ -1179,6 +1180,28 @@ $name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
 // One of the listed options with default index
 $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ```
+
+### Maintenance Mode
+
+If you want to enable maintenance mode on your page, execute the down Artisan command:
+```bash
+php artisan down
+```
+
+Then people would see default 503 status page.
+
+You may also provide flags:
+- message that would be shown
+- retry page reload every X seconds
+- still allow the access to some IP address
+```bash
+php artisan down --message="Upgrading Database" --retry=60 --allow=127.0.0.1
+```
+
+When you've done the maintenance work, just run:
+```bash
+php artisan up
+``
 
 ## Factories
 
