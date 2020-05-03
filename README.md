@@ -11,6 +11,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 - [Views](#views)
 - [Routing](#routing)
 - [Validation](#validation)
+- [Collection](#collection)
 - [Auth](#auth)
 - [Mails](#mails)
 - [Artisan](#artisan)
@@ -22,6 +23,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 ⬆️ [Go to top](#summary) ➡️ [Next (Models)](#models)
 
 - [Single Action Controllers](#single-action-controllers)
+- [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
 
 ### Single Action Controllers
 
@@ -335,6 +337,7 @@ $table->timestamp('updated_at')->useCurrent();
 - [View without controllers](#view-without-controllers)
 - [Blade @auth](#blade-auth)
 - [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
+- [Create Your Own Blade Directive](#create-your-own-blade-directive)
 
 ### $loop variable in foreach
 
@@ -435,6 +438,24 @@ In Blade's foreach you can use $loop variable even in two-level loop to reach pa
 @endforeach
 ```
 
+### Create Your Own Blade Directive
+
+It’s very easy - just add your own method in `app/Providers/AppServiceProvider.php`. For example, if you want to have this for replace `<br>` tags with new lines:
+
+```blade
+<textarea>@br2nl($post->post_text)</textarea>
+```
+
+Add this directive to AppServiceProvider’s `boot()` method:
+```php
+public function boot()
+{
+    Blade::directive('br2nl', function ($string) {
+        return "<?php echo preg_replace('/\<br(\s*)?\/?\>/i', \"\n\", $string); ?>";
+    });
+}
+```
+
 ## Routing
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Validation)](#validation)
@@ -444,6 +465,7 @@ In Blade's foreach you can use $loop variable even in two-level loop to reach pa
 - [What's behind the routes?](#whats-behind-the-routes)
 - [Route Model Binding: You can define a key](#route-model-binding-you-can-define-a-key)
 - [Quickly Navigate from Routes file to Controller](#quickly-navigate-from-routes-file-to-controller)
+- [Route Fallback - When no Other Route is Matched](#route-fallback---when-no-other-route-is-matched)
 
 ### Route group within a group
 
@@ -531,7 +553,23 @@ You can specify the Controller as a class:
 Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
 ```
 
-Then you will be able to click on “PageController” in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
+Then you will be able to click on **PageController** in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
+
+### Route Fallback - When no Other Route is Matched
+
+If you want to specify additional logic for not-found routes, instead of just throwing default 404 page, you may create a special Route for that, at the very end of your Routes file.
+
+```php
+Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/home', 'HomeController@index');
+    Route::resource('tasks', 'Admin\TasksController');
+});
+
+// Some more routes....
+Route::fallback(function() {
+    return 'Hm, why did you land here somehow?';
+});
+```
 
 ## Validation
 
@@ -572,9 +610,31 @@ $rules = [
 ];
 ```
 
+## Collection
+
+⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
+
+- [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
+
+### Don’t Filter by NULL in Collections
+
+You can filter by NULL in Eloquent, but if you're filtering the **collection** further - filter by empty string, there's no "null" in that field anymore.
+
+```php
+// This works
+$messages = Message::where('read_at is null')->get();
+
+// Won’t work - will return 0 messages
+$messages = Message::all();
+$unread_messages = $messages->where('read_at is null')->count();
+
+// Will work
+$unread_messages = $messages->where('read_at', '')->count();
+```
+
 ## Auth
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Mails)](#mails)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Collection)](#collection) ➡️ [Next (Mails)](#mails)
 
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
 
@@ -595,6 +655,7 @@ if (Auth::once($credentials)) {
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
+- [Default Email Subject in Laravel Notifications](#default-email-subject-in-laravel-notifications)
 
 ### Testing email into laravel.log
 
@@ -610,6 +671,19 @@ Route::get('/mailable', function () {
     return new App\Mail\InvoicePaid($invoice);
 });
 ```
+
+### Default Email Subject in Laravel Notifications
+
+If you send Laravel Notification and don't specify subject in **toMail()**, default subject is your notification class name, CamelCased into Spaces.
+
+So, if you have:
+```php
+class UserRegistrationEmail extends Notification {
+    //
+}
+```
+
+Then you will receive an email with subject **User Registration Email**.
 
 ## Artisan
 
