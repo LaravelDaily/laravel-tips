@@ -9,6 +9,10 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 - [Migrations](#migrations)
 - [Views](#views)
 - [Routing](#routing)
+- [Validation](#validation)
+- [Mails](#mails)
+- [Artisan](#artisan)
+- [Factories](#factories)
 
 ## Controllers
 
@@ -16,7 +20,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 
 ### Single Action Controllers
 
-If you want to create a controller with just one action, you can use __invoke() method and even create "invokable" controller.
+If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
 
 Route: `Route::get('user/{id}', 'ShowProfile');`
 Artisan: `php artisan make:controller ShowProfile --invokable` 
@@ -103,6 +107,45 @@ You can use Eloquent `has()` function to query relationships even two layers dee
 $authors = Author::has('books.ratings')->get();
 ```
 
+### Set logged in user with Observers
+
+Use `make:observer` and fill in `creating()` method to automatically set up `user_id` field for current logged in user.
+
+```php
+class PostObserver
+{
+    public function creating(Post $post)
+    {
+        $post->user_id = auth()->id();
+    }
+}
+```
+
+### Soft-deletes: multiple restore
+
+When using soft-deletes, you can restore multiple rows in one sentence.
+
+```php
+Post::withTrashed()->where('author_id', 1)->restore();
+```
+
+### Has Many. How many exactly?
+
+In Eloquent `hasMany()` relationships, you can filter out records that have X amount of children records.
+
+```php
+// Author -> hasMany(Book::class)
+$authors = Author::has('books', '>', 5)->get();
+```
+
+### Model all: columns
+
+When calling Eloquent's `Model::all()`, you can specify which columns to return.
+
+```php
+$users = User::all(['id', 'name', 'email']);
+```
+
 ## Migrations
 
 [Go to top](#summary)
@@ -141,6 +184,16 @@ $table->uuid('id');
 ```
 
 See all column types on the [official documentation](https://laravel.com/docs/master/migrations#creating-columns).
+
+### Default Timestamp
+
+While creating migrations, you can use `timestamp()` column type with option
+`useCurrent()`, it will set `CURRENT_TIMESTAMP` as default value.
+
+```php
+$table->timestamp('created_at')->useCurrent();
+$table->timestamp('updated_at')->useCurrent();
+```
 
 ## Views
 
@@ -183,6 +236,54 @@ You can even load an array of views and only the first existing will be actually
 return view()->first(['custom.dashboard', 'dashboard'], $data);
 ```
 
+### Error code Blade pages
+
+If you want to create a specific error page for some HTTP code, like 500 - just create a blade file with this code as filename, in `resources/views/errors/500.blade.php`, or `403.blade.php` etc, and it will automatically be loaded in case of that error code.
+
+### View without controllers
+
+If you want route to just show a certain view, don't create a Controller method, just use `Route::view()` function.
+
+```php
+// Instead of this
+Route::get('about', 'TextsController@about');
+// And this
+class TextsController extends Controller
+{
+    public function about()
+    {
+        return view('texts.about');
+    }
+}
+// Do this
+Route::view('about', 'texts.about');
+```
+
+### Blade @auth
+
+Instead of if-statement to check logged in user, use `@auth` directive.
+
+Typical way:
+```blade
+@if(auth()->user())
+    // The user is authenticated.
+@endif
+```
+
+Shorter:
+```blade
+@auth
+    // The user is authenticated.
+@endauth
+```
+
+The opposite is `@guest` directive:
+```blade
+@guest
+    // The user is not authenticated.
+@endguest
+```
+
 ## Routing
 
 [Go to top](#summary)
@@ -199,5 +300,83 @@ Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
     Route::group(['middleware' => 'auth'], function() {
         Route::get('edit', 'AccountController@edit');
     });
+});
+```
+
+### Wildcard subdomains
+
+You can create route group by dynamic subdomain name, and pass its value to every route.
+
+```php
+Route::domain('{username}.workspace.com')->group(function () {
+    Route::get('user/{id}', function ($username, $id) {
+        //
+    });
+});
+```
+
+## Validation
+
+[Go to top](#summary)
+
+### Image validation
+
+While validating uploaded images, you can specify the dimensions you require.
+
+```php
+['photo' => 'dimensions:max_width=4096,max_height=4096']
+```
+
+## Mails
+
+[Go to top](#summary)
+
+### Testing email into laravel.log
+
+If you want to test email contents in your app but unable or unwilling to set up something like Mailgun, use `.env` parameter `MAIL_DRIVER=log` and all the email will be saved into `storage/logs/laravel.log` file, instead of actually being sent.
+
+### Preview Mailables
+
+If you use Mailables to send email, you can preview the result without sending, directly in your browser. Just return a Mailable as route result:
+
+```php
+Route::get('/mailable', function () {
+    $invoice = App\Invoice::find(1);
+    return new App\Mail\InvoicePaid($invoice);
+});
+```
+
+## Artisan
+
+[Go to top](#summary)
+
+### Artisan command parameters
+
+When creating Artisan command, you can ask the input in variety of ways: `$this->confirm()`, `$this->anticipate()`, `$this->choice()`.
+
+```php
+// Yes or no?
+if ($this->confirm('Do you wish to continue?')) {
+    //
+}
+
+// Open question with auto-complete options
+$name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
+
+// One of the listed options with default index
+$name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
+```
+
+## Factories
+
+[Go to top](#summary)
+
+### Factory callbacks
+
+While using factories for seeding data, you can provide Factory Callback functions to perform some action after record is inserted.
+
+```php
+$factory->afterCreating(App\User::class, function ($user, $faker) {
+    $user->accounts()->save(factory(App\Account::class)->make());
 });
 ```
