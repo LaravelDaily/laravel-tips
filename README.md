@@ -73,6 +73,7 @@ return redirect()->action('SomeController@method', ['param' => $value]);
 - [To Fail or not to Fail](#to-fail-or-not-to-fail)
 - [Column name change](#column-name-change)
 - [Map query results](#map-query-results)
+- [Change Default Timestamp Fields](#)
 
 ### Eloquent where date methods
 
@@ -163,6 +164,18 @@ $users = User::where('role_id', 1)->get()->map(function (User $user) {
 });
 ```
 
+### Change Default Timestamp Fields
+
+What if you’re working with non-Laravel database and your timestamp columns are named differently? Maybe, you have create_time and update_time. Luckily, you can specify them in the model, too:
+
+```php
+class Role extends Model
+{
+    const CREATED_AT = 'create_time';
+    const UPDATED_AT = 'update_time';
+}
+```
+
 ## Models Relations
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Models)](#models) ➡️ [Next (Migrations)](#migrations)
@@ -176,6 +189,7 @@ $users = User::where('role_id', 1)->get()->map(function (User $user) {
 - [Eager Loading with Exact Columns](#eager-loading-with-exact-columns)
 - [Touch parent updated_at easily](#touch-parent-updated_at-easily)
 - [Always Check if Relationship Exists](#always-check-if-relationship-exists)
+- [Use withCount() to Calculate Child Relationships Records](#use-withcount-to-calculate-child-relationships-records)
 
 ### OrderBy on Eloquent relationships
 
@@ -273,6 +287,30 @@ Never **ever** do `$model->relationship->field` without checking if relationship
 It may be deleted for whatever reason, outside your code, by someone else's queued job etc.
 Do `if-else`, or `{{ $model->relationship->field ?? '' }}` in Blade, or `{{ optional($model->relationship)->field }}`.
 
+### Use withCount() to Calculate Child Relationships Records
+
+If you have `hasMany()` relationship, and you want to calculate “children” entries, don’t write a special query. For example, if you have posts and comments on your User model, write this `withCount()`:
+
+```php
+public function index()
+{
+    $users = User::withCount(['posts', 'comments'])->get();
+    return view('users', compact('users'));
+}
+```
+
+And then, in your Blade file, you will access those number with `{relationship}_count` properties:
+
+```blade
+@foreach ($users as $user)
+<tr>
+    <td>{{ $user->name }}</td>
+    <td class="text-center">{{ $user->posts_count }}</td>
+    <td class="text-center">{{ $user->comments_count }}</td>
+</tr>
+@endforeach
+```
+
 ## Migrations
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
@@ -338,6 +376,7 @@ $table->timestamp('updated_at')->useCurrent();
 - [Blade @auth](#blade-auth)
 - [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
 - [Create Your Own Blade Directive](#create-your-own-blade-directive)
+- [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)
 
 ### $loop variable in foreach
 
@@ -454,6 +493,25 @@ public function boot()
         return "<?php echo preg_replace('/\<br(\s*)?\/?\>/i', \"\n\", $string); ?>";
     });
 }
+```
+
+### Blade Directives: IncludeIf, IncludeWhen, IncludeFirst
+
+If you are not sure whether your Blade partial file actually would exist, you may use these condition commands:
+
+This will load header only if Blade file exists
+```blade
+@includeIf('partials.header')
+```
+
+This will load header only for user with role_id 1
+```blade
+@includeWhen(auth()->user()->role_id == 1, 'partials.header')
+```
+
+This will try to load adminlte.header, if missing - will load default.header
+```blade
+@includeFirst('adminlte.header', 'default.header')
 ```
 
 ## Routing
@@ -615,6 +673,7 @@ $rules = [
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
 
 - [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
+- [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
 
 ### Don’t Filter by NULL in Collections
 
@@ -631,6 +690,19 @@ $unread_messages = $messages->where('read_at is null')->count();
 // Will work
 $unread_messages = $messages->where('read_at', '')->count();
 ```
+
+### Use groupBy on Collections with Custom Callback Function
+
+If you want to group result by some condition whith isn’t a direct column in your database, you can do that by providing a closure function.
+
+For example, if you want to group users by day of registration, here’s the code:
+```php
+$users = User::all()->groupBy(function($item) {
+    return $item->created_at->format('Y-m-d');
+});
+```
+
+⚠️ Notice: it is done on a `Collection` class, so performed **AFTER** the results are fetched from the database.
 
 ## Auth
 
