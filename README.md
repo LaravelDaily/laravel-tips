@@ -18,7 +18,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 
 ## Controllers
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ➡️ [Next (Models)](#models)
 
 - [Single Action Controllers](#single-action-controllers)
 
@@ -43,7 +43,7 @@ class ShowProfile extends Controller
 
 ## Models
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Controllers)](#controllers) ➡️ [Next (Models Relations)](#models-relations)
 
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
@@ -134,13 +134,14 @@ $users = DB::table('users')->select('name', 'email as user_email')->get();
 
 ## Models Relations
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Models)](#models) ➡️ [Next (Migrations)](#migrations)
 
 - [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
 - [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
 - [Eloquent has() deeper](#eloquent-has-deeper)
 - [Has Many. How many exactly?](#has-many-how-many-exactly)
 - [Default model](#default-model)
+- [Use hasMany to create Many](#use-hasmany-to-create-many)
 
 ### OrderBy on Eloquent relationships
 
@@ -210,7 +211,7 @@ $post->comments()->saveMany([
 
 ## Migrations
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
 
 - [Order of Migrations](#order-of-migrations)
 - [Migration fields with timezones](#migration-fields-with-timezones)
@@ -264,7 +265,7 @@ $table->timestamp('updated_at')->useCurrent();
 
 ## Views
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Views)](#views) ➡️ [Next (Routing)](#routing)
 
 - [$loop variable in foreach](#loop-variable-in-foreach)
 - [Does view file exist?](#does-view-file-exist)
@@ -359,7 +360,7 @@ The opposite is `@guest` directive:
 
 ## Routing
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Validation)](#validation)
 
 - [Route group within a group](#route-group-within-a-group)
 - [Wildcard subdomains](#wildcard-subdomains)
@@ -430,7 +431,7 @@ Before Laravel 7, check the file `/vendor/laravel/framework/src/illuminate/Routi
 
 ## Validation
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Mails)](#mails)
 
 ### Image validation
 
@@ -442,7 +443,7 @@ While validating uploaded images, you can specify the dimensions you require.
 
 ## Mails
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Artisan)](#artisan)
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
@@ -464,7 +465,7 @@ Route::get('/mailable', function () {
 
 ## Artisan
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Mails)](#mails) ➡️ [Next (Factories)](#factories)
 
 - [Artisan command parameters](#artisan-command-parameters)
 
@@ -487,7 +488,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 
 ## Factories
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Logging)](#logging)
 
 - [Factory callbacks](#factory-callbacks)
 
