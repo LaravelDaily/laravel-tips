@@ -1027,7 +1027,7 @@ $request->validate([
 ]);
 ```
 
-### Policies
+## Policies
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Collection)](#collection)
 
