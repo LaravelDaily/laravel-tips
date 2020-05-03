@@ -1201,7 +1201,7 @@ php artisan down --message="Upgrading Database" --retry=60 --allow=127.0.0.1
 When you've done the maintenance work, just run:
 ```bash
 php artisan up
-``
+```
 
 ## Factories
 
