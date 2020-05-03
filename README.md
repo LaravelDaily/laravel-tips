@@ -100,6 +100,7 @@ public function reorder(Request $request)
 - [Grouping by First Letter](#grouping-by-first-letter)
 - [Never Update the Column](#never-update-the-column)
 - [Find Many](#find-many)
+- [Use UUID instead of auto-increment](#use-uuid-instead-of-auto-increment)
 
 ### Eloquent where date methods
 
@@ -319,6 +320,41 @@ Eloquent method `find()` may accept multiple parameters, and then it returns a C
 $user = User::find(1);
 // Will return Eloquent Collection
 $users = User::find([1,2,3]);
+```
+
+### Use UUID instead of auto-increment
+
+You don't want to use auto incrementing ID in your model?
+
+Migration:
+```php
+Schema::create('users', function (Blueprint $table) {
+    // $table->increments('id');
+    $table->uuid('id')->unique();
+});
+```
+
+Model:
+```php
+class User extends Model
+{
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        User::creating(function ($model) {
+            $model->setId();
+        });
+    }
+
+    public function setId()
+    {
+        $this->attributes['id'] = Str::uuid();
+    }
+}
 ```
 
 ## Models Relations
@@ -1106,6 +1142,19 @@ No sessions or cookies will be utilized, which means this method may be helpful 
 ```php
 if (Auth::once($credentials)) {
     //
+}
+```
+
+### Change API Token on user's password update
+
+It's convenient to change the user's API Token when its password changes.
+
+Model:
+```php
+public function setPasswordAttribute($value)
+{
+    $this->attributes['password'] = $value;
+    $this->attributes['api_token'] = Str::random(100);
 }
 ```
 
