@@ -1,6 +1,7 @@
 # Laravel Tips
 
-Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](http://www.laraveldaily.com/). PR are welcome!
+Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
+An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
 ## Summary
 
