@@ -16,7 +16,9 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 
 ## Controllers
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Single Action Controllers](#single-action-controllers)
 
 ### Single Action Controllers
 
@@ -39,7 +41,18 @@ class ShowProfile extends Controller
 
 ## Models
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
+- [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
+- [Eloquent where date methods](#eloquent-where-date-methods)
+- [Increments and decrements](#increments-and-decrements)
+- [No timestamp columns](#no-timestamp-columns)
+- [Eloquent has() deeper](#eloquent-has-deeper)
+- [Set logged in user with Observers](#set-logged-in-user-with-observers)
+- [Soft-deletes: multiple restore](#soft-deletes-multiple-restore)
+- [Has Many. How many exactly?](#has-many-how-many-exactly)
+- [Model all: columns](#model-all-columns)
 
 ### OrderBy on Eloquent relationships
 
@@ -148,7 +161,12 @@ $users = User::all(['id', 'name', 'email']);
 
 ## Migrations
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Order of Migrations](#order-of-migrations)
+- [Migration fields with timezones](#migration-fields-with-timezones)
+- [Database migrations column types](#database-migrations-column-types)
+- [Default Timestamp](#default-timestamp)
 
 ### Order of Migrations
 
@@ -197,7 +215,13 @@ $table->timestamp('updated_at')->useCurrent();
 
 ## Views
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [$loop variable in foreach](#loop-variable-in-foreach)
+- [Does view file exist?](#does-view-file-exist)
+- [Error code Blade pages](#error-code-blade-pages)
+- [View without controllers](#view-without-controllers)
+- [Blade @auth](#blade-auth)
 
 ### $loop variable in foreach
 
@@ -286,7 +310,10 @@ The opposite is `@guest` directive:
 
 ## Routing
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Route group within a group](#route-group-within-a-group)
+- [Wildcard subdomains](#wildcard-subdomains)
 
 ### Route group within a group
 
@@ -317,7 +344,7 @@ Route::domain('{username}.workspace.com')->group(function () {
 
 ## Validation
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
 
 ### Image validation
 
@@ -329,7 +356,10 @@ While validating uploaded images, you can specify the dimensions you require.
 
 ## Mails
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Testing email into laravel.log](#testing-email-into-laravellog)
+- [Preview Mailables](#preview-mailables)
 
 ### Testing email into laravel.log
 
@@ -348,7 +378,9 @@ Route::get('/mailable', function () {
 
 ## Artisan
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Artisan command parameters](#artisan-command-parameters)
 
 ### Artisan command parameters
 
@@ -369,7 +401,9 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 
 ## Factories
 
-[Go to top](#summary)
+⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+
+- [Factory callbacks](#factory-callbacks)
 
 ### Factory callbacks
 
