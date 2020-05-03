@@ -14,7 +14,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 - [Mails](#mails)
 - [Artisan](#artisan)
 - [Factories](#factories)
-- [Logging](#logging)
+- [Log and debug](#log-and-debug)
 
 ## Controllers
 
@@ -53,6 +53,7 @@ class ShowProfile extends Controller
 - [Model all: columns](#model-all-columns)
 - [To Fail or not to Fail](#to-fail-or-not-to-fail)
 - [Column name change](#column-name-change)
+- [Map query results](#map-query-results)
 
 ### Eloquent where date methods
 
@@ -130,6 +131,17 @@ In Eloquent Query Builder, you can specify "as" to return any column with a diff
 
 ```php
 $users = DB::table('users')->select('name', 'email as user_email')->get();
+```
+
+### Map query results
+
+After Eloquent query you can modify rows by using `map()` function in Collections.
+
+```php
+$users = User::where('role_id', 1)->get()->map(function (User $user) {
+    $user->some_column = some_function($user);
+    return $user;
+});
 ```
 
 ## Models Relations
@@ -272,6 +284,7 @@ $table->timestamp('updated_at')->useCurrent();
 - [Error code Blade pages](#error-code-blade-pages)
 - [View without controllers](#view-without-controllers)
 - [Blade @auth](#blade-auth)
+- [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
 
 ### $loop variable in foreach
 
@@ -358,6 +371,20 @@ The opposite is `@guest` directive:
 @endguest
 ```
 
+### Two-level $loop variable in Blade
+
+In Blade's foreach you can use $loop variable even in two-level loop to reach parent variable.
+
+```blade
+@foreach ($users as $user)
+    @foreach ($user->posts as $post)
+        @if ($loop->parent->first)
+            This is first iteration of the parent loop.
+        @endif
+    @endforeach
+@endforeach
+```
+
 ## Routing
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Validation)](#validation)
@@ -433,12 +460,27 @@ Before Laravel 7, check the file `/vendor/laravel/framework/src/illuminate/Routi
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Mails)](#mails)
 
+- [Image validation](#image-validation)
+- [Custom validation error messages](#custom-validation-error-messages)
+
 ### Image validation
 
 While validating uploaded images, you can specify the dimensions you require.
 
 ```php
 ['photo' => 'dimensions:max_width=4096,max_height=4096']
+```
+
+### Custom validation error messages
+
+You can customize validation error messages per **field**, **rule** and **language** - just create a specific language file `resources/lang/xx/validation.php` with appropriate array structure.
+
+```php
+'custom' => [
+     'email' => [
+        'required' => 'We need to know your e-mail address!',
+     ],
+],
 ```
 
 ## Mails
@@ -488,7 +530,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 
 ## Factories
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Logging)](#logging)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Log and debug)](#log-and-debug)
 
 - [Factory callbacks](#factory-callbacks)
 
@@ -502,11 +544,12 @@ $factory->afterCreating(App\User::class, function ($user, $faker) {
 });
 ```
 
-## Logging
+## Log and debug
 
-⬆️⬆️⬆️ [Go to top](#summary) ⬆️⬆️⬆️
+⬆️ [Go to top](#summary) ⬅️ [Previous (Factories)](#factories)
 
 - [Logging with parameters](#logging-with-parameters)
+- [More convenient DD](#more-convenient-dd)
 
 ### Logging with parameters
 
@@ -514,4 +557,16 @@ You can write `Log::info()`, or shorter `info()` message with additional paramet
 
 ```php
 Log::info('User failed to login.', ['id' => $user->id]);
+```
+
+### More convenient DD
+
+Instead of doing `dd($result)` you can put `->dd()` as a method directly at the end of your Eloquent sentence, or any Collection.
+
+```php
+// Instead of
+$users = User::where('name', 'Taylor')->get();
+dd($users);
+// Do this
+$users = User::where('name', 'Taylor')->get()->dd();
 ```
