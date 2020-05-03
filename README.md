@@ -11,6 +11,7 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 - [Views](#views)
 - [Routing](#routing)
 - [Validation](#validation)
+- [Auth](#auth)
 - [Mails](#mails)
 - [Artisan](#artisan)
 - [Factories](#factories)
@@ -26,9 +27,17 @@ Awesome Laravel tips. Based on the of Povilas Korop's idea from [Laravel Daily](
 
 If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
 
-Route: `Route::get('user/{id}', 'ShowProfile');`
-Artisan: `php artisan make:controller ShowProfile --invokable` 
+Route:
+```php
+Route::get('user/{id}', 'ShowProfile');
+```
 
+Artisan:
+```bash
+php artisan make:controller ShowProfile --invokable
+``` 
+
+Controller: 
 ```php
 class ShowProfile extends Controller
 {
@@ -39,6 +48,14 @@ class ShowProfile extends Controller
         ]);
     }
 }
+```
+
+### Redirect to Specific Controller Method
+
+You can `redirect()` not only to URL or specific route, but to a specific Controller's specific method, and even pass the parameters. Use this:
+
+```php
+return redirect()->action('SomeController@method', ['param' => $value]);
 ```
 
 ## Models
@@ -154,6 +171,9 @@ $users = User::where('role_id', 1)->get()->map(function (User $user) {
 - [Has Many. How many exactly?](#has-many-how-many-exactly)
 - [Default model](#default-model)
 - [Use hasMany to create Many](#use-hasmany-to-create-many)
+- [Eager Loading with Exact Columns](#eager-loading-with-exact-columns)
+- [Touch parent updated_at easily](#touch-parent-updated_at-easily)
+- [Always Check if Relationship Exists](#always-check-if-relationship-exists)
 
 ### OrderBy on Eloquent relationships
 
@@ -220,6 +240,36 @@ $post->comments()->saveMany([
     new Comment(['message' => 'Second comment']),
 ]);
 ```
+
+### Eager Loading with Exact Columns
+
+You can do Laravel Eager Loading and specify the exact columns you want to get from the relationship.
+```php
+$users = App\Book::with('author:id,name')->get();
+```
+
+You can do that even in deeper, second level relationships:
+```php
+$users = App\Book::with('author.country:id,name')->get();
+```
+
+### Touch parent updated_at easily
+
+If you are updating a record and want to update the `updated_at` column of parent relationship (like, you add new post comment and want `posts.updated_at` to renew), just use `$touches = ['post'];` property on child model.
+
+```php
+class Comment extends Model
+{
+    protected $touches = ['post'];
+}
+```
+
+### Always Check if Relationship Exists
+
+Never **ever** do `$model->relationship->field` without checking if relationship object still exists.
+
+It may be deleted for whatever reason, outside your code, by someone else's queued job etc.
+Do `if-else`, or `{{ $model->relationship->field ?? '' }}` in Blade, or `{{ optional($model->relationship)->field }}`.
 
 ## Migrations
 
@@ -392,6 +442,8 @@ In Blade's foreach you can use $loop variable even in two-level loop to reach pa
 - [Route group within a group](#route-group-within-a-group)
 - [Wildcard subdomains](#wildcard-subdomains)
 - [What's behind the routes?](#whats-behind-the-routes)
+- [Route Model Binding: You can define a key](#route-model-binding-you-can-define-a-key)
+- [Quickly Navigate from Routes file to Controller](#quickly-navigate-from-routes-file-to-controller)
 
 ### Route group within a group
 
@@ -456,12 +508,38 @@ public function auth()
 
 Before Laravel 7, check the file `/vendor/laravel/framework/src/illuminate/Routing/Router.php`.
 
+### Route Model Binding: You can define a key
+
+You can do Route model binding like `Route::get('api/users/{user}', function (App\User $user) { … }` - but not only by ID field. If you want `{user}` to be a `username`
+field, put this in the model:
+
+```php
+public function getRouteKeyName() {
+    return 'username';
+}
+```
+
+### Quickly Navigate from Routes file to Controller
+
+Instead of routing like this:
+```php
+Route::get('page', 'PageController@action');
+```
+
+You can specify the Controller as a class:
+```php
+Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
+```
+
+Then you will be able to click on “PageController” in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
+
 ## Validation
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Mails)](#mails)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Auth)](#auth)
 
 - [Image validation](#image-validation)
 - [Custom validation error messages](#custom-validation-error-messages)
+- [Validate dates with "now" or "yesterday" words](#validate-dates-with-now-or-yesterday-words)
 
 ### Image validation
 
@@ -483,9 +561,37 @@ You can customize validation error messages per **field**, **rule** and **langua
 ],
 ```
 
+### Validate dates with "now" or "yesterday" words
+
+You can validate dates by rules before/after and passing various strings as a parameter, like: `tomorrow`, `now`, `yesterday`. Example: `'start_date' => 'after:now'`. It's using strtotime() under the hood.
+
+```php
+$rules = [
+    'start_date' => 'after:tomorrow',
+    'end_date' => 'after:start_date'
+];
+```
+
+## Auth
+
+⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Mails)](#mails)
+
+- [Did you know about Auth::once()?](#did-you-know-about-authonce)
+
+### Did you know about Auth::once()?
+
+You can login with user only for ONE REQUEST, using method `Auth::once()`.  
+No sessions or cookies will be utilized, which means this method may be helpful when building a stateless API.
+
+```php
+if (Auth::once($credentials)) {
+    //
+}
+```
+
 ## Mails
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Artisan)](#artisan)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Auth)](#auth) ➡️ [Next (Artisan)](#artisan)
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
