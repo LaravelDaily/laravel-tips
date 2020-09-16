@@ -19,6 +19,7 @@ An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https
 - [Artisan](#artisan)
 - [Factories](#factories)
 - [Log and debug](#log-and-debug)
+- [Other](#other)
 
 ## Controllers
 
@@ -1334,3 +1335,14 @@ dd($users);
 // Do this
 $users = User::where('name', 'Taylor')->get()->dd();
 ```
+
+
+## Other
+
+⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug)
+
+### Exact Laravel version
+
+Find out exactly what Laravel version you have in your app, by running command
+`php artisan --version`
+
