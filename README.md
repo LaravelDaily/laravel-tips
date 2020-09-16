@@ -592,10 +592,31 @@ foreach ($podcasts as $podcast) {
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
 
+- [Unsigned Integer](#unsigned-integer)
 - [Order of Migrations](#order-of-migrations)
 - [Migration fields with timezones](#migration-fields-with-timezones)
 - [Database migrations column types](#database-migrations-column-types)
 - [Default Timestamp](#default-timestamp)
+
+### Unsigned Integer
+
+For foreign key migrations instead of `integer()` use `unsignedInteger()` type or `integer()->unsigned()`, otherwise you may get SQL errors.
+
+```php
+Schema::create('employees', function (Blueprint $table) {
+    $table->unsignedInteger('company_id');
+    $table->foreign('company_id')->references('id')->on('companies');
+    // ...
+});
+```
+
+You can also use `unsignedBigInteger()` if that other column is `bigInteger()` type.
+
+```php
+Schema::create('employees', function (Blueprint $table) {
+    $table->unsignedBigInteger('company_id');
+});
+```
 
 ### Order of Migrations
 
