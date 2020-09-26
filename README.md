@@ -104,6 +104,10 @@ public function reorder(Request $request)
 - [Find Many](#find-many)
 - [Use UUID instead of auto-increment](#use-uuid-instead-of-auto-increment)
 - [Sub-selects in Laravel Way](#sub-selects-in-laravel-way)
+- [Hide Some Columns](#hide-some-columns)
+- [Exact DB Error](#exact-db-error)
+- [Soft-Deletes with Query Builder](#soft-deletes-with-query-builder)
+- [Good Old SQL Query](#good-old-sql-query)
 
 ### Eloquent where date methods
 
@@ -372,6 +376,49 @@ return Destination::addSelect(['last_flight' => Flight::select('name')
 ])->get();
 ```
 
+### Hide Some Columns
+
+When doing Eloquent query, if you want to hide specific field from being returned, one of the quickest ways is to add `->makeHidden()` on Collection result.
+
+```php
+$users = User::all()->makeHidden(['email_verified_at', 'deleted_at']);
+```
+
+### Exact DB Error
+
+If you want to catch Eloquent Query exceptions, use specific `QueryException` instead default Exception class, and you will be able to get the exact SQL code of the error.
+
+```php
+try {
+    // Some Eloquent/SQL statement
+} catch (\Illuminate\Database\QueryException $e) {
+    if ($e->getCode() === '23000') { // integrity constraint violation
+        return back()->withError('Invalid data');
+    }
+}
+```
+
+### Soft-Deletes with Query Builder
+
+Don't forget that soft-deletes will exclude entries when you use Eloquent, but won't work if you use Query Builder.
+
+```php
+// Will exclude soft-deleted entries
+$users = User::all();
+
+// Will NOT exclude soft-deleted entries
+$users = DB::table('users')->get();
+```
+
+### Good Old SQL Query
+
+If you need to execute a simple SQL query, without getting any results - like changing something in DB schema, you can just do `DB::statement()`.
+
+```
+DB::statement('DROP TABLE users');
+DB::statement('ALTER TABLE projects AUTO_INCREMENT=123');
+```
+
 
 ## Models Relations
 
@@ -394,6 +441,8 @@ return Destination::addSelect(['last_flight' => Flight::select('name')
 - [Rename Pivot Table](#rename-pivot-table)
 - [Update Parent in One Line](#update-parent-in-one-line)
 - [Laravel 7+ Foreign Keys](#laravel-7-foreign-keys)
+- [Combine Two "whereHas"](#combine-two-wherehas)
+- [Check if Relationship Method Exists](#check-if-relationship-method-exists)
 
 ### OrderBy on Eloquent relationships
 
@@ -636,6 +685,29 @@ Schema::table('posts', function (Blueprint $table)) {
 }
 ```
 
+### Combine Two "whereHas"
+
+In Eloquent, you can combine `whereHas()` and `orDoesntHave()` in one sentence.
+
+```php
+User::whereHas('roles', function($query) {
+    $query->where('id', 1);
+})
+->orDoesntHave('roles')
+->get();
+```
+
+### Check if Relationship Method Exists
+
+If your Eloquent relationship names are dynamic and you need to check if relationship with such name exists on the object, use PHP function `method_exists($object, $methodName)`
+
+```php
+$user = User::first();
+if (method_exists($user, 'roles')) {
+	// Do something with $user->roles()->...
+}
+```
+
 
 ## Migrations
 
@@ -873,7 +945,7 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Route Fallback: When no Other Route is Matched](#route-fallback-when-no-other-route-is-matched)
 - [Route Parameters Validation with RegExp](#route-parameters-validation-with-regexp)
 - [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
-- [Query string parameters to Routes](#)
+- [Query string parameters to Routes](#query-string-parameters-to-routes)
 
 ### Route group within a group
 
@@ -1451,6 +1523,8 @@ $users = User::where('name', 'Taylor')->get()->dd();
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
 - [Composer: check for newer versions](#composer-check-for-newer-versions)
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
+- [Auto-Capitalize Translations](#auto-capitalize-translations)
+- [Carbon with Only Hours/Minutes](#carbon-with-only-hours-minutes)
 
 ### Exact Laravel version
 
@@ -1498,4 +1572,34 @@ class AppServiceProvider extends ServiceProvider
         JsonResource::withoutWrapping();
     }
 }
+```
+
+### Auto-Capitalize Translations
+
+In translation files (`resources/lang`), you can specify variables not only as `:variable`, but also capitalized as `:VARIABLE` or `:Variable` - and then whatever value you pass - will be also capitalized automatically.
+
+```php
+// resources/lang/en/messages.php
+'welcome' => 'Welcome, :Name'
+
+// Result: "Welcome, Taylor"
+echo __('messages.welcome', ['name' => 'taylor']);
+```
+
+### Carbon with Only Hours/Minutes
+
+If you want to have a current date without seconds and/or minutes, use Carbon's methods like `setSeconds(0)` or `setMinutes(0)`.
+
+```php
+// 2020-04-20 08:12:34
+echo now();
+
+// 2020-04-20 08:12:00
+echo now()->setSeconds(0);
+
+// 2020-04-20 08:00:00
+echo now()->setSeconds(0)->setMinutes(0);
+
+// Another way - even shorter
+echo now()->startOfHour();
 ```
