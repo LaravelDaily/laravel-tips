@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 26 Sep 2020__: Currently there are __103 tips__ divided into 14 sections.
+__Update 26 Sep 2020__: Currently there are __104 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ __Update 26 Sep 2020__: Currently there are __103 tips__ divided into 14 section
 - [Factories](#factories) (2 tips)
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (9 tips)
+- [Other](#other) (10 tips)
 
 
 ## DB Models and Eloquent
@@ -1543,6 +1543,7 @@ public function reorder(Request $request)
 - [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
 - [Use Older Laravel Version](#use-older-laravel-version)
 - [Add Parameters to Pagination Links](#add-parameters-to-pagination-links)
+- [Repeatable Callback Functions](#repeatable-callback-functions)
 
 ### Localhost in .env
 
@@ -1657,4 +1658,20 @@ In default Pagination links, you can pass additional parameters, preserve the or
 {{ $users->withQueryString()->links() }}
 
 {{ $users->fragment('foo')->links() }}
+```
+
+### Repeatable Callback Functions
+
+If you have a callback function that you need to re-use multiple times, you can assign it to a variable, and then re-use.﻿
+
+```php
+$userCondition = function ($query) {
+    $query->where('user_id', auth()->id());
+};
+
+// Get articles that have comments from this user
+// And return only those comments from this user
+$articles = Article::with(['comments' => $userCondition])
+    ->whereHas('comments', $userCondition)
+    ->get();
 ```
