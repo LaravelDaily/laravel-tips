@@ -18,7 +18,7 @@ An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https
 - [Factories](#factories) (2 tips)
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (7 tips)
+- [Other](#other) (8 tips)
 
 
 ## DB Models and Eloquent
@@ -1506,6 +1506,7 @@ public function reorder(Request $request)
 - [Carbon with Only Hours/Minutes](#carbon-with-only-hours-minutes)
 - [Single Action Controllers](#single-action-controllers)
 - [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
+- [Use Older Laravel Version](#use-older-laravel-version)
 
 ### Localhost in .env
 
@@ -1599,5 +1600,15 @@ You can `redirect()` not only to URL or specific route, but to a specific Contro
 ```php
 return redirect()->action('SomeController@method', ['param' => $value]);
 ```
+
+### Use Older Laravel Version
+
+If you want to use OLDER version instead of the newest Laravel, use this command:
+
+```
+composer create-project --prefer-dist laravel/laravel project "7.*"
+```
+
+Change 7.* to whichever version you want.
 
 
