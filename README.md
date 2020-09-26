@@ -3,7 +3,9 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-## Summary
+__Update 26 Sep 2020__: Currently there are __102 tips__ divided into 14 sections.
+
+## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (24 tips)
 - [Models Relations](#models-relations) (19 tips)
@@ -1536,7 +1538,7 @@ public function reorder(Request $request)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
 - [Composer: check for newer versions](#composer-check-for-newer-versions)
 - [Auto-Capitalize Translations](#auto-capitalize-translations)
-- [Carbon with Only Hours/Minutes](#carbon-with-only-hours-minutes)
+- [Carbon with Only Hours](#carbon-with-only-hours)
 - [Single Action Controllers](#single-action-controllers)
 - [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
 - [Use Older Laravel Version](#use-older-laravel-version)
@@ -1581,7 +1583,7 @@ In translation files (`resources/lang`), you can specify variables not only as `
 echo __('messages.welcome', ['name' => 'taylor']);
 ```
 
-### Carbon with Only Hours/Minutes
+### Carbon with Only Hours
 
 If you want to have a current date without seconds and/or minutes, use Carbon's methods like `setSeconds(0)` or `setMinutes(0)`.
 
