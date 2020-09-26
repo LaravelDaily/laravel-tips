@@ -12,7 +12,7 @@ An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https
 - [Routing](#routing) (9 tips)
 - [Validation](#validation) (7 tips)
 - [Collections](#collections) (3 tips)
-- [Auth](#auth) (4 tips)
+- [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (4 tips)
 - [Factories](#factories) (2 tips)
@@ -1213,7 +1213,7 @@ echo 'Total budget: ' . $users->sum('budget');
 - [More Events on User Registration](#more-events-on-user-registration)
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
 - [Change API Token on users password update](#change-api-token-on-users-password-update)
-
+- [Override Permissions for Super Admin](#override-permissions-for-super-admin)
 
 ### Check Multiple Permissions at Once
 
@@ -1267,6 +1267,27 @@ public function setPasswordAttribute($value)
     $this->attributes['api_token'] = Str::random(100);
 }
 ```
+
+### Override Permissions for Super Admin
+
+If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file. 
+
+```php
+// Intercept any Gate and check if it's super admin
+Gate::before(function($user, $ability) {
+    if ($user->is_super_admin == 1) {
+        return true;
+    }
+});
+
+// Or if you use some permissions package...
+Gate::before(function($user, $ability) {
+    if ($user->hasPermission('root')) {
+        return true;
+    }
+});
+```
+
 
 ## Mail
 
