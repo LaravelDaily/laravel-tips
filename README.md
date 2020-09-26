@@ -6,28 +6,27 @@ An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https
 ## Summary
 
 - [Controllers](#controllers)
-- [Models](#models)
+- [DB Models and Eloquent](#db-models-and-eloquent)
 - [Models Relations](#models-relations)
 - [Migrations](#migrations)
 - [Views](#views)
 - [Routing](#routing)
 - [Validation](#validation)
-- [Policies](#policies)
-- [Collection](#collection)
+- [Collections](#collections)
 - [Auth](#auth)
-- [Mails](#mails)
+- [Mail](#mail)
 - [Artisan](#artisan)
 - [Factories](#factories)
 - [Log and debug](#log-and-debug)
+- [API](#api)
 - [Other](#other)
 
 ## Controllers
 
-⬆️ [Go to top](#summary) ➡️ [Next (Models)](#models)
+⬆️ [Go to top](#summary) ➡️ [Next (DB Models and Eloquent)](#db-models-and-eloquent)
 
 - [Single Action Controllers](#single-action-controllers)
 - [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
-- [API Return "Everything went ok"](#api-return-everything-went-ok)
 
 ### Single Action Controllers
 
@@ -64,23 +63,7 @@ You can `redirect()` not only to URL or specific route, but to a specific Contro
 return redirect()->action('SomeController@method', ['param' => $value]);
 ```
 
-### API Return "Everything went ok"
-
-If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
-content". In Laravel, it's easy: `return response()->noContent();`.
-
-```php
-public function reorder(Request $request)
-{
-    foreach ($request->input('rows', []) as $row) {
-        Country::find($row['id'])->update(['position' => $row['position']]);
-    }
-
-    return response()->noContent();
-}
-```
-
-## Models
+## DB Models and Eloquent
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Controllers)](#controllers) ➡️ [Next (Models Relations)](#models-relations)
 
@@ -422,7 +405,7 @@ DB::statement('ALTER TABLE projects AUTO_INCREMENT=123');
 
 ## Models Relations
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Models)](#models) ➡️ [Next (Migrations)](#migrations)
+⬆️ [Go to top](#summary) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
 
 - [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
 - [Conditional relationships](#conditional-relationships)
@@ -1119,7 +1102,7 @@ $url = route('profile', ['id' => 1, 'photos' => 'yes']); // Result: /user/1/prof
 
 ## Validation
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Policies)](#policies)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
 
 - [Image validation](#image-validation)
 - [Custom validation error messages](#custom-validation-error-messages)
@@ -1217,27 +1200,9 @@ $request->validate([
 ]);
 ```
 
-## Policies
+## Collections
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Collection)](#collection)
-
-- [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
-
-### Check Multiple Permissions at Once
-
-In addition to `@can` Blade directive, did you know you can check multiple permissions at once with `@canany` directive?
-
-```blade
-@canany(['update', 'view', 'delete'], $post)
-    // The current user can update, view, or delete the post
-@elsecanany(['create'], \App\Post::class)
-    // The current user can create a post
-@endcanany
-```
-
-## Collection
-
-⬆️ [Go to top](#summary) ⬅️ [Previous (Policies)](#policies) ➡️ [Next (Auth)](#auth)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
 
 - [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
@@ -1284,11 +1249,25 @@ echo 'Total budget: ' . $users->sum('budget');
 
 ## Auth
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Collection)](#collection) ➡️ [Next (Mails)](#mails)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Collections)](#collections) ➡️ [Next (Mail)](#mail)
 
+- [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
 - [More Events on User Registration](#more-events-on-user-registration)
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
 - [Change API Token on users password update](#change-api-token-on-users-password-update)
+
+
+### Check Multiple Permissions at Once
+
+In addition to `@can` Blade directive, did you know you can check multiple permissions at once with `@canany` directive?
+
+```blade
+@canany(['update', 'view', 'delete'], $post)
+    // The current user can update, view, or delete the post
+@elsecanany(['create'], \App\Post::class)
+    // The current user can create a post
+@endcanany
+```
 
 ### More Events on User Registration
 
@@ -1331,7 +1310,7 @@ public function setPasswordAttribute($value)
 }
 ```
 
-## Mails
+## Mail
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Auth)](#auth) ➡️ [Next (Artisan)](#artisan)
 
@@ -1381,11 +1360,13 @@ Notification::route('mail', 'taylor@example.com')
 
 ## Artisan
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Mails)](#mails) ➡️ [Next (Factories)](#factories)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Mail)](#mail) ➡️ [Next (Factories)](#factories)
 
 - [Artisan command parameters](#artisan-command-parameters)
 - [Maintenance Mode](#maintenance-mode)
-- [Artisan command helo](#artisan-command-help)
+- [Artisan command help](#artisan-command-help)
+- [Exact Laravel version](#exact-laravel-version)
+
 
 ### Artisan command parameters
 
@@ -1450,6 +1431,11 @@ Options:
       --env[=ENV]       The environment the command should run under
   -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
+
+### Exact Laravel version
+
+Find out exactly what Laravel version you have in your app, by running command
+`php artisan --version`
 
 
 ## Factories
@@ -1518,19 +1504,11 @@ $users = User::where('name', 'Taylor')->get()->dd();
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug)
 
-- [Exact Laravel version](#exact-laravel-version)
 - [Localhost in .env](#localhost-in-env)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
 - [Composer: check for newer versions](#composer-check-for-newer-versions)
-- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [Auto-Capitalize Translations](#auto-capitalize-translations)
 - [Carbon with Only Hours/Minutes](#carbon-with-only-hours-minutes)
-
-### Exact Laravel version
-
-Find out exactly what Laravel version you have in your app, by running command
-`php artisan --version`
-
 
 ### Localhost in .env
 
@@ -1558,20 +1536,6 @@ phpunit/php-code-coverage   6.1.4 7.0.3 Library that provides collection, proces
 phpunit/phpunit             7.5.9 8.1.3 The PHP Unit Testing framework.
 ralouphie/getallheaders     2.0.5 3.0.3 A polyfill for getallheaders.
 sebastian/global-state      2.0.0 3.0.0 Snapshotting of global state
-```
-
-### API Resources: With or Without "data"?
-
-If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
-
-```php
-class AppServiceProvider extends ServiceProvider
-{
-    public function boot()
-    {
-        JsonResource::withoutWrapping();
-    }
-}
 ```
 
 ### Auto-Capitalize Translations
@@ -1603,3 +1567,39 @@ echo now()->setSeconds(0)->setMinutes(0);
 // Another way - even shorter
 echo now()->startOfHour();
 ```
+
+## API
+
+- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
+- [API Return "Everything went ok"](#api-return-everything-went-ok)
+
+### API Resources: With or Without "data"?
+
+If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
+
+```php
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot()
+    {
+        JsonResource::withoutWrapping();
+    }
+}
+```
+
+### API Return "Everything went ok"
+
+If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
+content". In Laravel, it's easy: `return response()->noContent();`.
+
+```php
+public function reorder(Request $request)
+{
+    foreach ($request->input('rows', []) as $row) {
+        Country::find($row['id'])->update(['position' => $row['position']]);
+    }
+
+    return response()->noContent();
+}
+```
+
