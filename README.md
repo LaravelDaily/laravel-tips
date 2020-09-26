@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 26 Sep 2020__: Currently there are __102 tips__ divided into 14 sections.
+__Update 26 Sep 2020__: Currently there are __103 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ __Update 26 Sep 2020__: Currently there are __102 tips__ divided into 14 section
 - [Factories](#factories) (2 tips)
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (8 tips)
+- [Other](#other) (9 tips)
 
 
 ## DB Models and Eloquent
@@ -1542,6 +1542,7 @@ public function reorder(Request $request)
 - [Single Action Controllers](#single-action-controllers)
 - [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
 - [Use Older Laravel Version](#use-older-laravel-version)
+- [Add Parameters to Pagination Links](#add-parameters-to-pagination-links)
 
 ### Localhost in .env
 
@@ -1646,4 +1647,14 @@ composer create-project --prefer-dist laravel/laravel project "7.*"
 
 Change 7.* to whichever version you want.
 
+### Add Parameters to Pagination Links
 
+In default Pagination links, you can pass additional parameters, preserve the original query string, or even point to a specific `#xxxxx` anchor. 
+
+```
+{{ $users->appends(['sort' => 'votes'])->links() }}
+
+{{ $users->withQueryString()->links() }}
+
+{{ $users->fragment('foo')->links() }}
+```
