@@ -103,6 +103,7 @@ public function reorder(Request $request)
 - [Never Update the Column](#never-update-the-column)
 - [Find Many](#find-many)
 - [Use UUID instead of auto-increment](#use-uuid-instead-of-auto-increment)
+- [Sub-selects in Laravel Way](#sub-selects-in-laravel-way)
 
 ### Eloquent where date methods
 
@@ -359,6 +360,19 @@ class User extends Model
 }
 ```
 
+### Sub-selects in Laravel Way
+
+From Laravel 6, you can use addSelect() in Eloquent statement, and do some calculation to that added column.
+
+```php
+return Destination::addSelect(['last_flight' => Flight::select('name')
+    ->whereColumn('destination_id', 'destinations.id')
+    ->orderBy('arrived_at', 'desc')
+    ->limit(1)
+])->get();
+```
+
+
 ## Models Relations
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Models)](#models) ➡️ [Next (Migrations)](#migrations)
@@ -378,6 +392,8 @@ class User extends Model
 - [Load Relationships Always, but Dynamically](#load-relationships-always-but-dynamically)
 - [Instead of belongsTo, use hasMany](#instead-of-belongsto-use-hasmany)
 - [Rename Pivot Table](#rename-pivot-table)
+- [Update Parent in One Line](#update-parent-in-one-line)
+- [Laravel 7+ Foreign Keys](#laravel-7-foreign-keys)
 
 ### OrderBy on Eloquent relationships
 
@@ -588,6 +604,38 @@ foreach ($podcasts as $podcast) {
     echo $podcast->subscription->created_at;
 }
 ```
+
+### Update Parent in One Line
+
+If you have a `belongsTo()` relationship, you can update the Eloquent relationship data in the same sentence:
+
+```php
+// if Project -> belongsTo(User::class)
+$project->user->update(['email' => 'some@gmail.com']); 
+```
+
+### Laravel 7+ Foreign Keys
+
+From Laravel 7, in migrations you don't need to write two lines for relationship field - one for the field and one for foreign key. Use method `foreignId()`.
+
+```php
+// Before Laravel 7
+Schema::table('posts', function (Blueprint $table)) {
+    $table->unsignedBigInteger('user_id');
+    $table->foreign('user_id')->references('id')->on('users');
+}
+
+// From Laravel 7
+Schema::table('posts', function (Blueprint $table)) {
+    $table->foreignId('user_id')->constrained();
+}
+
+// Or, if your field is different from the table reference
+Schema::table('posts', function (Blueprint $table)) {
+    $table->foreignId('created_by_id')->references('id')->on('users');
+}
+```
+
 
 ## Migrations
 
@@ -1166,7 +1214,26 @@ echo 'Total budget: ' . $users->sum('budget');
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Collection)](#collection) ➡️ [Next (Mails)](#mails)
 
+- [More Events on User Registration](#more-events-on-user-registration)
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
+- [Change API Token on users password update](#change-api-token-on-users-password-update)
+
+### More Events on User Registration
+
+Want to perform some actions after new user registration? Head to `app/Providers/EventServiceProvider.php` and add more Listeners classes, and then in those classes implement `handle()` method with `$event->user` object
+
+```php
+class EventServiceProvider extends ServiceProvider
+{
+    protected $listen = [
+        Registered::class => [
+            SendEmailVerificationNotification::class,
+
+            // You can add any Listener class here
+            // With handle() method inside of that class
+        ],
+    ];
+```
 
 ### Did you know about Auth::once()?
 
@@ -1179,7 +1246,7 @@ if (Auth::once($credentials)) {
 }
 ```
 
-### Change API Token on user's password update
+### Change API Token on users password update
 
 It's convenient to change the user's API Token when its password changes.
 
@@ -1382,6 +1449,8 @@ $users = User::where('name', 'Taylor')->get()->dd();
 - [Exact Laravel version](#exact-laravel-version)
 - [Localhost in .env](#localhost-in-env)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
+- [Composer: check for newer versions](#composer-check-for-newer-versions)
+- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 
 ### Exact Laravel version
 
@@ -1404,3 +1473,29 @@ APP_URL=http://localhost
 ### When (NOT) to run "composer update"
 
 Not so much about Laravel, but... Never run `composer update` on production live server, it's slow and will "break" repository. Always run `composer update` locally on your computer, commit new `composer.lock` to the repository, and run `composer install` on the live server.
+
+### Composer: Check for Newer Versions
+
+If you want to find out which of your `composer.json` packages have released newer versions, just run `composer outdated`. You will get a full list with all information, like this below.
+
+```
+phpdocumentor/type-resolver 0.4.0 0.7.1
+phpunit/php-code-coverage   6.1.4 7.0.3 Library that provides collection, processing, and rende...
+phpunit/phpunit             7.5.9 8.1.3 The PHP Unit Testing framework.
+ralouphie/getallheaders     2.0.5 3.0.3 A polyfill for getallheaders.
+sebastian/global-state      2.0.0 3.0.0 Snapshotting of global state
+```
+
+### API Resources: With or Without "data"?
+
+If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
+
+```php
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot()
+    {
+        JsonResource::withoutWrapping();
+    }
+}
+```
