@@ -1235,6 +1235,7 @@ Notification::route('mail', 'taylor@example.com')
 
 - [Artisan command parameters](#artisan-command-parameters)
 - [Maintenance Mode](#maintenance-mode)
+- [Artisan command helo](#artisan-command-help)
 
 ### Artisan command parameters
 
@@ -1274,6 +1275,32 @@ When you've done the maintenance work, just run:
 ```bash
 php artisan up
 ```
+
+### Artisan command help
+
+To check the options of artisan command, Run artisan commands with `--help` flag. For example, `php artisan make:model --help` and see how many options you have:
+
+```
+Options:
+  -a, --all             Generate a migration, seeder, factory, and resource controller for the model
+  -c, --controller      Create a new controller for the model
+  -f, --factory         Create a new factory for the model
+      --force           Create the class even if the model already exists
+  -m, --migration       Create a new migration file for the model
+  -s, --seed            Create a new seeder file for the model
+  -p, --pivot           Indicates if the generated model should be a custom intermediate table model
+  -r, --resource        Indicates if the generated controller should be a resource controller
+      --api             Indicates if the generated controller should be an API controller
+  -h, --help            Display this help message
+  -q, --quiet           Do not output any message
+  -V, --version         Display this application version
+      --ansi            Force ANSI output
+      --no-ansi         Disable ANSI output
+  -n, --no-interaction  Do not ask any interactive question
+      --env[=ENV]       The environment the command should run under
+  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+```
+
 
 ## Factories
 
@@ -1342,34 +1369,9 @@ $users = User::where('name', 'Taylor')->get()->dd();
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug)
 
 - [Exact Laravel version](#exact-laravel-version)
-- [Artisan command helo](#artisan-command-help)
 
 ### Exact Laravel version
 
 Find out exactly what Laravel version you have in your app, by running command
 `php artisan --version`
 
-### Artisan command help
-
-To check the options of artisan command, Run artisan commands with `--help` flag. For example, `php artisan make:model --help` and see how many options you have:
-
-```
-Options:
-  -a, --all             Generate a migration, seeder, factory, and resource controller for the model
-  -c, --controller      Create a new controller for the model
-  -f, --factory         Create a new factory for the model
-      --force           Create the class even if the model already exists
-  -m, --migration       Create a new migration file for the model
-  -s, --seed            Create a new seeder file for the model
-  -p, --pivot           Indicates if the generated model should be a custom intermediate table model
-  -r, --resource        Indicates if the generated controller should be a resource controller
-      --api             Indicates if the generated controller should be an API controller
-  -h, --help            Display this help message
-  -q, --quiet           Do not output any message
-  -V, --version         Display this application version
-      --ansi            Force ANSI output
-      --no-ansi         Disable ANSI output
-  -n, --no-interaction  Do not ask any interactive question
-      --env[=ENV]       The environment the command should run under
-  -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
-```
