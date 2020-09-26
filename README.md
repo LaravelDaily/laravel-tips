@@ -1474,7 +1474,8 @@ $factory->define(User::class, function (Faker $faker) {
 
 ## Log and debug
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Factories)](#factories)
+⬆️ [Go to top](#summary) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
+
 
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
@@ -1499,10 +1500,46 @@ dd($users);
 $users = User::where('name', 'Taylor')->get()->dd();
 ```
 
+## API
+
+⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug) ➡️ [Next (Other)](#other)
+
+- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
+- [API Return "Everything went ok"](#api-return-everything-went-ok)
+
+### API Resources: With or Without "data"?
+
+If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
+
+```php
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot()
+    {
+        JsonResource::withoutWrapping();
+    }
+}
+```
+
+### API Return "Everything went ok"
+
+If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
+content". In Laravel, it's easy: `return response()->noContent();`.
+
+```php
+public function reorder(Request $request)
+{
+    foreach ($request->input('rows', []) as $row) {
+        Country::find($row['id'])->update(['position' => $row['position']]);
+    }
+
+    return response()->noContent();
+}
+```
 
 ## Other
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug)
+⬆️ [Go to top](#summary) ⬅️ [Previous (API)](#api)
 
 - [Localhost in .env](#localhost-in-env)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
@@ -1566,40 +1603,5 @@ echo now()->setSeconds(0)->setMinutes(0);
 
 // Another way - even shorter
 echo now()->startOfHour();
-```
-
-## API
-
-- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
-- [API Return "Everything went ok"](#api-return-everything-went-ok)
-
-### API Resources: With or Without "data"?
-
-If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
-
-```php
-class AppServiceProvider extends ServiceProvider
-{
-    public function boot()
-    {
-        JsonResource::withoutWrapping();
-    }
-}
-```
-
-### API Return "Everything went ok"
-
-If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
-content". In Laravel, it's easy: `return response()->noContent();`.
-
-```php
-public function reorder(Request $request)
-{
-    foreach ($request->input('rows', []) as $row) {
-        Country::find($row['id'])->update(['position' => $row['position']]);
-    }
-
-    return response()->noContent();
-}
 ```
 
