@@ -903,6 +903,8 @@ public function getRouteKeyName() {
 
 ### Quickly Navigate from Routes file to Controller
 
+This thing was optional before Laravel 8, and became a standart main syntax of routing in Laravel 8.
+
 Instead of routing like this:
 ```php
 Route::get('page', 'PageController@action');
@@ -914,6 +916,15 @@ Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
 ```
 
 Then you will be able to click on **PageController** in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
+
+Or, to make it shorter, add this to top of Routes file:
+
+```php
+use App\Http\Controllers\PageController;
+
+// Then:
+Route::get('page', [PageController::class, 'action']);
+```
 
 ### Route Fallback: When no Other Route is Matched
 
@@ -1369,9 +1380,27 @@ $users = User::where('name', 'Taylor')->get()->dd();
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug)
 
 - [Exact Laravel version](#exact-laravel-version)
+- [Localhost in .env](#localhost-in-env)
+- [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
 
 ### Exact Laravel version
 
 Find out exactly what Laravel version you have in your app, by running command
 `php artisan --version`
 
+
+### Localhost in .env
+
+Don't forget to change `APP_URL` in your `.env` file from `http://localhost` to the real URL, cause it will be the basis for any links in your email notifications and elsewhere.
+
+```
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:9PHz3TL5C4YrdV6Gg/Xkkmx9btaE93j7rQTUZWm2MqU=
+APP_DEBUG=true
+APP_URL=http://localhost
+```
+
+### When (NOT) to run "composer update"
+
+Not so much about Laravel, but... Never run `composer update` on production live server, it's slow and will "break" repository. Always run `composer update` locally on your computer, commit new `composer.lock` to the repository, and run `composer install` on the live server.
