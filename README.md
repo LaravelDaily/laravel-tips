@@ -5,67 +5,25 @@ An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https
 
 ## Summary
 
-- [Controllers](#controllers)
-- [DB Models and Eloquent](#db-models-and-eloquent)
-- [Models Relations](#models-relations)
-- [Migrations](#migrations)
-- [Views](#views)
-- [Routing](#routing)
-- [Validation](#validation)
-- [Collections](#collections)
-- [Auth](#auth)
-- [Mail](#mail)
-- [Artisan](#artisan)
-- [Factories](#factories)
-- [Log and debug](#log-and-debug)
-- [API](#api)
-- [Other](#other)
+- [DB Models and Eloquent](#db-models-and-eloquent) (24 tips)
+- [Models Relations](#models-relations) (19 tips)
+- [Migrations](#migrations) (5 tips)
+- [Views](#views) (8 tips)
+- [Routing](#routing) (9 tips)
+- [Validation](#validation) (7 tips)
+- [Collections](#collections) (3 tips)
+- [Auth](#auth) (4 tips)
+- [Mail](#mail) (4 tips)
+- [Artisan](#artisan) (4 tips)
+- [Factories](#factories) (2 tips)
+- [Log and debug](#log-and-debug) (2 tips)
+- [API](#api) (2 tips)
+- [Other](#other) (7 tips)
 
-## Controllers
-
-⬆️ [Go to top](#summary) ➡️ [Next (DB Models and Eloquent)](#db-models-and-eloquent)
-
-- [Single Action Controllers](#single-action-controllers)
-- [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
-
-### Single Action Controllers
-
-If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
-
-Route:
-```php
-Route::get('user/{id}', 'ShowProfile');
-```
-
-Artisan:
-```bash
-php artisan make:controller ShowProfile --invokable
-``` 
-
-Controller: 
-```php
-class ShowProfile extends Controller
-{
-    public function __invoke($id)
-    {
-        return view('user.profile', [
-            'user' => User::findOrFail($id)
-        ]);
-    }
-}
-```
-
-### Redirect to Specific Controller Method
-
-You can `redirect()` not only to URL or specific route, but to a specific Controller's specific method, and even pass the parameters. Use this:
-
-```php
-return redirect()->action('SomeController@method', ['param' => $value]);
-```
 
 ## DB Models and Eloquent
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Controllers)](#controllers) ➡️ [Next (Models Relations)](#models-relations)
+⬆️ [Go to top](#summary) ➡️ [Next (Models Relations)](#models-relations)
 
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
@@ -1546,6 +1504,8 @@ public function reorder(Request $request)
 - [Composer: check for newer versions](#composer-check-for-newer-versions)
 - [Auto-Capitalize Translations](#auto-capitalize-translations)
 - [Carbon with Only Hours/Minutes](#carbon-with-only-hours-minutes)
+- [Single Action Controllers](#single-action-controllers)
+- [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
 
 ### Localhost in .env
 
@@ -1604,4 +1564,40 @@ echo now()->setSeconds(0)->setMinutes(0);
 // Another way - even shorter
 echo now()->startOfHour();
 ```
+
+### Single Action Controllers
+
+If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
+
+Route:
+```php
+Route::get('user/{id}', 'ShowProfile');
+```
+
+Artisan:
+```bash
+php artisan make:controller ShowProfile --invokable
+``` 
+
+Controller: 
+```php
+class ShowProfile extends Controller
+{
+    public function __invoke($id)
+    {
+        return view('user.profile', [
+            'user' => User::findOrFail($id)
+        ]);
+    }
+}
+```
+
+### Redirect to Specific Controller Method
+
+You can `redirect()` not only to URL or specific route, but to a specific Controller's specific method, and even pass the parameters. Use this:
+
+```php
+return redirect()->action('SomeController@method', ['param' => $value]);
+```
+
 
