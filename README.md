@@ -403,6 +403,7 @@ $flight = Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
+
 ```﻿
 
 
