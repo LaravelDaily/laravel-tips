@@ -3,12 +3,12 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 26 Sep 2020__: Currently there are __104 tips__ divided into 14 sections.
+__Update 26 Sep 2020__: Currently there are __106 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (24 tips)
-- [Models Relations](#models-relations) (19 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (25 tips)
+- [Models Relations](#models-relations) (20 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (9 tips)
@@ -51,6 +51,7 @@ __Update 26 Sep 2020__: Currently there are __104 tips__ divided into 14 section
 - [Exact DB Error](#exact-db-error)
 - [Soft-Deletes with Query Builder](#soft-deletes-with-query-builder)
 - [Good Old SQL Query](#good-old-sql-query)
+- [Use DB Transactions](#use-db-transactions)
 
 ### Eloquent where date methods
 
@@ -362,6 +363,20 @@ DB::statement('DROP TABLE users');
 DB::statement('ALTER TABLE projects AUTO_INCREMENT=123');
 ```
 
+### Use DB Transactions
+
+If you have two DB operations performed, and second may get an error, then you should rollback the first one, right? 
+
+For that, I suggest to use DB Transactions, it's really easy in Laravel:
+
+```php
+DB::transaction(function () {
+    DB::table('users')->update(['votes' => 1]);
+
+    DB::table('posts')->delete();
+});
+```
+
 
 ## Models Relations
 
@@ -386,6 +401,7 @@ DB::statement('ALTER TABLE projects AUTO_INCREMENT=123');
 - [Laravel 7+ Foreign Keys](#laravel-7-foreign-keys)
 - [Combine Two "whereHas"](#combine-two-wherehas)
 - [Check if Relationship Method Exists](#check-if-relationship-method-exists)
+- [Pivot Table with Extra Relations](#pivot-table-with-extra-relations)
 
 ### OrderBy on Eloquent relationships
 
@@ -524,6 +540,12 @@ And then, in your Blade file, you will access those number with `{relationship}_
 @endforeach
 ```
 
+You may also order by that field:
+
+```php
+User::withCount('comments')->orderBy('comments_count', 'desc')->get(); 
+```
+
 ### Extra Filter Query on Relationships
 
 If you want to load relationship data, you can specify some limitations or ordering in a closure function. For example, if you want to get Countries with only three of their biggest cities, here's the code.
@@ -649,6 +671,42 @@ $user = User::first();
 if (method_exists($user, 'roles')) {
 	// Do something with $user->roles()->...
 }
+```
+
+### Pivot Table with Extra Relations
+
+In many-to-many relationship, your pivot table may contain extra fields, and even extra relationships to other Model. 
+
+Then generate a separate Pivot Model:
+
+```
+php artisan make:model RoleUser --pivot
+```
+
+Next, specify it in `belongsToMany()` with `->using()` method. Then you could do magic, like in the example.﻿
+
+```php
+// in app/Models/User.php
+public function roles()
+{
+	return $this->belongsToMany(Role::class)
+	    ->using(RoleUser::class)
+	    ->withPivot(['team_id']);
+}
+
+// app/Models/RoleUser.php: notice extends Pivot, not Model
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class RoleUser extends Pivot
+{
+	public function team()
+	{
+	    return $this->belongsTo(Team::class);
+	}
+}
+
+// Then, in Controller, you can do:
+$firstTeam = auth()->user()->roles()->first()->pivot->team->name;
 ```
 
 
