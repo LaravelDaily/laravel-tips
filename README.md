@@ -176,7 +176,7 @@ User::oldest()->get();
 
 Also, you can specify another column to order by. For example, if you want to use `updated_at`, you can do this:
 ```php
-$lastUpdatedUser = User::newest('updated_at')->first();
+$lastUpdatedUser = User::latest('updated_at')->first();
 ```
 
 ### Automatic Column Value When Creating Records
