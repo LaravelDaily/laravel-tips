@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 26 Sep 2020__: Currently there are __106 tips__ divided into 14 sections.
+__Update 27 Sep 2020__: Currently there are __107 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (25 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (26 tips)
 - [Models Relations](#models-relations) (20 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
@@ -52,6 +52,7 @@ __Update 26 Sep 2020__: Currently there are __106 tips__ divided into 14 section
 - [Soft-Deletes with Query Builder](#soft-deletes-with-query-builder)
 - [Good Old SQL Query](#good-old-sql-query)
 - [Use DB Transactions](#use-db-transactions)
+- [Update or Create](#update-or-create)
 
 ### Eloquent where date methods
 
@@ -376,6 +377,34 @@ DB::transaction(function () {
     DB::table('posts')->delete();
 });
 ```
+
+### Update or Create
+
+If you need to check if the record exists, and then update it, or create a new record otherwise, you can do it in one sentence - use Eloquent method `updateOrCreate()`:
+
+```php
+// Instead of this
+$flight = Flight::where('departure', 'Oakland')
+    ->where('destination', 'San Diego')
+    ->first();
+if ($flight) {
+    $flight->update(['price' => 99, 'discounted' => 1]);
+} else {
+	$flight = Flight::create([
+	    'departure' => 'Oakland',
+	    'destination' => 'San Diego',
+	    'price' => 99,
+	    'discounted' => 1
+	]);
+}
+
+// Do it in ONE sentence
+$flight = Flight::updateOrCreate(
+    ['departure' => 'Oakland', 'destination' => 'San Diego'],
+    ['price' => 99, 'discounted' => 1]
+);
+```﻿
+
 
 
 ## Models Relations
