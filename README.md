@@ -383,6 +383,7 @@ DB::transaction(function () {
 If you need to check if the record exists, and then update it, or create a new record otherwise, you can do it in one sentence - use Eloquent method `updateOrCreate()`:
 
 ```php
+
 // Instead of this
 $flight = Flight::where('departure', 'Oakland')
     ->where('destination', 'San Diego')
@@ -404,7 +405,7 @@ $flight = Flight::updateOrCreate(
     ['price' => 99, 'discounted' => 1]
 );
 
-```﻿
+```﻿`
 
 
 
