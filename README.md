@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 27 Sep 2020__: Currently there are __107 tips__ divided into 14 sections.
+__Update 27 Sep 2020__: Currently there are __108 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (26 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (27 tips)
 - [Models Relations](#models-relations) (20 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
@@ -53,6 +53,7 @@ __Update 27 Sep 2020__: Currently there are __107 tips__ divided into 14 section
 - [Good Old SQL Query](#good-old-sql-query)
 - [Use DB Transactions](#use-db-transactions)
 - [Update or Create](#update-or-create)
+- [Forget Cache on Save](#forget-cache-on-save)
 
 ### Eloquent where date methods
 
@@ -402,6 +403,26 @@ $flight = Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
+```
+
+### Forget Cache on Save
+
+Tip given by [@pratiksh404](https://github.com/pratiksh404)
+
+If you have cache key like `posts` that gives collection, and you want to forget that cache key on new store or update, you can call static `saving` function on your model:
+
+```php
+class Post extends Model
+{
+    // Forget cache key on storing or updating
+    public static function boot()
+    {
+        parent::boot();
+        static::saving(function () {
+           Cache::forget('posts');
+        });
+    }
+}
 ```
 
 
