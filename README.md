@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 27 Sep 2020__: Currently there are __108 tips__ divided into 14 sections.
+__Update 28 Sep 2020__: Currently there are __109 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ __Update 27 Sep 2020__: Currently there are __108 tips__ divided into 14 section
 - [Views](#views) (8 tips)
 - [Routing](#routing) (9 tips)
 - [Validation](#validation) (7 tips)
-- [Collections](#collections) (3 tips)
+- [Collections](#collections) (4 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (4 tips)
@@ -1273,6 +1273,7 @@ $request->validate([
 - [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
+- [Calculate Sum with Pagination](#calculate-sum-with-pagination)
 
 ### Don’t Filter by NULL in Collections
 
@@ -1312,6 +1313,26 @@ echo 'Max ID: ' . $users->max('id');
 echo 'Average age: ' . $users->avg('age');
 echo 'Total budget: ' . $users->sum('budget');
 ```
+
+### Calculate Sum with Pagination
+
+How to calculate the sum of all records when you have only the PAGINATED collection? Do the calculation BEFORE the pagination, but from the same query.﻿
+
+
+```php
+// How to get sum of post_views with pagination?
+$posts = Post::paginate(10);
+// This will be only for page 1, not ALL posts
+$sum = $posts->sum('post_views');
+
+// Do this with Query Builder
+$query = Post::query();
+// Calculate sum
+$sum = $query->sum('post_views');
+// And then do the pagination from the same query
+$posts = $query->paginate(10);
+```
+
 
 ## Auth
 
