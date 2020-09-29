@@ -3,12 +3,12 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 28 Sep 2020__: Currently there are __109 tips__ divided into 14 sections.
+__Update 28 Sep 2020__: Currently there are __110 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (27 tips)
-- [Models Relations](#models-relations) (20 tips)
+- [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (9 tips)
@@ -450,6 +450,8 @@ class Post extends Model
 - [Combine Two "whereHas"](#combine-two-wherehas)
 - [Check if Relationship Method Exists](#check-if-relationship-method-exists)
 - [Pivot Table with Extra Relations](#pivot-table-with-extra-relations)
+- [Load Count on-the-fly](#load-count-on-the-fly)
+
 
 ### OrderBy on Eloquent relationships
 
@@ -757,6 +759,22 @@ class RoleUser extends Pivot
 $firstTeam = auth()->user()->roles()->first()->pivot->team->name;
 ```
 
+### Load Count on-the-fly
+
+In addition to Eloquent's `withCount()` method to count related records, you can also load the count on-the-fly, with `loadCount()`:
+
+```php
+// if your Book hasMany Reviews...
+$book = App\Book::first();
+
+$book->loadCount('reviews');
+// Then you get access to $book->reviews_count;
+
+// Or even with extra condition
+$book->loadCount(['reviews' => function ($query) {
+    $query->where('rating', 5);
+}]);
+```
 
 ## Migrations
 
