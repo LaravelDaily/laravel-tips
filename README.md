@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Sep 2020__: Currently there are __110 tips__ divided into 14 sections.
+__Update 30 Sep 2020__: Currently there are __111 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ __Update 29 Sep 2020__: Currently there are __110 tips__ divided into 14 section
 - [Collections](#collections) (4 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
-- [Artisan](#artisan) (4 tips)
+- [Artisan](#artisan) (5 tips)
 - [Factories](#factories) (2 tips)
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
@@ -1492,6 +1492,7 @@ Notification::route('mail', 'taylor@example.com')
 - [Maintenance Mode](#maintenance-mode)
 - [Artisan command help](#artisan-command-help)
 - [Exact Laravel version](#exact-laravel-version)
+- [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
 
 
 ### Artisan command parameters
@@ -1575,6 +1576,19 @@ Options:
 Find out exactly what Laravel version you have in your app, by running command
 `php artisan --version`
 
+### Launch Artisan command from anywhere
+
+If you have an Artisan command, you can launch it not only from Terminal, but also from anywhere in your code, with parameters. Use Artisan::call() method:
+
+```php
+Route::get('/foo', function () {
+    $exitCode = Artisan::call('email:send', [
+        'user' => 1, '--queue' => 'default'
+    ]);
+
+    //
+});
+```
 
 ## Factories
 
