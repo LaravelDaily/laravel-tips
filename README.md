@@ -54,7 +54,7 @@ __Update 01 Okt 2020__: Currently there are __112 tips__ divided into 14 section
 - [Use DB Transactions](#use-db-transactions)
 - [Update or Create](#update-or-create)
 - [Forget Cache on Save](#forget-cache-on-save)
-- [Auto Change Format of Created_at and Updated_at](#auto-change-format-of-created_at-and-updated_at)
+- [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
 
 ### Eloquent where date methods
 
@@ -426,24 +426,26 @@ class Post extends Model
 }
 ```
 
-### Auto Change Format Of Created_at and Updated_at
+### Change Format Of Created_at and Updated_at
 
 To change the format of `created_at` you can add a method in your model like this :
 ```
-public function getCreatedAtAttribute()
+public function getCreatedAtFormattedAtAttribute()
 {
-   return \Carbon\Carbon::parse($this->attributes['created_at'])->format('H:i d, M Y');
+   return $this->created_at->format('H:i d, M Y');
 }
 ```
+So you can use it `$entry->created_at_formatted` when its needed.
 It will return the `created_at` attribute like this : `04:19 23, Aug 2020`.
 
 And also for changing format of `updated_at` attribute, you can add this method :
 ```
-public function getUpdatedAtAttribute()
+public function getUpdatedAtFormattedAtAttribute()
 {
-   return \Carbon\Carbon::parse($this->attributes['updated_at'])->format('H:i d, M Y');
+   return $this->updated_at->format('H:i d, M Y');
 }
 ```
+So you can use it `$entry->updated_at_formatted` when its needed.
 It will return the `updated_at` attribute like this : `04:19 23, Aug 2020`.
 
 
