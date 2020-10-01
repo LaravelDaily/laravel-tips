@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 30 Sep 2020__: Currently there are __111 tips__ divided into 14 sections.
+__Update 01 Okt 2020__: Currently there are __112 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (27 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (28 tips)
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
@@ -54,6 +54,7 @@ __Update 30 Sep 2020__: Currently there are __111 tips__ divided into 14 section
 - [Use DB Transactions](#use-db-transactions)
 - [Update or Create](#update-or-create)
 - [Forget Cache on Save](#forget-cache-on-save)
+- [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
 
 ### Eloquent where date methods
 
@@ -424,6 +425,28 @@ class Post extends Model
     }
 }
 ```
+
+### Change Format Of Created_at and Updated_at
+
+To change the format of `created_at` you can add a method in your model like this :
+```
+public function getCreatedAtFormattedAtAttribute()
+{
+   return $this->created_at->format('H:i d, M Y');
+}
+```
+So you can use it `$entry->created_at_formatted` when its needed.
+It will return the `created_at` attribute like this : `04:19 23, Aug 2020`.
+
+And also for changing format of `updated_at` attribute, you can add this method :
+```
+public function getUpdatedAtFormattedAtAttribute()
+{
+   return $this->updated_at->format('H:i d, M Y');
+}
+```
+So you can use it `$entry->updated_at_formatted` when its needed.
+It will return the `updated_at` attribute like this : `04:19 23, Aug 2020`.
 
 
 ## Models Relations
