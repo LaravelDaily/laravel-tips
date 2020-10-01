@@ -1859,3 +1859,42 @@ $articles = Article::with(['comments' => $userCondition])
     ->whereHas('comments', $userCondition)
     ->get();
 ```
+
+
+### Composer Plugin Prestissimo 
+This is a [composer](https://getcomposer.org/) plugin that downloads packages in parallel to speed up the installation process.
+
+
+  
+#### Requirements
+-   composer  `>=1.0.0`  (includes dev-master)
+-   PHP  `>=5.3`, (suggest  `>=5.5`, because  `curl_share_init`)
+-   ext-curl
+
+#### Install
+    composer global require hirak/prestissimo
+
+#### Uninstall
+
+    composer global remove hirak/prestissimo
+
+#### Config (Optional)
+
+### [](https://github.com/hirak/prestissimo#prestissimo-03x)`prestissimo ^0.3.x`
+
+Recognize composer's options. You don't need to set any special configuration.
+
+-   [config.capath](https://getcomposer.org/doc/06-config.md#capath)
+-   [config.cafile](https://getcomposer.org/doc/06-config.md#cafile)
+
+#### [](https://github.com/hirak/prestissimo#composer-authentication)Composer authentication (Optional)
+
+To avoid Composer asking for authentication it is recommended to follow the procedure on  [composer's authentication](https://getcomposer.org/doc/articles/troubleshooting.md#api-rate-limit-and-oauth-tokens).
+
+For github.com you could also use an  `auth.json`  file with an  [oauth access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/)  placed on the the same level as your  `composer.json`  file:
+
+    {
+        "github-oauth": {
+            "github.com": "YOUR_GITHUB_ACCESS_TOKEN"
+        }
+    }
