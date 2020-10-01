@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 30 Sep 2020__: Currently there are __111 tips__ divided into 14 sections.
+__Update 01 Okt 2020__: Currently there are __112 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -54,7 +54,7 @@ __Update 30 Sep 2020__: Currently there are __111 tips__ divided into 14 section
 - [Use DB Transactions](#use-db-transactions)
 - [Update or Create](#update-or-create)
 - [Forget Cache on Save](#forget-cache-on-save)
-- [Auto Change Format of Creatd_at and Updated_at](#auto-change-format-of-created_at-and-updated_at)
+- [Auto Change Format of Created_at and Updated_at](#auto-change-format-of-created_at-and-updated_at)
 
 ### Eloquent where date methods
 
