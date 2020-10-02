@@ -55,6 +55,7 @@ __Update 01 Oct 2020__: Currently there are __112 tips__ divided into 14 section
 - [Update or Create](#update-or-create)
 - [Forget Cache on Save](#forget-cache-on-save)
 - [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
+- [Storing Array Type into JSON](#storing-array-type-into-json)
 
 ### Eloquent where date methods
 
@@ -450,6 +451,19 @@ public function getUpdatedAtFormattedAttribute()
 So you can use it `$entry->updated_at_formatted` when it's needed.
 It will return the `updated_at` attribute like this: `04:19 23, Aug 2020`.
 
+### Storing Array Type into JSON
+
+Tip given by [@pratiksh404](https://github.com/pratiksh404)
+
+If you have input field which takes an array and you have to store it as a JSON. You can use `$casts` method in your model. Here `images` is JSON attribute.
+
+```
+protected $casts = [
+        "images" => 'array',
+    ];
+```
+
+So you can store it as a JSON but when retrived from DB, it can be used as an array.
 
 ## Models Relations
 
