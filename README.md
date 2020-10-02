@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 01 Oct 2020__: Currently there are __112 tips__ divided into 14 sections.
+__Update 02 Oct 2020__: Currently there are __113 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (28 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (29 tips)
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
@@ -455,15 +455,16 @@ It will return the `updated_at` attribute like this: `04:19 23, Aug 2020`.
 
 Tip given by [@pratiksh404](https://github.com/pratiksh404)
 
-If you have input field which takes an array and you have to store it as a JSON. You can use `$casts` method in your model. Here `images` is JSON attribute.
+If you have input field which takes an array and you have to store it as a JSON, you can use `$casts` property in your model. Here `images` is a JSON attribute.
 
 ```
 protected $casts = [
-        "images" => 'array',
-    ];
+    'images' => 'array',
+];
 ```
 
-So you can store it as a JSON but when retrived from DB, it can be used as an array.
+So you can store it as a JSON, but when retrieved from DB, it can be used as an array.
+
 
 ## Models Relations
 
