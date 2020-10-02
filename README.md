@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 01 Oct 2020__: Currently there are __112 tips__ divided into 14 sections.
+**Update 01 Oct 2020**: Currently there are **112 tips** divided into 14 sections.
 
 ## Table of Contents
 
@@ -21,7 +21,6 @@ __Update 01 Oct 2020__: Currently there are __112 tips__ divided into 14 section
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
 - [Other](#other) (10 tips)
-
 
 ## DB Models and Eloquent
 
@@ -55,6 +54,7 @@ __Update 01 Oct 2020__: Currently there are __112 tips__ divided into 14 section
 - [Update or Create](#update-or-create)
 - [Forget Cache on Save](#forget-cache-on-save)
 - [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
+- [Storing Array Type into JSON](#storing-array-type-into-json)
 
 ### Eloquent where date methods
 
@@ -160,11 +160,13 @@ class Role extends Model
 ### Quick Order by created_at
 
 Instead of:
+
 ```php
 User::orderBy('created_at', 'desc')->get();
 ```
 
 You can do it quicker:
+
 ```php
 User::latest()->get();
 ```
@@ -172,11 +174,13 @@ User::latest()->get();
 By default, `latest()` will order by `created_at`.
 
 There is an opposite method `oldest()` which would order by `created_at` ascending:
+
 ```php
 User::oldest()->get();
 ```
 
 Also, you can specify another column to order by. For example, if you want to use `updated_at`, you can do this:
+
 ```php
 $lastUpdatedUser = User::latest('updated_at')->first();
 ```
@@ -214,6 +218,7 @@ User::where('active', 1)
 You can combine and chain Query Scopes in Eloquent, using more than one scope in a query.
 
 Model:
+
 ```php
 public function scopeActive($query) {
     return $query->where('active', 1);
@@ -225,6 +230,7 @@ public function scopeRegisteredWithinDays($query, $days) {
 ```
 
 Some Controller:
+
 ```php
 $users = User::registeredWithinDays(30)->active()->get();
 ```
@@ -243,6 +249,7 @@ $todayUsers = User::whereDate('created_at', now())->get();
 ### Grouping by First Letter
 
 You can group Eloquent results by any custom condition, here's how to group by first letter of user's name:
+
 ```php
 $users = User::all()->groupBy(function($item) {
     return $item->name[0];
@@ -252,6 +259,7 @@ $users = User::all()->groupBy(function($item) {
 ### Never Update the Column
 
 If you have DB column which you want to be set only once and never updated again, you can set that restriction on Eloquent Model, with a mutator:
+
 ```php
 class User extends Model
 {
@@ -269,6 +277,7 @@ class User extends Model
 ### Find Many
 
 Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found, not just one Model:
+
 ```php
 // Will return Eloquent Model
 $user = User::find(1);
@@ -281,6 +290,7 @@ $users = User::find([1,2,3]);
 You don't want to use auto incrementing ID in your model?
 
 Migration:
+
 ```php
 Schema::create('users', function (Blueprint $table) {
     // $table->increments('id');
@@ -289,6 +299,7 @@ Schema::create('users', function (Blueprint $table) {
 ```
 
 Model:
+
 ```php
 class User extends Model
 {
@@ -368,7 +379,7 @@ DB::statement('ALTER TABLE projects AUTO_INCREMENT=123');
 
 ### Use DB Transactions
 
-If you have two DB operations performed, and second may get an error, then you should rollback the first one, right? 
+If you have two DB operations performed, and second may get an error, then you should rollback the first one, right?
 
 For that, I suggest to use DB Transactions, it's really easy in Laravel:
 
@@ -431,25 +442,40 @@ class Post extends Model
 Tip given by [@syofyanzuhad](https://github.com/syofyanzuhad)
 
 To change the format of `created_at` you can add a method in your model like this:
+
 ```
 public function getCreatedAtFormattedAttribute()
 {
    return $this->created_at->format('H:i d, M Y');
 }
 ```
+
 So you can use it `$entry->created_at_formatted` when it's needed.
 It will return the `created_at` attribute like this: `04:19 23, Aug 2020`.
 
 And also for changing format of `updated_at` attribute, you can add this method :
+
 ```
 public function getUpdatedAtFormattedAttribute()
 {
    return $this->updated_at->format('H:i d, M Y');
 }
 ```
+
 So you can use it `$entry->updated_at_formatted` when it's needed.
 It will return the `updated_at` attribute like this: `04:19 23, Aug 2020`.
 
+### Storing Array Type into JSON
+
+If you have input field which takes an array and you have to store it as a JSON. You can use `$casts` method in your model. Here `images` is JSON attribute.
+
+```
+protected $casts = [
+        "images" => 'array',
+    ];
+```
+
+So you can store it as a JSON but when retrived from DB, it can be used as an array.
 
 ## Models Relations
 
@@ -477,7 +503,6 @@ It will return the `updated_at` attribute like this: `04:19 23, Aug 2020`.
 - [Pivot Table with Extra Relations](#pivot-table-with-extra-relations)
 - [Load Count on-the-fly](#load-count-on-the-fly)
 
-
 ### OrderBy on Eloquent relationships
 
 You can specify orderBy() directly on your Eloquent relationships.
@@ -499,6 +524,7 @@ public function productsByName()
 If you notice that you use same relationship often with additional "where" condition, you can create a separate relationship method.
 
 Model:
+
 ```php
 public function comments()
 {
@@ -540,7 +566,7 @@ $authors = Author::has('books', '>', 5)->get();
 
 ### Default model
 
-You can assign a default model in `belongsTo` relationship, to avoid fatal errors when calling it like `{{ $post->user->name }}` if $post->user doesn't exist.
+You can assign a default model in `belongsTo` relationship, to avoid fatal errors when calling it like `{{ $post->user->name }}` if \$post->user doesn't exist.
 
 ```php
 public function user()
@@ -564,11 +590,13 @@ $post->comments()->saveMany([
 ### Eager Loading with Exact Columns
 
 You can do Laravel Eager Loading and specify the exact columns you want to get from the relationship.
+
 ```php
 $users = App\Book::with('author:id,name')->get();
 ```
 
 You can do that even in deeper, second level relationships:
+
 ```php
 $users = App\Book::with('author.country:id,name')->get();
 ```
@@ -618,7 +646,7 @@ And then, in your Blade file, you will access those number with `{relationship}_
 You may also order by that field:
 
 ```php
-User::withCount('comments')->orderBy('comments_count', 'desc')->get(); 
+User::withCount('comments')->orderBy('comments_count', 'desc')->get();
 ```
 
 ### Extra Filter Query on Relationships
@@ -644,7 +672,7 @@ class ProductTag extends Model
     public function __construct() {
         parent::__construct();
         $this->with = ['product'];
-        
+
         if (auth()->check()) {
             $this->with[] = 'user';
         }
@@ -677,6 +705,7 @@ auth()->user()->posts()->create([
 If you want to rename "pivot" word and call your relationship something else, you just use `->as('name')` in your relationship.
 
 Model:
+
 ```php
 public function podcasts() {
     return $this->belongsToMany('App\Podcast')
@@ -686,6 +715,7 @@ public function podcasts() {
 ```
 
 Controller:
+
 ```php
 $podcasts = $user->podcasts();
 foreach ($podcasts as $podcast) {
@@ -700,7 +730,7 @@ If you have a `belongsTo()` relationship, you can update the Eloquent relationsh
 
 ```php
 // if Project -> belongsTo(User::class)
-$project->user->update(['email' => 'some@gmail.com']); 
+$project->user->update(['email' => 'some@gmail.com']);
 ```
 
 ### Laravel 7+ Foreign Keys
@@ -750,7 +780,7 @@ if (method_exists($user, 'roles')) {
 
 ### Pivot Table with Extra Relations
 
-In many-to-many relationship, your pivot table may contain extra fields, and even extra relationships to other Model. 
+In many-to-many relationship, your pivot table may contain extra fields, and even extra relationships to other Model.
 
 Then generate a separate Pivot Model:
 
@@ -758,7 +788,7 @@ Then generate a separate Pivot Model:
 php artisan make:model RoleUser --pivot
 ```
 
-Next, specify it in `belongsToMany()` with `->using()` method. Then you could do magic, like in the example.﻿
+Next, specify it in `belongsToMany()` with `->using()` method. Then you could do magic, like in the example.
 
 ```php
 // in app/Models/User.php
@@ -880,16 +910,16 @@ $table->timestamp('updated_at')->useCurrent();
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Migrations)](#migrations) ➡️ [Next (Routing)](#routing)
 
-- [$loop variable in foreach](#loop-variable-in-foreach)
+- [\$loop variable in foreach](#loop-variable-in-foreach)
 - [Does view file exist?](#does-view-file-exist)
 - [Error code Blade pages](#error-code-blade-pages)
 - [View without controllers](#view-without-controllers)
 - [Blade @auth](#blade-auth)
-- [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
+- [Two-level \$loop variable in Blade](#two-level-loop-variable-in-blade)
 - [Create Your Own Blade Directive](#create-your-own-blade-directive)
 - [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)
 
-### $loop variable in foreach
+### \$loop variable in foreach
 
 Inside of foreach loop, check if current entry is first/last by just using `$loop` variable.
 
@@ -954,6 +984,7 @@ Route::view('about', 'texts.about');
 Instead of if-statement to check logged in user, use `@auth` directive.
 
 Typical way:
+
 ```blade
 @if(auth()->user())
     // The user is authenticated.
@@ -961,6 +992,7 @@ Typical way:
 ```
 
 Shorter:
+
 ```blade
 @auth
     // The user is authenticated.
@@ -968,15 +1000,16 @@ Shorter:
 ```
 
 The opposite is `@guest` directive:
+
 ```blade
 @guest
     // The user is not authenticated.
 @endguest
 ```
 
-### Two-level $loop variable in Blade
+### Two-level \$loop variable in Blade
 
-In Blade's foreach you can use $loop variable even in two-level loop to reach parent variable.
+In Blade's foreach you can use \$loop variable even in two-level loop to reach parent variable.
 
 ```blade
 @foreach ($users as $user)
@@ -997,6 +1030,7 @@ It’s very easy - just add your own method in `app/Providers/AppServiceProvider
 ```
 
 Add this directive to AppServiceProvider’s `boot()` method:
+
 ```php
 public function boot()
 {
@@ -1011,16 +1045,19 @@ public function boot()
 If you are not sure whether your Blade partial file actually would exist, you may use these condition commands:
 
 This will load header only if Blade file exists
+
 ```blade
 @includeIf('partials.header')
 ```
 
 This will load header only for user with role_id 1
+
 ```blade
 @includeWhen(auth()->user()->role_id == 1, 'partials.header')
 ```
 
 This will try to load adminlte.header, if missing - will load default.header
+
 ```blade
 @includeFirst('adminlte.header', 'default.header')
 ```
@@ -1047,7 +1084,7 @@ In Routes, you can create a group within a group, assigning a certain middleware
 Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
     Route::get('login', 'AccountController@login');
     Route::get('register', 'AccountController@register');
-    
+
     Route::group(['middleware' => 'auth'], function() {
         Route::get('edit', 'AccountController@edit');
     });
@@ -1118,11 +1155,13 @@ public function getRouteKeyName() {
 This thing was optional before Laravel 8, and became a standart main syntax of routing in Laravel 8.
 
 Instead of routing like this:
+
 ```php
 Route::get('page', 'PageController@action');
 ```
 
 You can specify the Controller as a class:
+
 ```php
 Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
 ```
@@ -1159,6 +1198,7 @@ Route::fallback(function() {
 We can validate parameters directly in the route, with “where” parameter. A pretty typical case is to prefix your routes by language locale, like `fr/blog` and `en/article/333`. How do we ensure that those two first letters are not used for some other than language?
 
 `routes/web.php`:
+
 ```php
 Route::group([
     'prefix' => '{locale}',
@@ -1172,6 +1212,7 @@ Route::group([
 ### Rate Limiting: Global and for Guests/Users
 
 You can limit some URL to be called a maximum of 60 times per minute, with `throttle:60,1`:
+
 ```php
 Route::middleware('auth:api', 'throttle:60,1')->group(function () {
     Route::get('/user', function () {
@@ -1181,6 +1222,7 @@ Route::middleware('auth:api', 'throttle:60,1')->group(function () {
 ```
 
 But also, you can do it separately for public and for logged-in users:
+
 ```php
 // maximum of 10 requests for guests, 60 for authenticated users
 Route::middleware('throttle:10|60,1')->group(function () {
@@ -1189,6 +1231,7 @@ Route::middleware('throttle:10|60,1')->group(function () {
 ```
 
 Also, you can have a DB field users.rate_limit and limit the amount for specific user:
+
 ```php
 Route::middleware('auth:api', 'throttle:rate_limit,1')->group(function () {
     Route::get('/user', function () {
@@ -1278,7 +1321,7 @@ class StoreUserRequest extends FormRequest
     {
         return ['name' => 'required'];
     }
-    
+
     public function messages()
     {
         return ['name.required' => 'User name should be real name'];
@@ -1297,11 +1340,12 @@ protected function prepareForValidation()
         'slug' => Illuminate\Support\Str::slug($this->slug),
     ]);
 }
-``` 
+```
 
 ### Stop on First Validation Error
 
 By default, Laravel validation errors will be returned in a list, checking all validation rules. But if you want the process to stop after the first error, use validation rule called `bail`:
+
 ```php
 $request->validate([
     'title' => 'bail|required|unique:posts|max:255',
@@ -1339,6 +1383,7 @@ $unread_messages = $messages->where('read_at', '')->count();
 If you want to group result by some condition whith isn’t a direct column in your database, you can do that by providing a closure function.
 
 For example, if you want to group users by day of registration, here’s the code:
+
 ```php
 $users = User::all()->groupBy(function($item) {
     return $item->created_at->format('Y-m-d');
@@ -1350,6 +1395,7 @@ $users = User::all()->groupBy(function($item) {
 ### Multiple Collection Methods in a Row
 
 If you query all results with `->all()` or `->get()`, you may then perform various Collection operations on the same result, it won’t query database every time.
+
 ```php
 $users = User::all();
 echo 'Max ID: ' . $users->max('id');
@@ -1359,8 +1405,7 @@ echo 'Total budget: ' . $users->sum('budget');
 
 ### Calculate Sum with Pagination
 
-How to calculate the sum of all records when you have only the PAGINATED collection? Do the calculation BEFORE the pagination, but from the same query.﻿
-
+How to calculate the sum of all records when you have only the PAGINATED collection? Do the calculation BEFORE the pagination, but from the same query.
 
 ```php
 // How to get sum of post_views with pagination?
@@ -1375,7 +1420,6 @@ $sum = $query->sum('post_views');
 // And then do the pagination from the same query
 $posts = $query->paginate(10);
 ```
-
 
 ## Auth
 
@@ -1432,6 +1476,7 @@ if (Auth::once($credentials)) {
 It's convenient to change the user's API Token when its password changes.
 
 Model:
+
 ```php
 public function setPasswordAttribute($value)
 {
@@ -1442,7 +1487,7 @@ public function setPasswordAttribute($value)
 
 ### Override Permissions for Super Admin
 
-If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file. 
+If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file.
 
 ```php
 // Intercept any Gate and check if it's super admin
@@ -1459,7 +1504,6 @@ Gate::before(function($user, $ability) {
     }
 });
 ```
-
 
 ## Mail
 
@@ -1490,6 +1534,7 @@ Route::get('/mailable', function () {
 If you send Laravel Notification and don't specify subject in **toMail()**, default subject is your notification class name, CamelCased into Spaces.
 
 So, if you have:
+
 ```php
 class UserRegistrationEmail extends Notification {
     //
@@ -1519,7 +1564,6 @@ Notification::route('mail', 'taylor@example.com')
 - [Exact Laravel version](#exact-laravel-version)
 - [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
 
-
 ### Artisan command parameters
 
 When creating Artisan command, you can ask the input in variety of ways: `$this->confirm()`, `$this->anticipate()`, `$this->choice()`.
@@ -1540,6 +1584,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ### Maintenance Mode
 
 If you want to enable maintenance mode on your page, execute the down Artisan command:
+
 ```bash
 php artisan down
 ```
@@ -1547,6 +1592,7 @@ php artisan down
 Then people would see default 503 status page.
 
 You may also provide flags, in Laravel 8:
+
 - the path the user should be redirected to
 - the view that should be prerendered
 - secret phrase to bypass maintenance mode
@@ -1558,6 +1604,7 @@ php artisan down --redirect="/" --render="errors::503" --secret="1630542a-246b-4
 ```
 
 Before Laravel 8:
+
 - message that would be shown
 - retry page reload every X seconds
 - still allow the access to some IP address
@@ -1567,6 +1614,7 @@ php artisan down --message="Upgrading Database" --retry=60 --allow=127.0.0.1
 ```
 
 When you've done the maintenance work, just run:
+
 ```bash
 php artisan up
 ```
@@ -1652,7 +1700,6 @@ $factory->define(User::class, function (Faker $faker) {
 ## Log and debug
 
 ⬆️ [Go to top](#summary) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
-
 
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
@@ -1792,16 +1839,19 @@ echo now()->startOfHour();
 If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
 
 Route:
+
 ```php
 Route::get('user/{id}', 'ShowProfile');
 ```
 
 Artisan:
+
 ```bash
 php artisan make:controller ShowProfile --invokable
-``` 
+```
 
-Controller: 
+Controller:
+
 ```php
 class ShowProfile extends Controller
 {
@@ -1830,11 +1880,11 @@ If you want to use OLDER version instead of the newest Laravel, use this command
 composer create-project --prefer-dist laravel/laravel project "7.*"
 ```
 
-Change 7.* to whichever version you want.
+Change 7.\* to whichever version you want.
 
 ### Add Parameters to Pagination Links
 
-In default Pagination links, you can pass additional parameters, preserve the original query string, or even point to a specific `#xxxxx` anchor. 
+In default Pagination links, you can pass additional parameters, preserve the original query string, or even point to a specific `#xxxxx` anchor.
 
 ```
 {{ $users->appends(['sort' => 'votes'])->links() }}
@@ -1846,7 +1896,7 @@ In default Pagination links, you can pass additional parameters, preserve the or
 
 ### Repeatable Callback Functions
 
-If you have a callback function that you need to re-use multiple times, you can assign it to a variable, and then re-use.﻿
+If you have a callback function that you need to re-use multiple times, you can assign it to a variable, and then re-use.
 
 ```php
 $userCondition = function ($query) {
