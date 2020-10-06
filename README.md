@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 02 Oct 2020__: Currently there are __113 tips__ divided into 14 sections.
+__Update 02 Oct 2020__: Currently there are __114 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ __Update 02 Oct 2020__: Currently there are __113 tips__ divided into 14 section
 - [Factories](#factories) (2 tips)
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (10 tips)
+- [Other](#other) (11 tips)
 
 
 ## DB Models and Eloquent
@@ -1743,6 +1743,7 @@ public function reorder(Request $request)
 - [Use Older Laravel Version](#use-older-laravel-version)
 - [Add Parameters to Pagination Links](#add-parameters-to-pagination-links)
 - [Repeatable Callback Functions](#repeatable-callback-functions)
+- [Request: has any](#request-has-any)
 
 ### Localhost in .env
 
@@ -1873,4 +1874,20 @@ $userCondition = function ($query) {
 $articles = Article::with(['comments' => $userCondition])
     ->whereHas('comments', $userCondition)
     ->get();
+```
+
+
+### Request: has any
+
+You can check not only one parameter with `$request->has()` method, but also check for multiple parameters present, with `$request->hasAny()﻿`:
+
+```php
+public function store(Request $request) 
+{
+    if ($request->hasAny(['api_key', 'token'])) {
+        echo 'We have API key passed';
+    } else {
+        echo 'No authorization parameter';
+    }
+}
 ```
