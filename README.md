@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 05 Oct 2020__: Currently there are __114 tips__ divided into 14 sections.
+__Update 06 Oct 2020__: Currently there are __114 tips__ divided into 14 sections.
 
 ## Table of Contents
 
