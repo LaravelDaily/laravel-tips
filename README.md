@@ -736,7 +736,7 @@ Schema::table('posts', function (Blueprint $table)) {
 
 // Or, if your field is different from the table reference
 Schema::table('posts', function (Blueprint $table)) {
-    $table->foreignId('created_by_id')->references('id')->on('users');
+    $table->foreignId('created_by_id')->constrained('users', 'column');
 }
 ```
 
