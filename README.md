@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __120 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __121 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ __Update 29 Jan 2021__: Currently there are __120 tips__ divided into 14 section
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
-- [Routing](#routing) (12 tips)
+- [Routing](#routing) (13 tips)
 - [Validation](#validation) (7 tips)
 - [Collections](#collections) (4 tips)
 - [Auth](#auth) (5 tips)
@@ -1099,6 +1099,7 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Separate Routes by Files](#separate-routes-by-files)
 - [Translate Resource Verbs](#translate-resource-verbs)
 - [Custom Resource Route Names](#custom-resource-route-names)
+- [More Readable Route List](#more-readable-route-list)
 
 ### Route group within a group
 
@@ -1357,6 +1358,66 @@ Route::resource('p', ProductController::class)->names('products');
 So this code above will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit`, etc.
 But you would call them in the code by `route('products.index')`, `route('products.create')`, etc.
 
+### More Readable Route List
+
+Have you ever run "php artisan route:list" and then realized that the list takes too much space and hard to read?
+
+Here's the solution: 
+`php artisan route:list --compact` 
+
+Then it shows 3 columns instead of 6 columns: shows only Method / URI / Action.
+
+```
++----------+---------------------------------+-------------------------------------------------------------------------+
+| Method   | URI                             | Action                                                                  |
++----------+---------------------------------+-------------------------------------------------------------------------+
+| GET|HEAD | /                               | Closure                                                                 |
+| GET|HEAD | api/user                        | Closure                                                                 |
+| POST     | confirm-password                | App\Http\Controllers\Auth\ConfirmablePasswordController@store           |
+| GET|HEAD | confirm-password                | App\Http\Controllers\Auth\ConfirmablePasswordController@show            |
+| GET|HEAD | dashboard                       | Closure                                                                 |
+| POST     | email/verification-notification | App\Http\Controllers\Auth\EmailVerificationNotificationController@store |
+| POST     | forgot-password                 | App\Http\Controllers\Auth\PasswordResetLinkController@store             |
+| GET|HEAD | forgot-password                 | App\Http\Controllers\Auth\PasswordResetLinkController@create            |
+| POST     | login                           | App\Http\Controllers\Auth\AuthenticatedSessionController@store          |
+| GET|HEAD | login                           | App\Http\Controllers\Auth\AuthenticatedSessionController@create         |
+| POST     | logout                          | App\Http\Controllers\Auth\AuthenticatedSessionController@destroy        |
+| POST     | register                        | App\Http\Controllers\Auth\RegisteredUserController@store                |
+| GET|HEAD | register                        | App\Http\Controllers\Auth\RegisteredUserController@create               |
+| POST     | reset-password                  | App\Http\Controllers\Auth\NewPasswordController@store                   |
+| GET|HEAD | reset-password/{token}          | App\Http\Controllers\Auth\NewPasswordController@create                  |
+| GET|HEAD | verify-email                    | App\Http\Controllers\Auth\EmailVerificationPromptController@__invoke    |
+| GET|HEAD | verify-email/{id}/{hash}        | App\Http\Controllers\Auth\VerifyEmailController@__invoke                |
++----------+---------------------------------+-------------------------------------------------------------------------+
+```
+
+You can also specify the exact columns you want:
+
+`php artisan route:list --columns=Method,URI,Name`
+
+```
++----------+---------------------------------+---------------------+
+| Method   | URI                             | Name                |
++----------+---------------------------------+---------------------+
+| GET|HEAD | /                               |                     |
+| GET|HEAD | api/user                        |                     |
+| POST     | confirm-password                |                     |
+| GET|HEAD | confirm-password                | password.confirm    |
+| GET|HEAD | dashboard                       | dashboard           |
+| POST     | email/verification-notification | verification.send   |
+| POST     | forgot-password                 | password.email      |
+| GET|HEAD | forgot-password                 | password.request    |
+| POST     | login                           |                     |
+| GET|HEAD | login                           | login               |
+| POST     | logout                          | logout              |
+| POST     | register                        |                     |
+| GET|HEAD | register                        | register            |
+| POST     | reset-password                  | password.update     |
+| GET|HEAD | reset-password/{token}          | password.reset      |
+| GET|HEAD | verify-email                    | verification.notice |
+| GET|HEAD | verify-email/{id}/{hash}        | verification.verify |
++----------+---------------------------------+---------------------+
+```
 
 ## Validation
 
