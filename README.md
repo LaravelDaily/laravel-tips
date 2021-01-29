@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __124 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __125 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (30 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (31 tips)
 - [Models Relations](#models-relations) (22 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
@@ -57,6 +57,7 @@ __Update 29 Jan 2021__: Currently there are __124 tips__ divided into 14 section
 - [Forget Cache on Save](#forget-cache-on-save)
 - [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
 - [Storing Array Type into JSON](#storing-array-type-into-json)
+- [Make a Copy of the Model](#make-a-copy-of-the-model)
 
 ### Eloquent where date methods
 
@@ -473,6 +474,28 @@ protected $casts = [
 ```
 
 So you can store it as a JSON, but when retrieved from DB, it can be used as an array.
+
+### Make a Copy of the Model
+
+If you have two very similar Models (like shipping address and billing address) and you need to make a copy of one to another, you can use `replicate()` method and change some properties after that.
+
+Example from the [official docs](https://laravel.com/docs/8.x/eloquent#replicating-models): 
+
+```php
+$shipping = Address::create([
+    'type' => 'shipping',
+    'line_1' => '123 Example Street',
+    'city' => 'Victorville',
+    'state' => 'CA',
+    'postcode' => '90001',
+]);
+
+$billing = $shipping->replicate()->fill([
+    'type' => 'billing'
+]);
+
+$billing->save();
+```
 
 
 ## Models Relations
