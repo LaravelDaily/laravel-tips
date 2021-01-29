@@ -3,12 +3,12 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __123 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __124 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (30 tips)
-- [Models Relations](#models-relations) (21 tips)
+- [Models Relations](#models-relations) (22 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (13 tips)
@@ -500,6 +500,7 @@ So you can store it as a JSON, but when retrieved from DB, it can be used as an 
 - [Check if Relationship Method Exists](#check-if-relationship-method-exists)
 - [Pivot Table with Extra Relations](#pivot-table-with-extra-relations)
 - [Load Count on-the-fly](#load-count-on-the-fly)
+- [Randomize Relationship Order](#randomize-relationship-order)
 
 
 ### OrderBy on Eloquent relationships
@@ -823,6 +824,22 @@ $book->loadCount('reviews');
 $book->loadCount(['reviews' => function ($query) {
     $query->where('rating', 5);
 }]);
+```
+
+### Randomize Relationship Order
+
+You can use `inRandomOrder()` to randomize Eloquent query result, but also you can use it to randomize the **relationship** entries you're loading with query.
+
+```php
+// If you have a quiz and want to randomize questions...
+
+// 1. If you want to get questions in random order:
+$questions = Question::inRandomOrder()->get();
+
+// 2. If you want to also get question options in random order:
+$questions = Question::with(['answers' => function($q) {
+    $q->inRandomOrder();
+}])->inRandomOrder()->get();
 ```
 
 ## Migrations
