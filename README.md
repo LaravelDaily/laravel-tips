@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __122 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __123 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ __Update 29 Jan 2021__: Currently there are __122 tips__ divided into 14 section
 - [Factories](#factories) (2 tips)
 - [Log and debug](#log-and-debug) (2 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (11 tips)
+- [Other](#other) (12 tips)
 
 
 ## DB Models and Eloquent
@@ -1948,6 +1948,7 @@ public function reorder(Request $request)
 - [Add Parameters to Pagination Links](#add-parameters-to-pagination-links)
 - [Repeatable Callback Functions](#repeatable-callback-functions)
 - [Request: has any](#request-has-any)
+- [Simple Pagination](#simple-pagination)
 
 ### Localhost in .env
 
@@ -2094,4 +2095,16 @@ public function store(Request $request)
         echo 'No authorization parameter';
     }
 }
+```
+
+### Simple Pagination
+
+In pagination, if you want to have just "Previous/next" links instead of all the page numbers (and have fewer DB queries because of that), just change `paginate()` to `simplePaginate()`:
+
+```php
+// Instead of 
+$users = User::paginate(10);
+
+// You can do this
+$users = User::simplePaginate(10);
 ```
