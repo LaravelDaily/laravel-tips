@@ -3,13 +3,13 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __116 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __117 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (29 tips)
 - [Models Relations](#models-relations) (21 tips)
-- [Migrations](#migrations) (6 tips)
+- [Migrations](#migrations) (7 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (10 tips)
 - [Validation](#validation) (7 tips)
@@ -826,6 +826,7 @@ $book->loadCount(['reviews' => function ($query) {
 - [Database migrations column types](#database-migrations-column-types)
 - [Default Timestamp](#default-timestamp)
 - [Migration Status](#migration-status)
+- [Create Migration with Spaces](#create-migration-with-spaces)
 
 ### Unsigned Integer
 
@@ -907,6 +908,20 @@ Example result:
 | No   | 2019_08_19_000000_create_failed_jobs_table     |       |
 +------+------------------------------------------------+-------+
 ```
+
+### Create Migration with Spaces
+
+When typing `make:migration` command, you don't necessarily have to use underscore `_` symbol between parts, like `create_transactions_table`. You can put the name into quotes and then use spaces instead of underscores.
+
+```php
+// This works
+php artisan make:migration create_transactions_table
+
+// But this works too
+php artisan make:migration "create transactions table"
+```
+
+Source: [Steve O on Twitter](https://twitter.com/stephenoldham/status/1353647972991578120)
 
 ## Views
 
