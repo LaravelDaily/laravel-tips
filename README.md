@@ -3,13 +3,13 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __115 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __116 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (29 tips)
 - [Models Relations](#models-relations) (21 tips)
-- [Migrations](#migrations) (5 tips)
+- [Migrations](#migrations) (6 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (10 tips)
 - [Validation](#validation) (7 tips)
@@ -825,6 +825,7 @@ $book->loadCount(['reviews' => function ($query) {
 - [Migration fields with timezones](#migration-fields-with-timezones)
 - [Database migrations column types](#database-migrations-column-types)
 - [Default Timestamp](#default-timestamp)
+- [Migration Status](#migration-status)
 
 ### Unsigned Integer
 
@@ -889,6 +890,22 @@ While creating migrations, you can use `timestamp()` column type with option
 ```php
 $table->timestamp('created_at')->useCurrent();
 $table->timestamp('updated_at')->useCurrent();
+```
+
+### Migration Status
+
+If you want to check what migrations are executed or not yet, no need to look at the database "migrations" table, you can launch `php artisan migrate:status` command.
+
+Example result:
+
+```
++------+------------------------------------------------+-------+
+| Ran? | Migration                                      | Batch |
++------+------------------------------------------------+-------+
+| Yes  | 2014_10_12_000000_create_users_table           | 1     |
+| Yes  | 2014_10_12_100000_create_password_resets_table | 1     |
+| No   | 2019_08_19_000000_create_failed_jobs_table     |       |
++------+------------------------------------------------+-------+
 ```
 
 ## Views
