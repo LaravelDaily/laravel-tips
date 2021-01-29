@@ -1351,7 +1351,7 @@ public function boot()
 When using Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix in the browser and the route name prefix you use all over Laravel project may be different.
 
 ```php
-Route::resource('p'), ProductController::class)->names('products');
+Route::resource('p', ProductController::class)->names('products');
 ```
 
 So this code above will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit`, etc.
