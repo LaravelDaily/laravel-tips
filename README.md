@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __119 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __120 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ __Update 29 Jan 2021__: Currently there are __119 tips__ divided into 14 section
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
-- [Routing](#routing) (11 tips)
+- [Routing](#routing) (12 tips)
 - [Validation](#validation) (7 tips)
 - [Collections](#collections) (4 tips)
 - [Auth](#auth) (5 tips)
@@ -1098,6 +1098,7 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Query string parameters to Routes](#query-string-parameters-to-routes)
 - [Separate Routes by Files](#separate-routes-by-files)
 - [Translate Resource Verbs](#translate-resource-verbs)
+- [Custom Resource Route Names](#custom-resource-route-names)
 
 ### Route group within a group
 
@@ -1344,6 +1345,17 @@ public function boot()
     // ...
 }
 ```
+
+### Custom Resource Route Names
+
+When using Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix in the browser and the route name prefix you use all over Laravel project may be different.
+
+```php
+Route::resource('p'), ProductController::class)->names('products');
+```
+
+So this code above will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit`, etc.
+But you would call them in the code by `route('products.index')`, `route('products.create')`, etc.
 
 
 ## Validation
