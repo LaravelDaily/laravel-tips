@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __121 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __122 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (29 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (30 tips)
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
@@ -45,6 +45,7 @@ __Update 29 Jan 2021__: Currently there are __121 tips__ divided into 14 section
 - [Grouping by First Letter](#grouping-by-first-letter)
 - [Never Update the Column](#never-update-the-column)
 - [Find Many](#find-many)
+- [Find by Key](#find-by-key)
 - [Use UUID instead of auto-increment](#use-uuid-instead-of-auto-increment)
 - [Sub-selects in Laravel Way](#sub-selects-in-laravel-way)
 - [Hide Some Columns](#hide-some-columns)
@@ -275,6 +276,14 @@ Eloquent method `find()` may accept multiple parameters, and then it returns a C
 $user = User::find(1);
 // Will return Eloquent Collection
 $users = User::find([1,2,3]);
+```
+
+### Find by Key
+
+You can also find multiple records with `whereKey()` method which takes care of which field is exactly your primary key (`id` is the default but you may override it in Eloquent model):
+
+```php
+$users = User::whereKey([1,2,3])->get();
 ```
 
 ### Use UUID instead of auto-increment
