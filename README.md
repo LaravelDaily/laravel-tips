@@ -3,13 +3,13 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __118 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __119 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (29 tips)
 - [Models Relations](#models-relations) (21 tips)
-- [Migrations](#migrations) (7 tips)
+- [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (11 tips)
 - [Validation](#validation) (7 tips)
@@ -827,6 +827,7 @@ $book->loadCount(['reviews' => function ($query) {
 - [Default Timestamp](#default-timestamp)
 - [Migration Status](#migration-status)
 - [Create Migration with Spaces](#create-migration-with-spaces)
+- [Create Column after Another Column](#create-column-after-another-column)
 
 ### Unsigned Integer
 
@@ -922,6 +923,16 @@ php artisan make:migration "create transactions table"
 ```
 
 Source: [Steve O on Twitter](https://twitter.com/stephenoldham/status/1353647972991578120)
+
+### Create Column after Another Column
+
+If you're adding a new column to the existing table, it doesn't necessarily has to become the last in the list. You can specify, after which column it should be created:
+
+```php
+Schema::table('users', function (Blueprint $table) {
+    $table->string('phone')->after('email');
+});
+```
 
 ## Views
 
