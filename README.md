@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 29 Jan 2021__: Currently there are __117 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __118 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ __Update 29 Jan 2021__: Currently there are __117 tips__ divided into 14 section
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (7 tips)
 - [Views](#views) (8 tips)
-- [Routing](#routing) (10 tips)
+- [Routing](#routing) (11 tips)
 - [Validation](#validation) (7 tips)
 - [Collections](#collections) (4 tips)
 - [Auth](#auth) (5 tips)
@@ -1086,6 +1086,7 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
 - [Query string parameters to Routes](#query-string-parameters-to-routes)
 - [Separate Routes by Files](#separate-routes-by-files)
+- [Translate Resource Verbs](#translate-resource-verbs)
 
 ### Route group within a group
 
@@ -1314,6 +1315,22 @@ public function boot()
 
         // ... Your routes file listed next here
     });
+}
+```
+
+### Translate Resource Verbs
+
+If you use resource controllers, but want to change URL verbs to non-English for SEO purposes, so instead of `/create` you want Spanish `/crear`, you can configure it by using `Route::resourceVerbs()` method in `App\Providers\RouteServiceProvider`:
+
+```php
+public function boot()
+{
+    Route::resourceVerbs([
+        'create' => 'crear',
+        'edit' => 'editar',
+    ]);
+
+    // ...
 }
 ```
 
