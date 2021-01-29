@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 06 Oct 2020__: Currently there are __114 tips__ divided into 14 sections.
+__Update 29 Jan 2021__: Currently there are __115 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ __Update 06 Oct 2020__: Currently there are __114 tips__ divided into 14 section
 - [Models Relations](#models-relations) (21 tips)
 - [Migrations](#migrations) (5 tips)
 - [Views](#views) (8 tips)
-- [Routing](#routing) (9 tips)
+- [Routing](#routing) (10 tips)
 - [Validation](#validation) (7 tips)
 - [Collections](#collections) (4 tips)
 - [Auth](#auth) (5 tips)
@@ -1053,6 +1053,7 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Route Parameters Validation with RegExp](#route-parameters-validation-with-regexp)
 - [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
 - [Query string parameters to Routes](#query-string-parameters-to-routes)
+- [Separate Routes by Files](#separate-routes-by-files)
 
 ### Route group within a group
 
@@ -1223,6 +1224,67 @@ Route::get('user/{id}/profile', function ($id) {
 
 $url = route('profile', ['id' => 1, 'photos' => 'yes']); // Result: /user/1/profile?photos=yes
 ```
+
+### Separate Routes by Files
+
+If you have a set of routes related to a certain "section", you may separate them in a special `routes/XXXXX.php` file, and just include it in `routes/web.php`
+
+Example with `routes/auth.php` in [Laravel Breeze](https://github.com/laravel/breeze/blob/1.x/stubs/routes/web.php) by Taylor Otwell himself: 
+
+
+```php
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
+```
+
+Then, in `routes/auth.php`:
+
+```php
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+// ... more controllers
+
+use Illuminate\Support\Facades\Route;
+
+Route::get('/register', [RegisteredUserController::class, 'create'])
+                ->middleware('guest')
+                ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])
+                ->middleware('guest');
+
+// ... A dozen more routes
+```
+
+But you should use this `include()` only when that separate route file has the same settings for prefix/middlewares, otherwise it's better to group them in `app/Providers/RouteServiceProvider`:
+
+```php
+public function boot()
+{
+    $this->configureRateLimiting();
+
+    $this->routes(function () {
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
+
+        Route::middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
+
+        // ... Your routes file listed next here
+    });
+}
+```
+
 
 ## Validation
 
