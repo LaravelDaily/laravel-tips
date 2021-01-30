@@ -25,7 +25,7 @@ __Update 29 Jan 2021__: Currently there are __125 tips__ divided into 14 section
 
 ## DB Models and Eloquent
 
-⬆️ [Go to top](#summary) ➡️ [Next (Models Relations)](#models-relations)
+⬆️ [Go to top](#laravel-tips) ➡️ [Next (Models Relations)](#models-relations)
 
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
@@ -500,7 +500,7 @@ $billing->save();
 
 ## Models Relations
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
 
 - [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
 - [Conditional relationships](#conditional-relationships)
@@ -867,7 +867,7 @@ $questions = Question::with(['answers' => function($q) {
 
 ## Migrations
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
 
 - [Unsigned Integer](#unsigned-integer)
 - [Order of Migrations](#order-of-migrations)
@@ -985,7 +985,7 @@ Schema::table('users', function (Blueprint $table) {
 
 ## Views
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Migrations)](#migrations) ➡️ [Next (Routing)](#routing)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Migrations)](#migrations) ➡️ [Next (Routing)](#routing)
 
 - [$loop variable in foreach](#loop-variable-in-foreach)
 - [Does view file exist?](#does-view-file-exist)
@@ -1134,7 +1134,7 @@ This will try to load adminlte.header, if missing - will load default.header
 
 ## Routing
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Views)](#views) ➡️ [Next (Validation)](#validation)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Views)](#views) ➡️ [Next (Validation)](#validation)
 
 - [Route group within a group](#route-group-within-a-group)
 - [Wildcard subdomains](#wildcard-subdomains)
@@ -1470,7 +1470,7 @@ You can also specify the exact columns you want:
 
 ## Validation
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
 
 - [Image validation](#image-validation)
 - [Custom validation error messages](#custom-validation-error-messages)
@@ -1570,7 +1570,7 @@ $request->validate([
 
 ## Collections
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
 
 - [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
@@ -1638,7 +1638,7 @@ $posts = $query->paginate(10);
 
 ## Auth
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Collections)](#collections) ➡️ [Next (Mail)](#mail)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Collections)](#collections) ➡️ [Next (Mail)](#mail)
 
 - [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
 - [More Events on User Registration](#more-events-on-user-registration)
@@ -1722,7 +1722,7 @@ Gate::before(function($user, $ability) {
 
 ## Mail
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Auth)](#auth) ➡️ [Next (Artisan)](#artisan)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Auth)](#auth) ➡️ [Next (Artisan)](#artisan)
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
@@ -1770,7 +1770,7 @@ Notification::route('mail', 'taylor@example.com')
 
 ## Artisan
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Mail)](#mail) ➡️ [Next (Factories)](#factories)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Mail)](#mail) ➡️ [Next (Factories)](#factories)
 
 - [Artisan command parameters](#artisan-command-parameters)
 - [Maintenance Mode](#maintenance-mode)
@@ -1876,7 +1876,7 @@ Route::get('/foo', function () {
 
 ## Factories
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Log and debug)](#log-and-debug)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Log and debug)](#log-and-debug)
 
 - [Factory callbacks](#factory-callbacks)
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
@@ -1910,7 +1910,7 @@ $factory->define(User::class, function (Faker $faker) {
 
 ## Log and debug
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
 
 
 - [Logging with parameters](#logging-with-parameters)
@@ -1938,7 +1938,7 @@ $users = User::where('name', 'Taylor')->get()->dd();
 
 ## API
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (Log and debug)](#log-and-debug) ➡️ [Next (Other)](#other)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Log and debug)](#log-and-debug) ➡️ [Next (Other)](#other)
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
@@ -1975,7 +1975,7 @@ public function reorder(Request $request)
 
 ## Other
 
-⬆️ [Go to top](#summary) ⬅️ [Previous (API)](#api)
+⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (API)](#api)
 
 - [Localhost in .env](#localhost-in-env)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
