@@ -1226,7 +1226,7 @@ public function getRouteKeyName() {
 
 ### Quickly Navigate from Routes file to Controller
 
-This thing was optional before Laravel 8, and became a standart main syntax of routing in Laravel 8.
+This thing was optional before Laravel 8, and became a standard main syntax of routing in Laravel 8.
 
 Instead of routing like this:
 ```php
