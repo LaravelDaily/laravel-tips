@@ -975,6 +975,8 @@ Source: [Steve O on Twitter](https://twitter.com/stephenoldham/status/1353647972
 
 ### Create Column after Another Column
 
+_Notice: Only MySQL_
+
 If you're adding a new column to the existing table, it doesn't necessarily has to become the last in the list. You can specify, after which column it should be created:
 
 ```php
