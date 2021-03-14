@@ -1991,6 +1991,8 @@ public function reorder(Request $request)
 - [Repeatable Callback Functions](#repeatable-callback-functions)
 - [Request: has any](#request-has-any)
 - [Simple Pagination](#simple-pagination)
+- [Data Get Function](#data-get-function)
+
 
 ### Localhost in .env
 
@@ -2149,4 +2151,25 @@ $users = User::paginate(10);
 
 // You can do this
 $users = User::simplePaginate(10);
+```
+
+### Data Get Function
+
+If you have an array complex data structure, for example a nested array with objects. You can use `data_get()` helper function retrieves a value from a nested array or object using "dot" notation and wildcard:
+
+```php
+// We have an array
+[ 
+  0 => 
+	['user_id' =>'some user id', 'created_at' => 'some timestamp', 'product' => {object Product}, etc], 
+  1 =>  
+  	['user_id' =>'some user id', 'created_at' => 'some timestamp', 'product' => {object Product}, etc],  
+  2 =>  etc
+]
+
+// Now we want to get all products ids. We can do like this:
+
+data_get($yourArray,  '*.product.id');
+
+// Now we have all products ids [1, 2, 3, 4, 5, etc...]
 ```
