@@ -508,9 +508,9 @@ But this can be slow if we have really huge data because Laravel prepares object
 In such cases, Laravel has a handy function `toBase()`
 ```php
 $orders = Order::toBase()->get();
+//$orders will contain `Illuminate\Support\Collection` with objects `StdClass`.
 ```
 By calling this method it will fetch the data from the database but it will not prepares the Model class.
-Method returns `Illuminate\Support\Collection` class.
 
 ## Models Relations
 
