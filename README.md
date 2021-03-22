@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 14 Mar 2021__: Currently there are __126 tips__ divided into 14 sections.
+__Update 22 Mar 2021__: Currently there are __127 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (31 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (32 tips)
 - [Models Relations](#models-relations) (22 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
@@ -504,13 +504,15 @@ Sometimes we need to load a huge amount of data into memory. For example:
 ```php
 $orders = Order::all();
 ```
-But this can be slow if we have really huge data because Laravel prepares objects of the Model class.
+But this can be slow if we have really huge data, because Laravel prepares objects of the Model class.
 In such cases, Laravel has a handy function `toBase()`
+
 ```php
 $orders = Order::toBase()->get();
 //$orders will contain `Illuminate\Support\Collection` with objects `StdClass`.
 ```
-By calling this method it will fetch the data from the database but it will not prepares the Model class.
+By calling this method, it will fetch the data from the database, but it will not prepare the Model class.
+
 
 ## Models Relations
 
