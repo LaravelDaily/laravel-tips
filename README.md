@@ -58,6 +58,7 @@ __Update 14 Mar 2021__: Currently there are __126 tips__ divided into 14 section
 - [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
 - [Storing Array Type into JSON](#storing-array-type-into-json)
 - [Make a Copy of the Model](#make-a-copy-of-the-model)
+- [Reduce Memory](#reduce-memory)
 
 ### Eloquent where date methods
 
@@ -497,6 +498,19 @@ $billing = $shipping->replicate()->fill([
 $billing->save();
 ```
 
+### Reduce Memory 
+
+Sometimes we need to load a huge amount of data into memory. For example: 
+```php
+$orders = Order::all();
+```
+But this can be slow if we have really huge data because Laravel prepares objects of the Model class.
+In such cases, Laravel has a handy function `toBase()`
+```php
+$orders = Order::toBase()->get();
+//$orders will contain `Illuminate\Support\Collection` with objects `StdClass`.
+```
+By calling this method it will fetch the data from the database but it will not prepares the Model class.
 
 ## Models Relations
 
