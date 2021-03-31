@@ -111,7 +111,7 @@ class PostObserver
 When using soft-deletes, you can restore multiple rows in one sentence.
 
 ```php
-Post::withTrashed()->where('author_id', 1)->restore();
+Post::onlyTrashed()->where('author_id', 1)->restore();
 ```
 
 ### Model all: columns
