@@ -3,11 +3,11 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 22 Mar 2021__: Currently there are __127 tips__ divided into 14 sections.
+__Update 22 Mar 2021__: Currently there are __126 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (32 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (31 tips)
 - [Models Relations](#models-relations) (22 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
@@ -30,7 +30,6 @@ __Update 22 Mar 2021__: Currently there are __127 tips__ divided into 14 section
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
 - [No timestamp columns](#no-timestamp-columns)
-- [Set logged in user with Observers](#set-logged-in-user-with-observers)
 - [Soft-deletes: multiple restore](#soft-deletes-multiple-restore)
 - [Model all: columns](#model-all-columns)
 - [To Fail or not to Fail](#to-fail-or-not-to-fail)
@@ -89,20 +88,6 @@ If your DB table doesn't contain timestamp fields `created_at` and `updated_at`,
 class Company extends Model
 {
     public $timestamps = false;
-}
-```
-
-### Set logged in user with Observers
-
-Use `make:observer` and fill in `creating()` method to automatically set up `user_id` field for current logged in user.
-
-```php
-class PostObserver
-{
-    public function creating(Post $post)
-    {
-        $post->user_id = auth()->id();
-    }
 }
 ```
 
