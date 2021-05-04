@@ -25,7 +25,8 @@ __Update 31 Mar 2021__: Currently there are __126 tips__ divided into 14 section
 
 ## DB Models and Eloquent
 
-⬆️ [Go to top](#laravel-tips) ➡️ [Next (Models Relations)](#models-relations)
+⬆️ [Go to top](#laravel-tips
+➡️ [Next (Models Relations)](#models-relations)
 
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
@@ -937,11 +938,11 @@ See all column types on the [official documentation](https://laravel.com/docs/ma
 ### Default Timestamp
 
 While creating migrations, you can use `timestamp()` column type with option
-`useCurrent()`, it will set `CURRENT_TIMESTAMP` as default value.
+`useCurrent()` and `useCurrentOnUpdate()`, it will set `CURRENT_TIMESTAMP` as default value.
 
 ```php
 $table->timestamp('created_at')->useCurrent();
-$table->timestamp('updated_at')->useCurrent();
+$table->timestamp('updated_at')->useCurrentOnUpdate();
 ```
 
 ### Migration Status
