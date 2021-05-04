@@ -25,7 +25,7 @@ __Update 31 Mar 2021__: Currently there are __126 tips__ divided into 14 section
 
 ## DB Models and Eloquent
 
-⬆️ [Go to top](#laravel-tips ➡️ [Next (Models Relations)](#models-relations)
+⬆️ [Go to top](#laravel-tips) ➡️ [Next (Models Relations)](#models-relations)
 
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
