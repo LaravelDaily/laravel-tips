@@ -937,11 +937,11 @@ See all column types on the [official documentation](https://laravel.com/docs/ma
 ### Default Timestamp
 
 While creating migrations, you can use `timestamp()` column type with option
-`useCurrent()`, it will set `CURRENT_TIMESTAMP` as default value.
+`useCurrent()` and `useCurrentOnUpdate()`, it will set `CURRENT_TIMESTAMP` as default value.
 
 ```php
 $table->timestamp('created_at')->useCurrent();
-$table->timestamp('updated_at')->useCurrent();
+$table->timestamp('updated_at')->useCurrentOnUpdate();
 ```
 
 ### Migration Status
