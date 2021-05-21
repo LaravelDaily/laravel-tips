@@ -351,6 +351,9 @@ Don't forget that soft-deletes will exclude entries when you use Eloquent, but w
 $users = User::all();
 
 // Will NOT exclude soft-deleted entries
+$users = User::withTrashed()->get();
+
+// Will NOT exclude soft-deleted entries
 $users = DB::table('users')->get();
 ```
 
@@ -497,6 +500,7 @@ $orders = Order::toBase()->get();
 //$orders will contain `Illuminate\Support\Collection` with objects `StdClass`.
 ```
 By calling this method, it will fetch the data from the database, but it will not prepare the Model class.
+Keep in mind it is often a good idea to pass an array of fields to the get method, preventing all fields to be fetched from the database.
 
 
 ## Models Relations
@@ -510,6 +514,7 @@ By calling this method, it will fetch the data from the database, but it will no
 - [Has Many. How many exactly?](#has-many-how-many-exactly)
 - [Default model](#default-model)
 - [Use hasMany to create Many](#use-hasmany-to-create-many)
+- [Multi level Eager Loading](#multi-level-eager-loading)
 - [Eager Loading with Exact Columns](#eager-loading-with-exact-columns)
 - [Touch parent updated_at easily](#touch-parent-updated_at-easily)
 - [Always Check if Relationship Exists](#always-check-if-relationship-exists)
@@ -610,6 +615,15 @@ $post->comments()->saveMany([
 ]);
 ```
 
+### Multi level Eager Loading
+
+In Laravel you can Eager Load multiple levels in one statement, in this example we not only load the author relation but also the country relation on the author model.
+
+```php
+$users = App\Book::with('author.country')->get();
+```
+
+
 ### Eager Loading with Exact Columns
 
 You can do Laravel Eager Loading and specify the exact columns you want to get from the relationship.
@@ -638,7 +652,7 @@ class Comment extends Model
 Never **ever** do `$model->relationship->field` without checking if relationship object still exists.
 
 It may be deleted for whatever reason, outside your code, by someone else's queued job etc.
-Do `if-else`, or `{{ $model->relationship->field ?? '' }}` in Blade, or `{{ optional($model->relationship)->field }}`.
+Do `if-else`, or `{{ $model->relationship->field ?? '' }}` in Blade, or `{{ optional($model->relationship)->field }}`.  With php8 you can even use the nullsafe operator `{{ $model->relationship?->field) }}`
 
 ### Use withCount() to Calculate Child Relationships Records
 
@@ -807,7 +821,7 @@ Then generate a separate Pivot Model:
 php artisan make:model RoleUser --pivot
 ```
 
-Next, specify it in `belongsToMany()` with `->using()` method. Then you could do magic, like in the example.﻿
+Next, specify it in `belongsToMany()` with `->using()` method. Then you could do magic, like in the example.
 
 ```php
 // in app/Models/User.php
@@ -983,6 +997,14 @@ If you're adding a new column to the existing table, it doesn't necessarily has 
 ```php
 Schema::table('users', function (Blueprint $table) {
     $table->string('phone')->after('email');
+});
+```
+
+If you want your column to be the first in your table , then use the before method.
+
+```php
+Schema::table('users', function (Blueprint $table) {
+    $table->string('uuid')->first();
 });
 ```
 
@@ -1579,6 +1601,7 @@ $request->validate([
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
+- [Higher order collection methods](#higher-order-collection-methods)
 
 ### Don’t Filter by NULL in Collections
 
@@ -1598,7 +1621,7 @@ $unread_messages = $messages->where('read_at', '')->count();
 
 ### Use groupBy on Collections with Custom Callback Function
 
-If you want to group result by some condition whith isn’t a direct column in your database, you can do that by providing a closure function.
+If you want to group result by some condition which isn’t a direct column in your database, you can do that by providing a closure function.
 
 For example, if you want to group users by day of registration, here’s the code:
 ```php
@@ -1637,6 +1660,27 @@ $sum = $query->sum('post_views');
 // And then do the pagination from the same query
 $posts = $query->paginate(10);
 ```
+
+### Higher order collection methods
+
+Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax.  This example calculates the 
+price per group of products on an offer.
+
+```php
+$offer = [
+        'name'  => 'offer1',
+        'lines' => [
+            ['group' => 1, 'price' => 10],
+            ['group' => 1, 'price' => 20],
+            ['group' => 2, 'price' => 30],
+            ['group' => 2, 'price' => 40],
+            ['group' => 3, 'price' => 50],
+            ['group' => 3, 'price' => 60]
+        ]
+];
+                
+$totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
+``` 
 
 
 ## Auth
