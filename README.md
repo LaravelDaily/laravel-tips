@@ -3,17 +3,17 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 31 Mar 2021__: Currently there are __126 tips__ divided into 14 sections.
+__Update 21 May 2021__: Currently there are __128 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (31 tips)
-- [Models Relations](#models-relations) (22 tips)
+- [Models Relations](#models-relations) (23 tips)
 - [Migrations](#migrations) (8 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (13 tips)
 - [Validation](#validation) (7 tips)
-- [Collections](#collections) (4 tips)
+- [Collections](#collections) (5 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (5 tips)
