@@ -3,7 +3,7 @@
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
-__Update 21 May 2021__: Currently there are __128 tips__ divided into 14 sections.
+__Update 06 July 2021__: Currently there are __129 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ __Update 21 May 2021__: Currently there are __128 tips__ divided into 14 section
 - [Views](#views) (8 tips)
 - [Routing](#routing) (13 tips)
 - [Validation](#validation) (7 tips)
-- [Collections](#collections) (5 tips)
+- [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (5 tips)
@@ -1601,6 +1601,7 @@ $request->validate([
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
+- [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
 - [Higher order collection methods](#higher-order-collection-methods)
 
 ### Don’t Filter by NULL in Collections
@@ -1660,6 +1661,21 @@ $sum = $query->sum('post_views');
 // And then do the pagination from the same query
 $posts = $query->paginate(10);
 ```
+
+### Serial no in foreach loop with pagination
+We can use foreach collection items index as serial no (SL) in pagination.
+
+```php
+   ...
+   <th>Serial</th>
+    ...
+    @foreach ($products as $product)
+    <tr>
+        <td>{{ $loop->index + $product->firstItem() }}</td>
+        ...
+    @endforeach
+```
+it will solve the issue of next pages(?page=2&...) index count from continue.
 
 ### Higher order collection methods
 
