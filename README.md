@@ -7,24 +7,24 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 06 July 2021__: Currently there are __129 tips__ divided into 14 sections.
+__Update 13 August 2021__: Currently there are __152 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (31 tips)
-- [Models Relations](#models-relations) (23 tips)
-- [Migrations](#migrations) (8 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (36 tips)
+- [Models Relations](#models-relations) (25 tips)
+- [Migrations](#migrations) (9 tips)
 - [Views](#views) (8 tips)
-- [Routing](#routing) (13 tips)
-- [Validation](#validation) (7 tips)
+- [Routing](#routing) (16 tips)
+- [Validation](#validation) (9 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (5 tips)
-- [Factories](#factories) (2 tips)
-- [Log and debug](#log-and-debug) (2 tips)
+- [Factories](#factories) (3 tips)
+- [Log and debug](#log-and-debug) (3 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (13 tips)
+- [Other](#other) (21 tips)
 
 
 ## DB Models and Eloquent
@@ -62,6 +62,11 @@ __Update 06 July 2021__: Currently there are __129 tips__ divided into 14 sectio
 - [Storing Array Type into JSON](#storing-array-type-into-json)
 - [Make a Copy of the Model](#make-a-copy-of-the-model)
 - [Reduce Memory](#reduce-memory)
+- [Force query without $fillable/$guarded](#force-query-without-fillableguarded)
+- [3-level structure of parent-children](#3-level-structure-of-parent-children)
+- [Use find to search multiple records](#use-find-to-search-multiple-records)
+- [Perform any action on failure](#perform-any-action-on-failure)
+- [Check if record exists or show 404](##check-if-record-exists-or-show-404)
 
 ### Eloquent where date methods
 
@@ -637,6 +642,8 @@ optional(Product::find($id))->update($productDataArray);
 - [Pivot Table with Extra Relations](#pivot-table-with-extra-relations)
 - [Load Count on-the-fly](#load-count-on-the-fly)
 - [Randomize Relationship Order](#randomize-relationship-order)
+- [Filter hasMany relationships](#filter-hasmany-relationships)
+- [Filter by many-to-many relationship pivot column](#filter-by-many-to-many-relationship-pivot-column)
 
 
 ### OrderBy on Eloquent relationships
@@ -1032,6 +1039,7 @@ public function whatever_method() {
 - [Migration Status](#migration-status)
 - [Create Migration with Spaces](#create-migration-with-spaces)
 - [Create Column after Another Column](#create-column-after-another-column)
+- [Make migration for existing table](#make-migration-for-existing-table)
 
 ### Unsigned Integer
 
@@ -1351,6 +1359,9 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Translate Resource Verbs](#translate-resource-verbs)
 - [Custom Resource Route Names](#custom-resource-route-names)
 - [More Readable Route List](#more-readable-route-list)
+- [Eager load relationship](#eager-load-relationship)
+- [Localizing Resource URIs](#localizing-resource-uris)
+- [Resource Controllers naming](#resource-controllers-naming)
 
 ### Route group within a group
 
@@ -1721,6 +1732,8 @@ Route::resource('p', \App\Http\Controllers\ProductController::class)->names('pro
 - [Change Default Validation Messages](#change-default-validation-messages)
 - [Prepare for Validation](#prepare-for-validation)
 - [Stop on First Validation Error](#stop-on-first-validation-error)
+- [Throw 422 status code without using validete() or Form Request](https://github.com/krekas/laravel-tips/tree/new-tips#throw-422-status-code-without-using-validete-or-form-request)
+- [Rules depending on some other conditions](#rules-depending-on-some-other-conditions)
 
 ### Image validation
 
@@ -2197,6 +2210,7 @@ Route::get('/foo', function () {
 
 - [Factory callbacks](#factory-callbacks)
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
+- [Override values and apply custom login to them](#override-values-and-apply-custom-login-to-them)
 
 ### Factory callbacks
 
@@ -2241,9 +2255,9 @@ $users = User::factory()
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
 
-
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
+- [Log with context](#log-with-context)
 
 ### Logging with parameters
 
@@ -2337,7 +2351,14 @@ public function reorder(Request $request)
 - [Request: has any](#request-has-any)
 - [Simple Pagination](#simple-pagination)
 - [Data Get Function](#data-get-function)
-
+- [Blade directive to add true/false conditions](#blade-directive-to-add-truefalse-conditions)
+- [Jobs can be used without queues](#jobs-can-be-used-without-queues)
+- [Use faker outside factories or seeders](#use-faker-outside-factories-or-seeders)
+- [Schedule things](#schedule-things)
+- [Search Laravel docs](#search-laravel-docs)
+- [Filter route:list](#filter-routelist)
+- [Blade directive for not repeating yourself](#blade-directive-for-not-repeating-yourself)
+- [Artisan commands help](#artisan-commands-help)
 
 ### Localhost in .env
 
