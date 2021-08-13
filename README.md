@@ -1732,7 +1732,7 @@ Route::resource('p', \App\Http\Controllers\ProductController::class)->names('pro
 - [Change Default Validation Messages](#change-default-validation-messages)
 - [Prepare for Validation](#prepare-for-validation)
 - [Stop on First Validation Error](#stop-on-first-validation-error)
-- [Throw 422 status code without using validete() or Form Request](https://github.com/krekas/laravel-tips/tree/new-tips#throw-422-status-code-without-using-validete-or-form-request)
+- [Throw 422 status code without using validete() or Form Request](#throw-422-status-code-without-using-validate-or-form-request)
 - [Rules depending on some other conditions](#rules-depending-on-some-other-conditions)
 
 ### Image validation
