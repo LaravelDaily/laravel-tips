@@ -1707,7 +1707,7 @@ This will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit` etc. But you would 
 - route('products.create)
 - etc
 ```php
-Route::resource('p', \App\Http\Controllers\ProductController::class)->names('products);
+Route::resource('p', \App\Http\Controllers\ProductController::class)->names('products');
 ```
 
 ## Validation
@@ -1810,7 +1810,7 @@ $request->validate([
 ]);
 ```
 
-### Throw 422 status code without using validete() or Form Request
+### Throw 422 status code without using validate() or Form Request
 If you don't use validate() or Form Request, but still need to throw errors with the same 422 status code and error structure, you can do it manually `throw ValidationException::withMessages()`
 
 ```php
