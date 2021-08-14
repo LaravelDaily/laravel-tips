@@ -7,11 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 13 August 2021__: Currently there are __152 tips__ divided into 14 sections.
+__Update 13 August 2021__: Currently there are __153 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (36 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (37 tips)
 - [Models Relations](#models-relations) (25 tips)
 - [Migrations](#migrations) (9 tips)
 - [Views](#views) (8 tips)
@@ -30,7 +30,7 @@ __Update 13 August 2021__: Currently there are __152 tips__ divided into 14 sect
 ## DB Models and Eloquent
 
 ⬆️ [Go to top](#laravel-tips) ➡️ [Next (Models Relations)](#models-relations)
-
+- [Reuse or clone query](#reuse-or-clone-query)
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
 - [No timestamp columns](#no-timestamp-columns)
@@ -67,6 +67,39 @@ __Update 13 August 2021__: Currently there are __152 tips__ divided into 14 sect
 - [Use find to search multiple records](#use-find-to-search-multiple-records)
 - [Perform any action on failure](#perform-any-action-on-failure)
 - [Check if record exists or show 404](##check-if-record-exists-or-show-404)
+
+
+### Reuse or clone query()
+
+Typically, we need to query multiple time from a filtered query. So, most of the time we use `query()` method, 
+
+let's write a query for getting today created active and inactive products
+
+```php
+
+$query = Product::query();
+
+
+$today = request()->q_date ?? today();
+if($today){
+    $query->where('created_at', $today);
+}
+
+// lets get active and inactive products
+$active_products = $query->where('status', 1)->get(); // this line modified the $query object variable
+$inactive_products = $query->where('status', 0)->get(); // so here we will not find any incative products
+```
+
+But, after getting `$active products` the` $query `will be modified. So, `$inactive_products` will not find any inactive products from `$query`  and that will return blank collection every time. Cause, that will try to find inactive products from `$active_products` (`$query` will return active products only).
+
+For solve this issue, we can query multiple time by reusing this `$query` object.
+So, We need to clone this `$query` before doing any `$query` modification action.
+
+```php
+$active_products = (clone $query)->where('status', 1)->get(); // it will not modify the $query
+$inactive_products = (clone $query)->where('status', 0)->get(); // so we will get inactive products from $query
+
+```
 
 ### Eloquent where date methods
 
