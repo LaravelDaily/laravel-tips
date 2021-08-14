@@ -7,24 +7,24 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 06 July 2021__: Currently there are __129 tips__ divided into 14 sections.
+__Update 13 August 2021__: Currently there are __152 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (31 tips)
-- [Models Relations](#models-relations) (23 tips)
-- [Migrations](#migrations) (8 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (36 tips)
+- [Models Relations](#models-relations) (25 tips)
+- [Migrations](#migrations) (9 tips)
 - [Views](#views) (8 tips)
-- [Routing](#routing) (13 tips)
-- [Validation](#validation) (7 tips)
+- [Routing](#routing) (16 tips)
+- [Validation](#validation) (9 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (5 tips)
-- [Factories](#factories) (2 tips)
-- [Log and debug](#log-and-debug) (2 tips)
+- [Factories](#factories) (3 tips)
+- [Log and debug](#log-and-debug) (3 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (13 tips)
+- [Other](#other) (21 tips)
 
 
 ## DB Models and Eloquent
@@ -62,6 +62,11 @@ __Update 06 July 2021__: Currently there are __129 tips__ divided into 14 sectio
 - [Storing Array Type into JSON](#storing-array-type-into-json)
 - [Make a Copy of the Model](#make-a-copy-of-the-model)
 - [Reduce Memory](#reduce-memory)
+- [Force query without $fillable/$guarded](#force-query-without-fillableguarded)
+- [3-level structure of parent-children](#3-level-structure-of-parent-children)
+- [Use find to search multiple records](#use-find-to-search-multiple-records)
+- [Perform any action on failure](#perform-any-action-on-failure)
+- [Check if record exists or show 404](##check-if-record-exists-or-show-404)
 
 ### Eloquent where date methods
 
@@ -506,6 +511,109 @@ $orders = Order::toBase()->get();
 By calling this method, it will fetch the data from the database, but it will not prepare the Model class.
 Keep in mind it is often a good idea to pass an array of fields to the get method, preventing all fields to be fetched from the database.
 
+### Force query without $fillable/$guarded
+If you create a Laravel boilerplate as a "starter" for other devs, and you're not in control of what THEY would later fill in Model's $fillable/$guarded, you may use forceFill()
+```php
+$team->update(['name' => $request->name])
+```
+What if "name" is not in Team model's `$fillable`? Or what if there's no `$fillable/$guarded` at all?
+```php
+$team->forceFill(['name' => $request->name])
+```
+This will "ignore" the `$fillable` for that one query and will execute no matter what.
+
+### 3-level structure of parent-children
+If you have a 3-level structure of parent-children, like categories in an e-shop, and you want to show the number of products on the third level, you can use `with('yyy.yyy')` and then add `withCount()` as a condition
+```php
+class HomeController extend Controller
+{
+    public function index()
+    {
+        $categories = Category::query()
+            ->whereNull('category_id')
+            ->with(['subcategories.subcategories' => function($query) {
+                $query->withCount('products');
+            }])->get();
+    }
+}
+```
+```php
+class Category extends Model
+{
+    public function subcategories()
+    {
+        return $this->hasMany(Category::class);
+    }
+    
+    public function products()
+    {
+    return $this->hasMany(Product::class);
+    }
+}
+```
+```php
+<ul>
+    @foreach($categories as $category)
+        <li>
+            {{ $category->name }}
+            @if ($category->subcategories)
+                <ul>
+                @foreach($category->subcategories as $subcategory)
+                    <li>
+                        {{ $subcategory->name }}
+                        @if ($subcategory->subcategories)
+                            <ul>
+                                @foreach ($subcategory->subcategories as $subcategory)
+                                    <li>{{ $subcategory->name }} ({{ $subcategory->product_count }})</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </li>
+                @endforeach
+                </ul>
+            @endif
+        </li>
+    @endforeach           
+</ul>
+```
+
+### Use find to search multiple records
+You can use Eloquent `find()` not only to search for one record but also to return a collection of multiple records by their IDs.
+Instead of
+```php
+return Product::whereIn('id', $this->productIDs)->get();
+```
+You can do this
+```php
+return Product::find($this->productIDs)
+```
+
+### Perform any action on failure 
+When looking for a record, you may want to perform some actions if it's not found.
+In addition to `->firstOrFail()` which just throws 404, you can perform any action on failure, just do `->firstOr(function() { ... })`
+```php
+$model = Flight::where('legs', '>', 3)->firstOr(function () {
+    // ...
+})
+```
+
+### Check if record exists or show 404
+Don't use find() and then check if the record exists. Use findOrFail() or optional().
+```php
+$product = Product::find($id);
+if ($product) {
+    $product->update($productDataArray);
+}
+```
+Shorter way
+```php
+$product = Product::findOrFail($id); // shows 404 if not found
+$product->update($productDataArray);
+```
+Even shorter
+```php
+optional(Product::find($id))->update($productDataArray);
+```
 
 ## Models Relations
 
@@ -534,6 +642,8 @@ Keep in mind it is often a good idea to pass an array of fields to the get metho
 - [Pivot Table with Extra Relations](#pivot-table-with-extra-relations)
 - [Load Count on-the-fly](#load-count-on-the-fly)
 - [Randomize Relationship Order](#randomize-relationship-order)
+- [Filter hasMany relationships](#filter-hasmany-relationships)
+- [Filter by many-to-many relationship pivot column](#filter-by-many-to-many-relationship-pivot-column)
 
 
 ### OrderBy on Eloquent relationships
@@ -884,6 +994,39 @@ $questions = Question::with(['answers' => function($q) {
 }])->inRandomOrder()->get();
 ```
 
+### Filter hasMany relationships
+Just a code example from my project, showing the possibility of filtering hasMany relationships.<br>
+TagTypes -> hasMany Tags -> hasMany Examples<br>
+And you wanna query all the types, with their tags, but only those that have examples, ordering by most examples.
+```php
+$tag_types = TagType::with(['tags' => function ($query) {
+    $query->has('examples')
+        ->withCount('examples')
+        ->orderBy('examples_count', 'desc');
+    }])->get();
+```
+
+### Filter by many-to-many relationship pivot column
+If you have a many-to-many relationship, and you add an extra column to the pivot table, here's how you can order by it when querying the list.
+```php
+class Tournament extends Model
+{
+    public function countries()
+    {
+        return $this->belongsToMany(Country::class)->withPivot(['position']);
+    }
+}
+```
+```php
+class TournamentsController extends Controller
+
+public function whatever_method() {
+    $tournaments = Tournament::with(['countries' => function($query) {
+            $query->orderBy('position');
+        }])->latest()->get();
+}
+```
+
 ## Migrations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
@@ -896,6 +1039,7 @@ $questions = Question::with(['answers' => function($q) {
 - [Migration Status](#migration-status)
 - [Create Migration with Spaces](#create-migration-with-spaces)
 - [Create Column after Another Column](#create-column-after-another-column)
+- [Make migration for existing table](#make-migration-for-existing-table)
 
 ### Unsigned Integer
 
@@ -1010,6 +1154,43 @@ If you want your column to be the first in your table , then use the before meth
 Schema::table('users', function (Blueprint $table) {
     $table->string('uuid')->first();
 });
+```
+
+### Make migration for existing table
+If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "_in_xxxxx_table" at the end, or specify "--table" parameter.
+`php artisan change_fields_products_table` generates empty class
+```php
+class ChangeFieldsProductsTable extends Migration
+{
+    public function up()
+    {
+        //
+    }
+}
+```
+But add `in_xxxxx_table` `php artisan make:migration change_fields_in_products_table` and it generates class with `Schemma::table()` pre-fileed
+```php
+class ChangeFieldsProductsTable extends Migration
+{
+    public function up()
+    {
+        Schema::table('products', function (Blueprint $table) {
+            //
+        })
+    };
+}
+```
+Also you can specify `--table` parameter `php artisan make:migration whatever_you_want --table=products`
+```php
+class WhateverYouWant extends Migration
+{
+    public function up()
+    {
+        Schema::table('products', function (Blueprint $table) {
+            //
+        })
+    };
+}
 ```
 
 ## Views
@@ -1178,6 +1359,9 @@ This will try to load adminlte.header, if missing - will load default.header
 - [Translate Resource Verbs](#translate-resource-verbs)
 - [Custom Resource Route Names](#custom-resource-route-names)
 - [More Readable Route List](#more-readable-route-list)
+- [Eager load relationship](#eager-load-relationship)
+- [Localizing Resource URIs](#localizing-resource-uris)
+- [Resource Controllers naming](#resource-controllers-naming)
 
 ### Route group within a group
 
@@ -1497,6 +1681,46 @@ You can also specify the exact columns you want:
 +----------+---------------------------------+---------------------+
 ```
 
+### Eager load relationship
+If you use Route Model Binding and think you can't use Eager Loading for relationships, think again.<br>
+So you use Route Model Binding
+```php
+public function show(Product $product) {
+    //
+}
+```
+But you have a belongsTo relationship, and cannot use $product->with('category') eager loading?<br>
+You actually can! Load the relationship with `->load()`
+```php
+public function show(Product $product) {
+    $product->load('category');
+    //
+}
+```
+
+### Localizing Resource URIs
+If you use resource controllers, but want to change URL verbs to non-English, so instead of `/create` you want Spanish `/crear`, you can configure it with `Route::resourceVerbs()` method.
+```php
+public function boot()
+{
+    Route::resourceVerbs([
+        'create' => 'crear',
+        'edit' => 'editar',
+    ]);
+    //
+}
+```
+
+### Resource Controllers naming
+In Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix and the route name prefix may be different.<br>
+This will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit` etc. But you would call them:
+- route('products.index)
+- route('products.create)
+- etc
+```php
+Route::resource('p', \App\Http\Controllers\ProductController::class)->names('products');
+```
+
 ## Validation
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
@@ -1508,6 +1732,8 @@ You can also specify the exact columns you want:
 - [Change Default Validation Messages](#change-default-validation-messages)
 - [Prepare for Validation](#prepare-for-validation)
 - [Stop on First Validation Error](#stop-on-first-validation-error)
+- [Throw 422 status code without using validete() or Form Request](#throw-422-status-code-without-using-validate-or-form-request)
+- [Rules depending on some other conditions](#rules-depending-on-some-other-conditions)
 
 ### Image validation
 
@@ -1595,6 +1821,43 @@ $request->validate([
     'title' => 'bail|required|unique:posts|max:255',
     'body' => 'required',
 ]);
+```
+
+### Throw 422 status code without using validate() or Form Request
+If you don't use validate() or Form Request, but still need to throw errors with the same 422 status code and error structure, you can do it manually `throw ValidationException::withMessages()`
+
+```php
+if (! $user || ! Hash::check($request->password, $user->password)) {
+    throw ValidationException::withMessages([
+        'email' => ['The provided credentials are incorrect.'],
+    ]);
+}
+```
+
+### Rules depending on some other conditions
+If your rules are dynamic and depend on some other condition, you can create that array of rules on the fly
+```php
+    public function store(Request $request)
+    {
+        $validationArray = [
+            'title' => 'required',
+            'company' => 'required',
+            'logo' => 'file|max:2048',
+            'location' => 'required',
+            'apply_link' => 'required|url',
+            'content' => 'required',
+            'payment_method_id' => 'required'
+        ];
+
+        if (!Auth::check()) {
+            $validationArray = array_merge($validationArray, [
+                'email' => 'required|email|unique:users',
+                'password' => 'required|confirmed|min:5',
+                'name' => 'required'
+            ]);
+        }
+        //
+    }
 ```
 
 ## Collections
@@ -1947,6 +2210,7 @@ Route::get('/foo', function () {
 
 - [Factory callbacks](#factory-callbacks)
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
+- [Override values and apply custom login to them](#override-values-and-apply-custom-login-to-them)
 
 ### Factory callbacks
 
@@ -1975,13 +2239,25 @@ $factory->define(User::class, function (Faker $faker) {
 });
 ```
 
+### Override values and apply custom login to them
+When creating records with Factories, you can use Sequence class to override some values and apply custom logic to them.
+```php
+$users = User::factory()
+                ->count(10)
+                ->state(new Sequence(
+                    ['admin' => 'Y'],
+                    ['admin' => 'N'],
+                ))
+                ->create();
+```
+
 ## Log and debug
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
 
-
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
+- [Log with context](#log-with-context)
 
 ### Logging with parameters
 
@@ -2001,6 +2277,24 @@ $users = User::where('name', 'Taylor')->get();
 dd($users);
 // Do this
 $users = User::where('name', 'Taylor')->get()->dd();
+```
+
+### Log with context
+New in Laravel 8.49: `Log::withContext()` will help you to differentiate the Log messages between different requests.<br>
+If you create a Middleware and set this context, all Log messages will contain that context, and you'll be able to search them easier.
+```php
+public function handle(Request $request, Closure $next)
+{
+    $requestId = Str::uuid();
+
+    Log::withContext(['request-id' => $requestId]);
+
+    $response = $next($request);
+
+    $response->header('request-id', $requestId);
+
+    return $response;
+}
 ```
 
 ## API
@@ -2057,7 +2351,14 @@ public function reorder(Request $request)
 - [Request: has any](#request-has-any)
 - [Simple Pagination](#simple-pagination)
 - [Data Get Function](#data-get-function)
-
+- [Blade directive to add true/false conditions](#blade-directive-to-add-truefalse-conditions)
+- [Jobs can be used without queues](#jobs-can-be-used-without-queues)
+- [Use faker outside factories or seeders](#use-faker-outside-factories-or-seeders)
+- [Schedule things](#schedule-things)
+- [Search Laravel docs](#search-laravel-docs)
+- [Filter route:list](#filter-routelist)
+- [Blade directive for not repeating yourself](#blade-directive-for-not-repeating-yourself)
+- [Artisan commands help](#artisan-commands-help)
 
 ### Localhost in .env
 
@@ -2238,3 +2539,117 @@ data_get($yourArray,  '*.product.id');
 
 // Now we have all products ids [1, 2, 3, 4, 5, etc...]
 ```
+
+### Blade directive to add true/false conditions
+New in Laravel 8.51: `@class` Blade directive to add true/false conditions on whether some CSS class should be added. Read more in [docs](https://laravel.com/docs/8.x/blade#conditional-classes) <br>
+Before: 
+```php
+<div class="@if ($active) underline @endif">`
+```
+Now:
+```php
+<div @class(['underline' => $active])>
+```
+```php
+@php
+    $isActive = false;
+    $hasError = true;
+@endphp
+
+<span @class([
+    'p-4',
+    'font-bold' => $isActive,
+    'text-gray-500' => ! $isActive,
+    'bg-red' => $hasError,
+])></span>
+
+<span class="p-4 text-gray-500 bg-red"></span>
+```
+
+### Jobs can be used without queues
+Jobs are discussed in the "Queues" section of the docs, but you can use Jobs without queues, just as classes to delegate tasks to.
+Just call `$this->dispatchNow()` from Controllers
+```php
+public function approve(Article $article)
+{
+    //
+    $this->dispatchNow(new ApproveArticle($article));
+    //
+}
+```
+
+### Use faker outside factories or seeders
+If you want to generate some fake data, you can use Faker even outside factories or seeds, in any class.<br>
+_Keep in mind: to use it in __production__, you need to move faker from `"require-dev"` to `"require"` in `composer.json`_
+```php
+use Faker;
+
+class WhateverController extends Controller
+{
+    public function whatever_method()
+    {
+        $faker = Faker\Factory::create();
+        $address = $faker->streetAddress;
+    }
+}
+```
+
+### Schedule things
+You can schedule things to run daily/hourly in a lot of different structures.<br>
+You can schedule an artisan command, a Job class, an invokable class, a callback function, and even execute a shell script.
+```php
+use App\Jobs\Heartbeat;
+
+$schedule->job(new Heartbeat)->everyFiveMinutes();
+```
+```php
+$schedule->exec('node /home/forge/script.js')->daily();
+```
+```php
+use App\Console\Commands\SendEmailsCommand;
+
+$schedule->command('emails:send Taylor --force')->daily();
+
+$schedule->command(SendEmailsCommand::class, ['Taylor', '--force'])->daily();
+```
+```php
+protected function schedule(Schedule $schedule)
+{
+    $schedule->call(function () {
+        DB::table('recent_users')->delete();
+    })->daily();
+}
+```
+
+### Search Laravel docs
+If you want to search Laravel Docs for some keyword, by default it gives you only the TOP 5 results. Maybe there are more?<br>
+If you want to see ALL results, you may go to the Github Laravel docs repository and search there directly. https://github.com/laravel/docs
+
+### Filter route:list
+New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619)
+
+### Blade directive for not repeating yourself
+If you keep doing the same formatting of the data in multiple Blade files, you may create your own Blade directive.<br>
+Here's an example of money amount formatting using the method from Laravel Cashier.
+```php
+"require": {
+        "laravel/cashier": "^12.9",
+}
+```
+```php
+public function boot()
+{
+    Blade::directive('money', function ($expression) {
+        return "<?php echo Laravel\Cashier\Cashier::formatAmount($expression, config('cashier.currency')); ?>";
+    });
+}
+```
+```php
+<div>Price: @money($book->price)</div>
+@if($book->discount_price)
+    <div>Discounted price: @money($book->dicount_price)</div>
+@endif
+```
+
+### Artisan commands help
+If you are not sure about the parameters of some Artisan command, or you want to know what parameters are available, just type `php artisan help [a command you want]`.
