@@ -1173,7 +1173,7 @@ Source: [Steve O on Twitter](https://twitter.com/stephenoldham/status/1353647972
 
 _Notice: Only MySQL_
 
-If you're adding a new column to the existing table, it doesn't necessarily has to become the last in the list. You can specify, after which column it should be created:
+If you're adding a new column to the existing table, it doesn't necessarily have to become the last in the list. You can specify after which column it should be created:
 
 ```php
 Schema::table('users', function (Blueprint $table) {
@@ -1181,7 +1181,15 @@ Schema::table('users', function (Blueprint $table) {
 });
 ```
 
-If you want your column to be the first in your table , then use the before method.
+If you're adding a new column to the existing table, it doesn't necessarily have to become the last in the list. You can specify before which column it should be created:
+
+```php
+Schema::table('users', function (Blueprint $table) {
+    $table->string('phone')->before('created_at');
+});
+```
+
+If you want your column to be the first in your table , then use the first method.
 
 ```php
 Schema::table('users', function (Blueprint $table) {
