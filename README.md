@@ -12,7 +12,7 @@ __Update 13 August 2021__: Currently there are __153 tips__ divided into 14 sect
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (37 tips)
-- [Models Relations](#models-relations) (25 tips)
+- [Models Relations](#models-relations) (26 tips)
 - [Migrations](#migrations) (9 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (16 tips)
@@ -67,6 +67,7 @@ __Update 13 August 2021__: Currently there are __153 tips__ divided into 14 sect
 - [Use find to search multiple records](#use-find-to-search-multiple-records)
 - [Perform any action on failure](#perform-any-action-on-failure)
 - [Check if record exists or show 404](##check-if-record-exists-or-show-404)
+- [Define Default filters for Every Model Queries](##define-default-filters-for-every-model-queries)
 
 
 ### Reuse or clone query()
@@ -648,6 +649,60 @@ Even shorter
 optional(Product::find($id))->update($productDataArray);
 ```
 
+### Define Default filters for Every Model Queries
+
+Sometimes you may need some default where() or relation calls.
+
+Let's assume you wants to call just Active Users.
+
+let's write a query for getting active users.
+
+```php
+
+  //Define booted function in our Model file.
+  
+  protected static function booted()
+  {
+    static::addGlobalScope(new UserScope);
+  }
+
+
+```
+
+Now let's define our UserScope Class
+
+
+```php
+namespace App\Scopes;
+  
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
+  
+class UserScope implements Scope
+{
+    /**
+     * Apply the scope to a given Eloquent query builder.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $builder
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @return void
+     */
+    public function apply(Builder $builder, Model $model)
+    {
+        $builder->where('is_active', '=', 1);
+    }
+}
+
+```
+Now you can call all active Users like that.
+```php
+$users = User::all();
+```
+If you need an exception for one time you can use it.
+```php
+$users = User::all()->withoutGlobalScope(ActiveScope::class);
+```
 ## Models Relations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
