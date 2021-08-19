@@ -2326,7 +2326,7 @@ If you create a Middleware and set this context, all Log messages will contain t
 ```php
 public function handle(Request $request, Closure $next)
 {
-    $requestId = Str::uuid();
+    $requestId = (string) Str::uuid();
 
     Log::withContext(['request-id' => $requestId]);
 
