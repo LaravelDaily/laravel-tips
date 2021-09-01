@@ -7,13 +7,13 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 13 August 2021__: Currently there are __153 tips__ divided into 14 sections.
+__Update 01 September 2021__: Currently there are __154 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (37 tips)
 - [Models Relations](#models-relations) (25 tips)
-- [Migrations](#migrations) (9 tips)
+- [Migrations](#migrations) (10 tips)
 - [Views](#views) (8 tips)
 - [Routing](#routing) (16 tips)
 - [Validation](#validation) (9 tips)
@@ -1073,7 +1073,7 @@ public function whatever_method() {
 - [Create Migration with Spaces](#create-migration-with-spaces)
 - [Create Column after Another Column](#create-column-after-another-column)
 - [Make migration for existing table](#make-migration-for-existing-table)
-- [Output query before run the migrate](#output-query-using-pretend)
+- [Output SQL before running migrations](#output-sql-before-running-migrations)
 
 
 ### Unsigned Integer
@@ -1236,14 +1236,15 @@ class WhateverYouWant extends Migration
 }
 ```
 
-### Output query before run the migrate
+### Output SQL before running migrations
 
-When typing `migrate --pretend` command, you get the sql command that will be executed in the terminal. It's an interesting way to debug SQL if necessary .
+When typing `migrate --pretend` command, you get the SQL query that will be executed in the terminal. It's an interesting way to debug SQL if necessary.
 
 ```php
 // Artisan command
 php artisan migrate --pretend
 ```
+
 
 ## Views
 
