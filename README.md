@@ -1073,6 +1073,8 @@ public function whatever_method() {
 - [Create Migration with Spaces](#create-migration-with-spaces)
 - [Create Column after Another Column](#create-column-after-another-column)
 - [Make migration for existing table](#make-migration-for-existing-table)
+- [Output query before run the migrate](#output-query-using-pretend)
+
 
 ### Unsigned Integer
 
@@ -1232,6 +1234,15 @@ class WhateverYouWant extends Migration
         })
     };
 }
+```
+
+### Output query before run the migrate
+
+When typing `migrate --pretend` command, you get the sql command that will be executed in the terminal. It's an interesting way to debug SQL if necessary .
+
+```php
+// Artisan command
+php artisan migrate --pretend
 ```
 
 ## Views
