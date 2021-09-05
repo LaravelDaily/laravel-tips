@@ -66,7 +66,7 @@ __Update 01 September 2021__: Currently there are __154 tips__ divided into 14 s
 - [3-level structure of parent-children](#3-level-structure-of-parent-children)
 - [Use find to search multiple records](#use-find-to-search-multiple-records)
 - [Perform any action on failure](#perform-any-action-on-failure)
-- [Check if record exists or show 404](##check-if-record-exists-or-show-404)
+- [Check if record exists or show 404](#check-if-record-exists-or-show-404)
 
 
 ### Reuse or clone query()
