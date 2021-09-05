@@ -452,7 +452,7 @@ $flight = Flight::updateOrCreate(
 
 Tip given by [@pratiksh404](https://github.com/pratiksh404)
 
-If you have cache key like `posts` that gives collection, and you want to forget that cache key on new store or update, you can call static `saving` function on your model:
+If you have cache key like `posts` that gives collection, and you want to forget that cache key on new store or update, you can call static `saved` function on your model:
 
 ```php
 class Post extends Model
@@ -461,7 +461,7 @@ class Post extends Model
     public static function boot()
     {
         parent::boot();
-        static::saving(function () {
+        static::saved(function () {
            Cache::forget('posts');
         });
     }
