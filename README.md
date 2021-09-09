@@ -631,21 +631,18 @@ $model = Flight::where('legs', '>', 3)->firstOr(function () {
 ```
 
 ### Check if record exists or show 404
-Don't use find() and then check if the record exists. Use findOrFail() or optional().
+Don't use find() and then check if the record exists. Use findOrFail().
 ```php
 $product = Product::find($id);
-if ($product) {
-    $product->update($productDataArray);
+if (!$product) {
+    abort(404);
 }
+$product->update($productDataArray);
 ```
 Shorter way
 ```php
 $product = Product::findOrFail($id); // shows 404 if not found
 $product->update($productDataArray);
-```
-Even shorter
-```php
-optional(Product::find($id))->update($productDataArray);
 ```
 
 ## Models Relations
