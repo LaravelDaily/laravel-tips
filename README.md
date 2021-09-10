@@ -67,6 +67,7 @@ __Update 01 September 2021__: Currently there are __154 tips__ divided into 14 s
 - [Use find to search multiple records](#use-find-to-search-multiple-records)
 - [Perform any action on failure](#perform-any-action-on-failure)
 - [Check if record exists or show 404](#check-if-record-exists-or-show-404)
+- [Abort if condition failed](#abort-if-condition-failed)
 
 
 ### Reuse or clone query()
