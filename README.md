@@ -645,6 +645,15 @@ $product = Product::findOrFail($id); // shows 404 if not found
 $product->update($productDataArray);
 ```
 
+### Abort if condition failed
+`abort_if()` can be used as shorter way to check condition and throw an error page.
+```php
+$product = Product::find($id);
+abort_if (!$product, 404)
+
+abort_if (!auth()->user()->is_admin, 403)
+```
+
 ## Models Relations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
