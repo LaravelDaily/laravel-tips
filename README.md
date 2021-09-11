@@ -7,11 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 01 September 2021__: Currently there are __154 tips__ divided into 14 sections.
+__Update 11 September 2021__: Currently there are __155 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (37 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (38 tips)
 - [Models Relations](#models-relations) (25 tips)
 - [Migrations](#migrations) (10 tips)
 - [Views](#views) (8 tips)
@@ -649,12 +649,17 @@ $product->update($productDataArray);
 ### Abort if condition failed
 `abort_if()` can be used as shorter way to check condition and throw an error page.
 ```php
-$product = Product::find($id);
-abort_if (!$product, 404)
-
-abort_if (!auth()->user()->is_admin, 403)
+$product = Product::findOrFail($id);
+if($product->user_id != auth()->user()->id){
+    abort(403);
+}
 ```
-
+Shorter way
+```php
+/* abort_if(CONDITION, ERROR_CODE) */
+$product = Product::findOrFail($id);
+abort_if ($product->user_id != auth()->user()->id, 403)
+```
 ## Models Relations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
