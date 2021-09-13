@@ -7,11 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 11 September 2021__: Currently there are __155 tips__ divided into 14 sections.
+__Update 13 September 2021__: Currently there are __156 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (38 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (39 tips)
 - [Models Relations](#models-relations) (25 tips)
 - [Migrations](#migrations) (10 tips)
 - [Views](#views) (8 tips)
@@ -48,6 +48,7 @@ __Update 11 September 2021__: Currently there are __155 tips__ divided into 14 s
 - [Grouping by First Letter](#grouping-by-first-letter)
 - [Never Update the Column](#never-update-the-column)
 - [Find Many](#find-many)
+- [Find Many and return specific columns](#find-many-and-return-specific-columns)
 - [Find by Key](#find-by-key)
 - [Use UUID instead of auto-increment](#use-uuid-instead-of-auto-increment)
 - [Sub-selects in Laravel Way](#sub-selects-in-laravel-way)
@@ -307,6 +308,16 @@ $user = User::find(1);
 // Will return Eloquent Collection
 $users = User::find([1,2,3]);
 ```
+### Find Many and return specific columns
+
+Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specificied columns, not all columns of model:
+```php
+// Will return Eloquent Model with first_name and email only
+$user = User::find(1, ['first_name', 'email']);
+// Will return Eloquent Collection with first_name and email only
+$users = User::find([1,2,3, ['first_name', 'email']]);
+```
+Tip given by [@tahiriqbalnajam](https://github.com/tahiriqbalnajam)
 
 ### Find by Key
 
