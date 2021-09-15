@@ -315,7 +315,7 @@ Eloquent method `find()` may accept multiple parameters, and then it returns a C
 // Will return Eloquent Model with first_name and email only
 $user = User::find(1, ['first_name', 'email']);
 // Will return Eloquent Collection with first_name and email only
-$users = User::find([1,2,3, ['first_name', 'email']]);
+$users = User::find([1,2,3], ['first_name', 'email']);
 ```
 Tip given by [@tahiriqbalnajam](https://github.com/tahiriqbalnajam)
 
