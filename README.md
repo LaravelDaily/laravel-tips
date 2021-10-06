@@ -69,7 +69,7 @@ __Update 13 September 2021__: Currently there are __156 tips__ divided into 14 s
 - [Perform any action on failure](#perform-any-action-on-failure)
 - [Check if record exists or show 404](#check-if-record-exists-or-show-404)
 - [Abort if condition failed](#abort-if-condition-failed)
-
+- [Perform any extra steps before deleting model](#perform-any-extra-steps-before-deleting-model)
 
 ### Reuse or clone query()
 
@@ -671,6 +671,22 @@ Shorter way
 $product = Product::findOrFail($id);
 abort_if ($product->user_id != auth()->user()->id, 403)
 ```
+
+### Perform any extra steps before deleting model
+We can use `Model::delete()` in the overridden delete method to perform additional steps.
+```
+// App\Models\User.php
+
+public function delete(){
+
+	//extra steps here whatever you want
+	
+	//now perform the normal deletion
+	Model::delete();
+}
+
+```
+
 ## Models Relations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
