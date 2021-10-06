@@ -7,11 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 13 September 2021__: Currently there are __156 tips__ divided into 14 sections.
+__Update 6 Ocrober 2021__: Currently there are __157 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (39 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (40 tips)
 - [Models Relations](#models-relations) (25 tips)
 - [Migrations](#migrations) (10 tips)
 - [Views](#views) (8 tips)
@@ -673,6 +673,9 @@ abort_if ($product->user_id != auth()->user()->id, 403)
 ```
 
 ### Perform any extra steps before deleting model
+
+Tip given by [@back2Lobby](https://github.com/back2Lobby)
+
 We can use `Model::delete()` in the overridden delete method to perform additional steps.
 ```
 // App\Models\User.php
