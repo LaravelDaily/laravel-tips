@@ -115,6 +115,14 @@ $products = Product::whereDay('created_at', '31')->get();
 $products = Product::whereYear('created_at', date('Y'))->get();
 $products = Product::whereTime('created_at', '=', '14:13:58')->get();
 ```
+### Eloquent Multiple Conditions with One Method
+```php
+Book::where('category_id',1)->where('active',1)->get();
+```
+We just used one method for all conditions.
+```php
+Book::whereCategoryIdAndActive(1,1)->get();
+```
 
 ### Eloquent Multiple Conditions with One Method
 ```php
