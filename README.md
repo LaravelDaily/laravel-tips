@@ -32,6 +32,7 @@ __Update 6 Ocrober 2021__: Currently there are __157 tips__ divided into 14 sect
 ⬆️ [Go to top](#laravel-tips) ➡️ [Next (Models Relations)](#models-relations)
 - [Reuse or clone query](#reuse-or-clone-query)
 - [Eloquent where date methods](#eloquent-where-date-methods)
+- [Eloquent Multiple Conditions with One method](#eloquent-multiple-conditions-with-one-method)
 - [Increments and decrements](#increments-and-decrements)
 - [No timestamp columns](#no-timestamp-columns)
 - [Soft-deletes: multiple restore](#soft-deletes-multiple-restore)
@@ -114,6 +115,16 @@ $products = Product::whereDay('created_at', '31')->get();
 $products = Product::whereYear('created_at', date('Y'))->get();
 $products = Product::whereTime('created_at', '=', '14:13:58')->get();
 ```
+
+### Eloquent Multiple Conditions with One Method
+```php
+Book::where('category_id',1)->where('active',1)->get();
+```
+We just used one method for all conditions.
+```php
+Book::whereCategoryIdAndActive(1,1)->get();
+```
+
 
 ### Increments and decrements
 
