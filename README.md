@@ -7,7 +7,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 17 Ocrober 2021__: Currently there are __193 tips__ divided into 14 sections.
+__Update 17 October 2021__: Currently there are __194 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ __Update 17 Ocrober 2021__: Currently there are __193 tips__ divided into 14 sec
 - [Factories](#factories) (4 tips)
 - [Log and debug](#log-and-debug) (5 tips)
 - [API](#api) (3 tips)
-- [Other](#other) (29 tips)
+- [Other](#other) (30 tips)
 
 
 ## DB Models and Eloquent
@@ -317,6 +317,9 @@ $user = User::find(1);
 // Will return Eloquent Collection
 $users = User::find([1,2,3]);
 ```
+
+Tip given by [@tahiriqbalnajam](https://twitter.com/tahiriqbalnajam/status/1436120403655671817)
+
 ### Find Many and return specific columns
 
 Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specificied columns, not all columns of model:
@@ -717,6 +720,8 @@ class Article extends Model
 }
 ```
 
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1432390722280427521)
+
 ### Extra information about the query
 You can call the `explain()` method on queries to know extra information about the query.
 ```php
@@ -744,6 +749,8 @@ Illuminate\Support\Collection {#5344
 }
 ```
 
+Tip given by [@amit_merchant](https://twitter.com/amit_merchant/status/1432277631320223744)
+
 ### Using the doesntExist() method in Laravel 
 ```php
 // This works
@@ -760,6 +767,8 @@ if ( ! $model->where('status', 'pending')->exists() ) {
 if ( $model->where('status', 'pending')->doesntExist() ) {
 }
 ```
+
+Tip given by [@ShawnHooper](https://twitter.com/ShawnHooper/status/1435686220542234626)
 
 ### Trait that you want to add to a few Models to call their boot() method automatically
 If you have a Trait that you want to add to a few Models to call their `boot()` method automatically, you can call Trait's method as boot[TraitName]
@@ -820,6 +829,8 @@ public function index()
 }
 ```
 
+Tip given by [@aschmelyun](https://twitter.com/aschmelyun/status/1440641525998764041)
+
 ### How to prevent “property of non-object” error
 ```php
 // BelongsTo Default Models
@@ -844,6 +855,8 @@ public function author() {
 }
 ```
 
+Tip given by [@coderahuljat](https://twitter.com/coderahuljat/status/1440556610837876741)
+
 ### Get original attributes after mutating an Eloquent record
 Get original attributes after mutating an Eloquent record you can get the original attributes by calling getOriginal()
 ```php
@@ -854,6 +867,8 @@ $user->getOriginal('name'); // John
 $user->getOriginal(); // Original $user record
 ```
 
+Tip given by [@devThaer](https://twitter.com/devThaer/status/1442133797223403521)
+
 ### A simple way to seed a database
 A simple way to seed a database in Laravel with a .sql dump file
 ```php
@@ -861,6 +876,8 @@ DB::unprepared(
     file_get_contents(__DIR__ . './dump.sql')
 );
 ```
+
+Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/1447902369388249091)
 
 ## Models Relations
 
@@ -1323,7 +1340,7 @@ class User
     }
     
     // with a getter
-    public function getPubl;ishedPostsAttribute()
+    public function getPublishedPostsAttribute()
     {
         return $this->posts->filter(fn ($post) => $post->published);
     }
@@ -1335,6 +1352,8 @@ class User
     }
 }
 ```
+
+Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1441718371335114756)
 
 ### New `whereBelongsTo()` Eloquent query builder method
 Laravel 8.63.0 ships with a new `whereBelongsTo()` Eloquent query builder method. Smiling face with heart-shaped eyes<br>
@@ -1356,6 +1375,8 @@ Post::query()
 // Specify a custom relationship:
 $query->whereBelongsTo($author, 'author')
 ```
+
+Tip given by [@danjharrin](https://twitter.com/danjharrin/status/1445406334405459974)
 
 ## Migrations
 
@@ -1570,6 +1591,8 @@ return new class extends Migration {
 };
 ```
 
+Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)
+
 ### You can add "comment" about a column inside your migrations
 You can add "comment" about a column inside your migrations and provide useful information.<br>
 If database is managed by someone other than developers, they can look at comments in Table structure before performing any operations.
@@ -1578,6 +1601,8 @@ $table->unsignedInteger('interval')
     ->index()
     ->comment('This column is used for indexing.')   
 ```
+
+Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1442345998790107137)
 
 ## Views
 
@@ -1742,6 +1767,8 @@ This will try to load adminlte.header, if missing - will load default.header
 <x-post :link="$post->title" />
 ```
 
+Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787795970)
+
 ### Blade components props
 ```php
 // button.blade.php
@@ -1761,6 +1788,8 @@ This will try to load adminlte.header, if missing - will load default.header
 // Rounded:
 <x-button rounded>Submit</x-button>
 ```
+
+Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)
 
 ## Routing
 
@@ -2158,6 +2187,8 @@ Use `Route::is('route-name')` to easily highlight your navbar menus
 </ul>
 ```
 
+Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1443893957507747849)
+
 ### Generate absolute path using route() helper
 ```php
 route('page.show', $page->id);
@@ -2166,6 +2197,8 @@ route('page.show', $page->id);
 route('page.show', $page->id, false);
 // /pages/1
 ```
+
+Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1445796035742240770)
 
 ### Override the route binding resolver for each of your models
 You can override the route binding resolver for each of your models. In this example, I have no control over the @ sign in the URL, so using the `resolveRouteBinding` method, I'm able to remove the @ sign and resolve the model.
@@ -2184,6 +2217,8 @@ public function resolveRouteBinding($value, $field = null)
     return parent::resolveRouteBinding($value, $field);
 }
 ```
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1447539300397195269)
 
 ### If you need public URL but you want them to be secured
 If you need public URL but you want them to be secured, use Laravel signed URL
@@ -2211,6 +2246,8 @@ class AccountController extends Controller
     }
 }
 ```
+
+Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)
 
 ## Validation
 
@@ -2369,12 +2406,16 @@ This is different from `Bail` rule that stops the validation for just a single a
 protected $stopOnFirstFailure = true;
 ```
 
+Tip given by [@Sala7JR](https://twitter.com/Sala7JR/status/1436172331198603270)
+
 ### Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model
 Strange that `Rule::unique` doesn't take into the SoftDeletes Global Scope applied on the Model, by default.<br>
 But `withoutTrashed()` method is available
 ```php
 Rule::unique('users', 'email')->withoutTrashed();
 ```
+
+Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1438490197956702209)
 
 ### Validator::sometimes() method allows us to define when a validation rule should be applied
 The laravel `Validator::sometimes()` method allows us to define when a validation rule should be applied, based on the input provided.<br>
@@ -2408,6 +2449,8 @@ $validator->sometimes('coupon', 'prohibited', function (Fluent $data) {
 // throws a ValidationException as the quantity provided is not enough
 $validator->validate();
 ```
+
+Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
 
 ## Collections
 
@@ -2527,6 +2570,7 @@ public function rules()
 }
 ```
 
+Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
 ## Auth
 
@@ -2824,6 +2868,8 @@ User::factory()->hasPosts(3)->create();
 User::factory()->has(Post::factory()->count(3))->create();
 ```
 
+Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)
+
 ## Log and debug
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
@@ -2882,6 +2928,8 @@ dd($clients);
 Client::where('payment,' 'confirmed')->get()->dd();
 ```
 
+Tip given by [@LaraibiM](https://twitter.com/LaraibiM/status/1437857603263078421)
+
 ### Quickly output an Eloquent query in its SQL form
 If you want to quickly output an Eloquent query in its SQL form, you can invoke the toSql() method onto it like so
 ```php
@@ -2890,6 +2938,8 @@ $invoices = Invoice::where('client', 'James pay')->toSql();
 dd($invoices)
 // select * from `invoices` where `client` = ? 
 ```
+
+Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210)
 
 
 ## API
@@ -2913,6 +2963,8 @@ class AppServiceProvider extends ServiceProvider
     }
 }
 ```
+
+Tip given by [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230637544321029)
 
 ### API Return "Everything went ok"
 
@@ -2972,6 +3024,7 @@ public function boot()
 - ["upcomingInvoice" method in Laravel Cashier (Stripe)](#upcomingInvoice-method-in-laravel-cashier-stripe)
 - [Laravel Request exists() vs has()](#laravel-request-exists-vs-has)
 - [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
+- [Schedule regular shell commands](#schedule-regular-shell-commands)
 
 ### Localhost in .env
 
@@ -3179,6 +3232,8 @@ Now:
 <span class="p-4 text-gray-500 bg-red"></span>
 ```
 
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1445417511546023938)
+
 ### Jobs can be used without queues
 Jobs are discussed in the "Queues" section of the docs, but you can use Jobs without queues, just as classes to delegate tasks to.
 Just call `$this->dispatchNow()` from Controllers
@@ -3274,6 +3329,8 @@ If you don't want to prevent lazy loading when running your tests you can disabl
 Model::preventLazyLoading(!$this->app->isProduction() && !$this->app->runningUnitTests());
 ```
 
+Tip given by [@djgeisi](https://twitter.com/djgeisi/status/1435538167290073090)
+
 ### Using two amazing helpers in Laravel will bring magic results
 Using two amazing helpers in Laravel will bring magic results...<br>
 In this case, the service will be called and retried (retry). If it stills failing, it will be reported, but the request won't fail (rescue)
@@ -3285,6 +3342,8 @@ rescue(function () {
 });
 ```
 
+Tip given by [@JuanDMeGon](https://twitter.com/JuanDMeGon/status/1435466660467683328)
+
 ### Request parameter default value
 Here we are checking if there is a per_page (or any other parameter) value then we will use it, otherwise, we will use a default one.
 ```php
@@ -3295,11 +3354,15 @@ $perPage = request()->per_page ? request()->per_page : 20;
 $perPage = request('per_page', 20);
 ```
 
+Tip given by [@devThaer](https://twitter.com/devThaer/status/1437521022631165957)
+
 ### Pass middleware directly into the route without register it
 ```php
 Route::get('posts', PostController::class)
     ->middleware(['auth', CustomMiddleware::class])
 ```
+
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1438258486815690766)
 
 ### Transforming an array to CssClasses
 ```php
@@ -3317,6 +3380,8 @@ $classes = Arr::toCssClasses($array);
  */
 ```
 
+Tip given by [@dietsedev](https://twitter.com/dietsedev/status/1438550428833271808)
+
 ### "upcomingInvoice" method in Laravel Cashier (Stripe)
 You can show how much a customer will pay in the next billing cycle.<br>
 There is a "upcomingInvoice" method in Laravel Cashier (Stripe) to get the upcoming invoice details.
@@ -3329,6 +3394,9 @@ Route::get('/profile/invoices', function (Request $request) {
     ]);
 });
 ```
+
+Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1439997820228890626)
+
 ### Laravel Request exists() vs has()
 ```php
 // https://example.com?popular
@@ -3339,6 +3407,8 @@ $request->has('popular') // false
 $request->exists('popular') // true
 $request->has('popular') // true
 ```
+
+Tip given by [@coderahuljat](https://twitter.com/coderahuljat/status/1442191143244951552)
 
 ### There are multiple ways to return a view with variables
 ```php
@@ -3363,3 +3433,20 @@ return view('index', $data);
 // Fourth way - the shortest - compact()
 return view('index', compact('projects', 'tasks'));
 ```
+
+### Schedule regular shell commands
+We can schedule regular shell commands within Laravel scheduled command
+
+```php
+// app/Console/Kernel.php
+
+class Kernel extends ConsoleKernel
+{
+    protected function shedule(Schedule $shedule)
+    {
+        $shedule->exec('node /home/forge/script.js')->daily();
+    }
+}
+```
+
+Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)
