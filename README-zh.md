@@ -2703,15 +2703,15 @@ Tip given by [@cerbero90](https://twitter.com/cerbero90/status/14344260761980149
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (集合)](#集合) ➡️ [下一个 (邮件)](#邮件)
 
-- [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
-- [More Events on User Registration](#more-events-on-user-registration)
-- [Did you know about Auth::once()?](#did-you-know-about-authonce)
-- [Change API Token on users password update](#change-api-token-on-users-password-update)
-- [Override Permissions for Super Admin](#override-permissions-for-super-admin)
+- [一次检查多个权限](#一次检查多个权限)
+- [更多关于用户注册的事件](#更多关于用户注册的事件)
+- [你知道Auth::once()吗](#你知道Auth::once()吗)
+- [更改用户密码更新的API令牌](#更改用户密码更新的API令牌)
+- [覆盖超级管理员的权限](#覆盖超级管理员的权限)
 
-### Check Multiple Permissions at Once
+### 一次检查多个权限
 
-In addition to `@can` Blade directive, did you know you can check multiple permissions at once with `@canany` directive?
+除了 `@can Blade` 指令外，你知道可以用 `@canany` 指令一次检查多个权限吗？
 
 ```blade
 @canany(['update', 'view', 'delete'], $post)
@@ -2721,9 +2721,9 @@ In addition to `@can` Blade directive, did you know you can check multiple permi
 @endcanany
 ```
 
-### More Events on User Registration
+### 更多关于用户注册的事件
 
-Want to perform some actions after new user registration? Head to `app/Providers/EventServiceProvider.php` and add more Listeners classes, and then in those classes implement `handle()` method with `$event->user` object
+希望在新用户注册后执行一些操作？ 转到 `app/Providers/EventServiceProvider.php` 和 添加更多的监听类，然后在 `$event->user` 对象中实现 `handle()` 方法。
 
 ```php
 class EventServiceProvider extends ServiceProvider
@@ -2738,10 +2738,10 @@ class EventServiceProvider extends ServiceProvider
     ];
 ```
 
-### Did you know about Auth::once()?
+### 你知道Auth::once()吗
 
-You can login with user only for ONE REQUEST, using method `Auth::once()`.  
-No sessions or cookies will be utilized, which means this method may be helpful when building a stateless API.
+你可以用用户登录一个请求，使用方法 `Auth::once()`。
+不会使用任何会话或 cookie，这意味着该方法在构建无状态 API 时可能很有帮助。
 
 ```php
 if (Auth::once($credentials)) {
@@ -2749,11 +2749,10 @@ if (Auth::once($credentials)) {
 }
 ```
 
-### Change API Token on users password update
+### 更改用户密码更新的API令牌
 
-It's convenient to change the user's API Token when its password changes.
-
-Model:
+当用户的密码更改时，可以方便地更改用户的 API 令牌。
+模型：
 
 ```php
 public function setPasswordAttribute($value)
@@ -2763,9 +2762,10 @@ public function setPasswordAttribute($value)
 }
 ```
 
-### Override Permissions for Super Admin
+### 覆盖超级管理员的权限
 
-If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file. 
+
+如果你已经定义了网关（Gates）但是又想要覆盖超级管理员的所有权限。 给超级管理员所有权限，你可以在  `AuthServiceProvider.php` 文件中用 `Gate::before()` 语句拦截网关（Gates）。
 
 ```php
 // Intercept any Gate and check if it's super admin
