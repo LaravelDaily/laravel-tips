@@ -942,7 +942,7 @@ DB::unprepared(
 
 - [在 Eloquent 关系中使用 OrderBy](#在-Eloquent-关系中使用-OrderBy)
 - [在 Eloquent 关系中添加条件](#在-Eloquent-关系中添加条件)
-- [DB 原生查询: havingRaw ()](#DB 原生查询-havingRaw-())
+- [DB 原生查询: havingRaw ()](#DB-原生查询-havingRaw-())
 - [Eloquent 使用 has () 实现多层调用查询](#Eloquent-使用-has-()-实现多层调用查询)
 - [一对多关系中获取符合指定数量的信息](#一对多关系中获取符合指定数量的信息)
 - [默认模型](#默认模型)
