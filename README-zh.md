@@ -1689,16 +1689,16 @@ $table->unsignedInteger('interval')
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (数据库迁移)](#数据库迁移) ➡️ [下一个 (视图)](#路由)
 
-- [foreach 语句中的 $loop 变量](#foreach-语句中的-$loop 变量)
+- [foreach 语句中的 $loop 变量](#foreach-语句中的-$loop-变量)
 - [视图是否存在](#视图是否存在)
 - [错误代码视图页面](#错误代码视图页面)
 - [脱离控制器的视图](#脱离控制器的视图)
-- [Blade @auth 指令](#Blade-@auth 指令)
+- [Blade @auth 指令](#Blade-@auth-指令)
 - [Blade 视图中的二级 $loop 变量](#Blade-视图中的二级-$loop-变量)
-- [创建你自己的 Blade 指令](#创建你自己的 Blade 指令)
+- [创建你自己的 Blade 指令](#创建你自己的-Blade-指令)
 - [视图指令IncludeIf IncludeWhen IncludeFirst](#视图指令IncludeIf-IncludeWhen-IncludeFirst)
 - [使用Laravel Blade-X 变量绑定节省更多空间](#使用Laravel-Blade-X-变量绑定节省更多空间)
-- [Blade 组件属性](#Blade 组件属性)
+- [Blade 组件属性](#Blade-组件属性)
 
 ### foreach 语句中的 $loop 变量
 
