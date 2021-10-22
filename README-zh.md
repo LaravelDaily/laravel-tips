@@ -3011,23 +3011,23 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14414473563234304
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (工厂)](#工厂) ➡️ [下一个 (API)](#API)
 
-- [Logging with parameters](#logging-with-parameters)
-- [More convenient DD](#more-convenient-dd)
-- [Log with context](#log-with-context)
-- [Inline dd()](#inline-dd)
-- [Quickly output an Eloquent query in its SQL form](#quickly-output-an-eloquent-query-in-its-sql-form)
+- [日志记录参数](#日志记录参数)
+- [更方便的 DD](#更方便的 DD)
+- [使用 context 日志](#使用 context 日志)
+- [行内dd()](#行内dd())
+- [快速输出Query的sql](#快速输出Query的sql)
 
-### Logging with parameters
+### 日志记录参数
 
-You can write `Log::info()`, or shorter `info()` message with additional parameters, for more context about what happened.
+你可以使用 `Log::info()`，或使用更短的 `info()` 额外参数信息，来了解更多发生的事情
 
 ```php
 Log::info('User failed to login.', ['id' => $user->id]);
 ```
 
-### More convenient DD
+### 更方便的 DD
 
-Instead of doing `dd($result)` you can put `->dd()` as a method directly at the end of your Eloquent sentence, or any Collection.
+你可以在你的 `Eloquent` 句子或者任何集合结尾添加 `->dd()`，而不是使用 `dd($result)`
 
 ```php
 // Instead of
@@ -3037,10 +3037,10 @@ dd($users);
 $users = User::where('name', 'Taylor')->get()->dd();
 ```
 
-### Log with context
+### 使用 context 日志
 
-New in Laravel 8.49: `Log::withContext()` will help you to differentiate the Log messages between different requests.<br>
-If you create a Middleware and set this context, all Log messages will contain that context, and you'll be able to search them easier.
+在最新的 `Laravel 8.49` 中：`Log::withContext()` 将帮助您区分不同请求之间的日志消息。
+如果你创建了中间件并且设置了 `context`，所有的长消息将包含在 `context` 中，你将会搜索更容易。
 
 ```php
 public function handle(Request $request, Closure $next)
@@ -3057,7 +3057,7 @@ public function handle(Request $request, Closure $next)
 }
 ```
 
-### Inline dd()
+### 行内dd()
 
 ```php
 // Instead of this
@@ -3068,11 +3068,11 @@ dd($clients);
 Client::where('payment,' 'confirmed')->get()->dd();
 ```
 
-Tip given by [@LaraibiM](https://twitter.com/LaraibiM/status/1437857603263078421)
+由 [@LaraibiM](https://twitter.com/LaraibiM/status/1437857603263078421)提供
 
-### Quickly output an Eloquent query in its SQL form
+### 快速输出Query的sql
 
-If you want to quickly output an Eloquent query in its SQL form, you can invoke the toSql() method onto it like so
+如果你想快速输出一个 `Eloquent query`的sql 你可以调用 `toSql()`方法如下:
 
 ```php
 $invoices = Invoice::where('client', 'James pay')->toSql();
