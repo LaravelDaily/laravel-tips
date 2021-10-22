@@ -14,7 +14,7 @@ __更新于 2021/10/17__:现在有194个小提示，分成14类.
 
 ## 目录
 
-- [数据库模型与 Eloquent](#数据库模型与 Eloquent) (52 提示)
+- [数据库模型与 Eloquent](#数据库模型与-Eloquent) (52 提示)
 - [模型关联](#模型关联) (29 提示)
 - [数据库迁移](#数据库迁移) (12 提示)
 - [视图](#视图) (10 提示)
@@ -32,15 +32,15 @@ __更新于 2021/10/17__:现在有194个小提示，分成14类.
 
 ## 数据库模型与 Eloquent
 
-⬆️ [回到顶部](#Laravel 编码技巧) ➡️ [下一个 (模型关联)](#模型关联)
+⬆️ [回到顶部](#Laravel-编码技巧) ➡️ [下一个 (模型关联)](#模型关联)
 
 - [复用或克隆query](#复用或克隆query)
-- [Eloquent where 日期方法](#Eloquent where 日期方法)
+- [Eloquent where 日期方法](#Eloquent-where日期方法)
 - [增量和减量](#增量和减量)
-- [禁止 timestamp 列](#禁止 timestamp 列)
-- [软删除: 多行恢复](#软删除: 多行恢复)
-- [Model all: columns](#Model all: columns)
-- [To Fail or not to Fail](#To Fail or not to Fail)
+- [禁止 timestamp 列](#禁止-timestamp-列)
+- [软删除: 多行恢复](#软删除:多行恢复)
+- [Model all: columns](#Model all:columns)
+- [To Fail or not to Fail](#To-Fail-or-not-to-Fail)
 - [列名修改](#列名修改)
 - [过滤结果集合](#过滤结果集合)
 - [修改默认的Timestamp 字段](#修改默认的Timestamp 字段)
@@ -84,6 +84,8 @@ __更新于 2021/10/17__:现在有194个小提示，分成14类.
 - [Eloquent 数据改变后获取原始数据](#Eloquent 数据改变后获取原始数据)
 - [一种更简单创建数据库的方法](#一种更简单创建数据库的方法)
 
+
+
 ### 复用或克隆query
 
 通常，我们需要从过滤后的查询中进行更多次查询。因此，大多数时候我们使用 query() 方法，
@@ -113,7 +115,7 @@ $inactive_products = (clone $query)->where('status', 0)->get(); // so we will ge
 
 ```
 
-### Eloquent where 日期方法
+### Eloquent where日期方法
 
 在 Eloquent 中，使用 `whereDay()`、`whereMonth()`、`whereYear()`、`whereDate()` 和 `whereTime()` 函数检查日期。
 
