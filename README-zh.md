@@ -2583,9 +2583,9 @@ Tip given by [@cerbero90](https://twitter.com/cerbero90/status/14402260379720130
 - [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
 - [Higher order collection methods](#higher-order-collection-methods)
 
-### Don’t Filter by NULL in Collections
+### 不要使用NULL过滤集合
 
-You can filter by NULL in Eloquent, but if you're filtering the **collection** further - filter by empty string, there's no "null" in that field anymore.
+你可以在 Eloquent 中使用 `NULL` 过滤，但是你不能用 `NULL` 过滤 集合 - 你应该换成空字符串过滤，字段中已经没有 "null"。(意思是全字符串的形式的过滤不能使用 NULL，因为会被格式化为 ["field is null", "=", true])
 
 ```php
 // This works
@@ -2599,11 +2599,10 @@ $unread_messages = $messages->where('read_at is null')->count();
 $unread_messages = $messages->where('read_at', '')->count();
 ```
 
-### Use groupBy on Collections with Custom Callback Function
+### 使用自定义的回调函数对集合分组
 
-If you want to group result by some condition which isn’t a direct column in your database, you can do that by providing a closure function.
-
-For example, if you want to group users by day of registration, here’s the code:
+如果你想对结果分组，且分组字段不对应数据库中的字段，你可以提供一个回调函数来返回自定义的分组字段。
+例如，通过用户的注册日分组，代码如下：
 
 ```php
 $users = User::all()->groupBy(function($item) {
@@ -2611,11 +2610,11 @@ $users = User::all()->groupBy(function($item) {
 });
 ```
 
-⚠️ Notice: it is done on a `Collection` class, so performed **AFTER** the results are fetched from the database.
+注意：这个方法是在 `Collection `类上的，所以将会在数据库的返回结果上执行。(意思不会在数据库 sql 层面分组)
 
-### Multiple Collection Methods in a Row
+### 针对行的集合方法
 
-If you query all results with `->all()` or `->get()`, you may then perform various Collection operations on the same result, it won’t query database every time.
+你可以用 `->all(`) ,` ->get()` 方法查询数据，然后在这个返回的集合上执行各种集合方法，执行集合操作不会每次都查询数据库。
 
 ```php
 $users = User::all();
@@ -2624,9 +2623,9 @@ echo 'Average age: ' . $users->avg('age');
 echo 'Total budget: ' . $users->sum('budget');
 ```
 
-### Calculate Sum with Pagination
+### 对分页集合求和
 
-How to calculate the sum of all records when you have only the PAGINATED collection? Do the calculation BEFORE the pagination, but from the same query.﻿
+如何对分页返回的结果集求和？使用相同的查询构建器，在分页查询之前执行求和操作
 
 
 ```php
@@ -2643,9 +2642,9 @@ $sum = $query->sum('post_views');
 $posts = $query->paginate(10);
 ```
 
-### Serial no in foreach loop with pagination
+### 分页组件中的唯一标识
 
-We can use foreach collection items index as serial no (SL) in pagination.
+我们可以在分页组件中像序列号那样使用每趟循环中的索引 `index `，作为分页组件的唯一标识。
 
 ```php
    ...
@@ -2658,12 +2657,11 @@ We can use foreach collection items index as serial no (SL) in pagination.
     @endforeach
 ```
 
-it will solve the issue of next pages(?page=2&...) index count from continue.
+这可以解决下一页（?page=2&...）索引的计数问题。
 
-### Higher order collection methods
+### 高阶集合方法
 
-Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax.  This example calculates the 
-price per group of products on an offer.
+集合具有更高阶的可以链式调用的方法，例如 `groupBy()` `map()` 等，给你流畅的语法体验。下面的例子计算了一个需求单中每组产品的价格。
 
 ```php
 $offer = [
@@ -2681,10 +2679,11 @@ $offer = [
 $totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
 ```
 
-### With Rule::when() we can conditionally apply validation rules
+### 提交自定义验证规则
 
-Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
-In this example we validate the value of the vote only if the user can actually vote the post.
+感谢`Rule::when` 我们可以指定提交验证规则。
+
+下面例子我们可以验证用户是否真的可以对文章点赞。
 
 ```php
 use Illuminate\Validation\Rule;
@@ -2697,7 +2696,7 @@ public function rules()
 }
 ```
 
-Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
+由 [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)提供
 
 ## 授权
 
