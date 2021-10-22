@@ -2205,7 +2205,7 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14457960357422407
 You can override the route binding resolver for each of your models. In this example, I have no control over the @ sign in the URL, so using the `resolveRouteBinding` method, I'm able to remove the @ sign and resolve the model.
 ```php
 // Route
-Route::get('{product:slug', Controller::class);
+Route::get('{product:slug}', Controller::class);
 
 // Request
 https://nodejs.pub/@unlock/hello-world
