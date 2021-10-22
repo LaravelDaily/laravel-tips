@@ -2576,12 +2576,13 @@ Tip given by [@cerbero90](https://twitter.com/cerbero90/status/14402260379720130
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (验证)](#验证) ➡️ [下一个 (授权)](#授权)
 
-- [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
-- [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
-- [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
-- [Calculate Sum with Pagination](#calculate-sum-with-pagination)
-- [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
-- [Higher order collection methods](#higher-order-collection-methods)
+- [不要使用NULL过滤集合](#不要使用NULL过滤集合)
+- [使用自定义的回调函数对集合分组](#使用自定义的回调函数对集合分组)
+- [针对行的集合方法](#针对行的集合方法)
+- [对分页集合求和](#对分页集合求和)
+- [分页组件中的唯一标识](#分页组件中的唯一标识)
+- [高阶集合方法](#高阶集合方法)
+- [提交自定义验证规则](#提交自定义验证规则)
 
 ### 不要使用NULL过滤集合
 
