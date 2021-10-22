@@ -2363,31 +2363,30 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (路由)](#路由) ➡️ [下一个 (集合)](#集合)
 
-- [Image validation](#image-validation)
-- [Custom validation error messages](#custom-validation-error-messages)
-- [Validate dates with "now" or "yesterday" words](#validate-dates-with-now-or-yesterday-words)
-- [Validation Rule with Some Conditions](#validation-rule-with-some-conditions)
-- [Change Default Validation Messages](#change-default-validation-messages)
-- [Prepare for Validation](#prepare-for-validation)
-- [Stop on First Validation Error](#stop-on-first-validation-error)
-- [Throw 422 status code without using validete() or Form Request](#throw-422-status-code-without-using-validate-or-form-request)
-- [Rules depending on some other conditions](#rules-depending-on-some-other-conditions)
-- [With Rule::when() we can conditionally apply validation rules](#with-rule-when-we-can-conditionally-apply-validation-rules)
-- [Use this property in the request classes to stop the validation of the whole request attributes](#use-this-property-in-the-request-classes-to-stop-the-validation-of-the-whole-request-attributes)
-- [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#rule-unique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
-- [Validator::sometimes() method allows us to define when a validation rule should be applied](#validator-sometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
+- [图片验证](#图片验证)
+- [自定义验证错误的信息](#自定义验证错误的信息)
+- [用now或yesterday来验证日期](#用now或yesterday来验证日期)
+- [具有某些条件的验证规则](#具有某些条件的验证规则)
+- [更改默认验证消息](#更改默认验证消息)
+- [预验证](#预验证)
+- [第一次验证错误时停止](#第一次验证错误时停止)
+- [不使用validate或者FormRequest就抛出422](#不使用validate或者FormRequest就抛出422)
+- [规则取决于其他条件](#规则取决于其他条件)
+- [使用属性设置首次验证失败时停止](#使用属性设置首次验证失败时停止)
+- [unique规则在软删除全局作用域中无效](#unique规则在软删除全局作用域中无效)
+- [sometimes方法允许你定义验证器在什么时候被应用](#sometimes方法允许你定义验证器在什么时候被应用)
 
-### Image validation
+### 图片验证
 
-While validating uploaded images, you can specify the dimensions you require.
+在验证上传的图片时，可以指定所需的尺寸
 
 ```php
 ['photo' => 'dimensions:max_width=4096,max_height=4096']
 ```
 
-### Custom validation error messages
+### 自定义验证错误的信息
 
-You can customize validation error messages per **field**, **rule** and **language** - just create a specific language file `resources/lang/xx/validation.php` with appropriate array structure.
+只需在 `resources/lang/xx/validation.php` 文件创建适当的数组结构，就可以定义定每个 字段、规则和语言的验证错误消息。
 
 ```php
 'custom' => [
@@ -2397,9 +2396,9 @@ You can customize validation error messages per **field**, **rule** and **langua
 ],
 ```
 
-### Validate dates with "now" or "yesterday" words
+### 用now或yesterday来验证日期
 
-You can validate dates by rules before/after and passing various strings as a parameter, like: `tomorrow`, `now`, `yesterday`. Example: `'start_date' => 'after:now'`. It's using strtotime() under the hood.
+您可以使用 `before/after` 的规则验证日期，并将各种字符串作为参数传递，比如: `tomorrow`, `now`, `yesterday`。例如: `'start_date' => 'after:now'`。它在底层下使用 `strtotime ()`。
 
 ```php
 $rules = [
@@ -2408,9 +2407,9 @@ $rules = [
 ];
 ```
 
-### Validation Rule with Some Conditions
+### 具有某些条件的验证规则
 
-If your validation rules depend on some condition, you can modify the rules by adding `withValidator()` to your `FormRequest` class, and specify your custom logic there. Like, if you want to add validation rule only for some user role.
+如果验证规则依赖于某些条件，则可以通过将 `withValidator()` 添加到 `FormRequest` 类中来修改规则，并在那里指定自定义逻辑。例如，如果您只想为某些用户角色添加验证规则。
 
 ```php
 use Illuminate\Validation\Validator;
@@ -2423,9 +2422,9 @@ class StoreBlogCategoryRequest extends FormRequest {
 }
 ```
 
-### Change Default Validation Messages
+### 更改默认验证消息
 
-If you want to change default validation error message for specific field and specific validation rule, just add a `messages()` method into your `FormRequest` class.
+如果要更改特定字段和特定验证规则的默认验证错误消息，只需将 `messages()` 方法添加到` FormRequest `类中。
 
 ```php
 class StoreUserRequest extends FormRequest
@@ -2442,9 +2441,9 @@ class StoreUserRequest extends FormRequest
 }
 ```
 
-### Prepare for Validation
+### 预验证
 
-If you want to modify some field before default Laravel validation, or, in other words, "prepare" that field, guess what - there's a method `prepareForValidation()` in `FormRequest` class:
+如果你想在默认的` Laravel `验证之前修改某个字段，或者，换句话说，“准备” 那个字段， `FormRequest `类中有一个方法 `prepareForValidation () `
 
 ```php
 protected function prepareForValidation()
@@ -2455,9 +2454,9 @@ protected function prepareForValidation()
 }
 ```
 
-### Stop on First Validation Error
+### 第一次验证错误时停止
 
-By default, Laravel validation errors will be returned in a list, checking all validation rules. But if you want the process to stop after the first error, use validation rule called `bail`:
+默认情况下，将在列表中返回 Laravel 验证错误，检查所有验证规则。但是如果你想要在第一个错误之后停止这个过程，使用验证规则叫做 bail:
 
 ```php
 $request->validate([
@@ -2466,9 +2465,9 @@ $request->validate([
 ]);
 ```
 
-### Throw 422 status code without using validate() or Form Request
+### 不使用validate或者FormRequest就抛出422
 
-If you don't use validate() or Form Request, but still need to throw errors with the same 422 status code and error structure, you can do it manually `throw ValidationException::withMessages()`
+如果您不使用 `validate()` 或 `Form Request`，但仍然需要使用相同的 `422` 状态码和错误结构抛出错误，那么可以手动抛出 `throw ValidationException::withMessages()`
 
 ```php
 if (! $user || ! Hash::check($request->password, $user->password)) {
@@ -2478,9 +2477,9 @@ if (! $user || ! Hash::check($request->password, $user->password)) {
 }
 ```
 
-### Rules depending on some other conditions
+### 规则取决于其他条件
 
-If your rules are dynamic and depend on some other condition, you can create that array of rules on the fly
+如果您的规则是动态的并且依赖于其他条件，那么您可以动态地创建该规则数组
 
 ```php
     public function store(Request $request)
@@ -2506,12 +2505,11 @@ If your rules are dynamic and depend on some other condition, you can create tha
     }
 ```
 
-### Use this property in the request classes to stop the validation of the whole request attributes
+### 使用属性设置首次验证失败时停止
 
-Use this property in the request classes to stop the validation of the whole request attributes.<br><br>
+在`request`类中使用这个属性设置首次验证失败时停止。
 
-Hint Direct<br>
-This is different from `Bail` rule that stops the validation for just a single attribute if one of its rules doesn't validate.
+注意 这个跟 `Bail`规则不一样 只在单个规则失败时就停止
 
 ```php
 /**
@@ -2522,23 +2520,22 @@ This is different from `Bail` rule that stops the validation for just a single a
 protected $stopOnFirstFailure = true;
 ```
 
-Tip given by [@Sala7JR](https://twitter.com/Sala7JR/status/1436172331198603270)
+由 [@Sala7JR](https://twitter.com/Sala7JR/status/1436172331198603270)提供
 
-### Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model
+### unique规则在软删除全局作用域中无效
 
-Strange that `Rule::unique` doesn't take into the SoftDeletes Global Scope applied on the Model, by default.<br>
-But `withoutTrashed()` method is available
+`Rule::unique` 默认不在软删除的全局范围内。但是`使用`withoutTrashed` 时可用。
 
 ```php
 Rule::unique('users', 'email')->withoutTrashed();
 ```
 
-Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1438490197956702209)
+由 [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1438490197956702209)提供
 
-### Validator::sometimes() method allows us to define when a validation rule should be applied
+### sometimes方法允许你定义验证器在什么时候被应用
 
-The laravel `Validator::sometimes()` method allows us to define when a validation rule should be applied, based on the input provided.<br>
-The snippet shows how to prohibit the use of a coupon if the quantity of the purchased items is not enough.
+`Validator::sometimes` 方法允许你定义验证器在什么时候被应用，基于提供的输入。
+这个片段展示了如果购买的物品数量不够，如何禁止使用优惠券。
 
 ```php
 $data = [
