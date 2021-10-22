@@ -3012,8 +3012,8 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14414473563234304
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (工厂)](#工厂) ➡️ [下一个 (API)](#API)
 
 - [日志记录参数](#日志记录参数)
-- [更方便的 DD](#更方便的 DD)
-- [使用 context 日志](#使用 context 日志)
+- [更方便的 DD](#更方便的-DD)
+- [使用 context 日志](#使用-context-日志)
 - [行内dd()](#行内dd())
 - [快速输出Query的sql](#快速输出Query的sql)
 
