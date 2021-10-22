@@ -3088,13 +3088,13 @@ Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (日志与调试)](#日志与调试) ➡️ [下一个 (其他)](#其他)
 
-- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
-- [API Return "Everything went ok"](#api-return-everything-went-ok)
-- [Get rid of that extra inner data wrap](#get-rid-of-that-extra-inner-data-wrap)
+- [API 资源 带不带data](#API-资源-带不带data)
+- [API 返回一切正常](#API-返回一切正常)
+- [去掉额外的内部数据包装](#去掉额外的内部数据包装)
 
-### API Resources: With or Without "data"?
+### API 资源 带不带data
 
-If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
+如果您使用 `Eloquent API Resource` 去返回数据，它们将自动封装到 `data` 中。如果要将其删除，请在 `app/Providers/AppServiceProvider.php` 中添加` JsonResource::withoutWrapping()`;
 
 ```php
 class AppServiceProvider extends ServiceProvider
@@ -3106,12 +3106,11 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-Tip given by [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230637544321029)
+由 [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230637544321029)提供
 
-### API Return "Everything went ok"
+### API 返回一切正常
 
-If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
-content". In Laravel, it's easy: `return response()->noContent();`.
+如果你有 API 端口执行某些操作但是没有响应，那么您只想返回 “一切正常”, 您可以返回 204 状态代码 “No content”。在 Laravel 中，很简单: `return response()->noContent();`
 
 ```php
 public function reorder(Request $request)
@@ -3124,9 +3123,13 @@ public function reorder(Request $request)
 }
 ```
 
-### Get rid of that extra inner data wrap
 
-When creating a Laravel Resource collection, you can get rid of that extra inner data wrap by adding `JsonResource::withoutWrapping();` in your `AppServiceProvider`
+
+### 去掉额外的内部数据包装
+
+当创建一个 `Laravel Resource` 集合 你可以去除数据外层包装, 通过在 `AppServiceProvider`中添加
+
+`JsonResource::withoutWrapping()`
 
 ```php
 public function boot()
