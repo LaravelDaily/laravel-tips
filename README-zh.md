@@ -1450,25 +1450,24 @@ $query->whereBelongsTo($author, 'author')
 
 ## 数据库迁移
 
-⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (模型关联)](#模型关联) ➡️ [Next (视图)](#视图)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (模型关联)](#模型关联) ➡️ [下一个 (视图)](#视图)
 
-- [Unsigned Integer](#unsigned-integer)
-- [Order of Migrations](#order-of-migrations)
-- [Migration fields with timezones](#migration-fields-with-timezones)
-- [Database migrations column types](#database-migrations-column-types)
-- [Default Timestamp](#default-timestamp)
-- [Migration Status](#migration-status)
-- [Create Migration with Spaces](#create-migration-with-spaces)
-- [Create Column after Another Column](#create-column-after-another-column)
-- [Make migration for existing table](#make-migration-for-existing-table)
-- [Output SQL before running migrations](#output-sql-before-running-migrations)
-- [Anonymous Migrations](#anonymous-migrations)
-- [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
+- [无符号整型](#无符号整型)
+- [迁移顺序](#迁移顺序)
+- [带时区的迁移字段](#带时区的迁移字段)
+- [数据库迁移字段类型](#数据库迁移字段类型)
+- [默认时间戳](#默认时间戳)
+- [迁移状态](#迁移状态)
+- [创建带空格的迁移](#创建带空格的迁移)
+- [在另一列的后面创建一列](#在另一列的后面创建一列)
+- [为已经存在的表生成迁移文件](#为已经存在的表生成迁移文件)
+- [执行迁移前先输出 SQL 语句](#执行迁移前先输出-SQL-语句)
+- [匿名迁移](#匿名迁移)
+- [给迁移添加注释](#给迁移添加注释)
 
+### 无符号整型
 
-### Unsigned Integer
-
-For foreign key migrations instead of `integer()` use `unsignedInteger()` type or `integer()->unsigned()`, otherwise you may get SQL errors.
+作为迁移的外键，请使用 `unsignedInteger()`  类型或 `integer()->unsigned()` 来替代 `integer()` ，否则你会得到 SQL 错误。
 
 ```php
 Schema::create('employees', function (Blueprint $table) {
@@ -1478,7 +1477,7 @@ Schema::create('employees', function (Blueprint $table) {
 });
 ```
 
-You can also use `unsignedBigInteger()` if that other column is `bigInteger()` type.
+同样，你可以用 `unsignedBigInteger()` 如果外键对应的是 `bigInteger()` 类型。
 
 ```php
 Schema::create('employees', function (Blueprint $table) {
@@ -1486,15 +1485,15 @@ Schema::create('employees', function (Blueprint $table) {
 });
 ```
 
-### Order of Migrations
+### 迁移顺序
 
-If you want to change the order of DB migrations, just rename the file's timestamp, like from `2018_08_04_070443_create_posts_table.php` to`2018_07_04_070443_create_posts_table.php` (changed from `2018_08_04` to `2018_07_04`).
+如果你想改变数据库迁移的顺序，只需要将文件按时间戳记命名， 就像 `2018_08_04_070443_create_posts_table.php` 改为 `2018_07_04_070443_create_posts_table.php` (从 `2018_08_04` 改成了 `2018_07_04`).
 
-They run in alphabetical order.
+迁移是以字母顺序执行。
 
-### Migration fields with timezones
+### 带时区的迁移字段
 
-Did you know that in migrations there's not only `timestamps()` but also `timestampsTz()`, for the timezone?
+你知不知道在迁移中不止有 `timestamps()` 还有带时区的 `timestampsTz()` 。
 
 ```php
 Schema::create('employees', function (Blueprint $table) {
@@ -1505,11 +1504,11 @@ Schema::create('employees', function (Blueprint $table) {
 });
 ```
 
-Also, there are columns `dateTimeTz()`, `timeTz()`, `timestampTz()`, `softDeletesTz()`.
+同样，还有这么些列 `dateTimeTz()` ，` timeTz()` ， `timestampTz()` ， `softDeletesTz()`。
 
-### Database migrations column types
+### 数据库迁移字段类型
 
-There are interesting column types for migrations, here are a few examples.
+迁移中有一些有趣的字段类型，下面是一些示例。
 
 ```php
 $table->geometry('positions');
@@ -1519,23 +1518,23 @@ $table->point('position');
 $table->uuid('id');
 ```
 
-See all column types on the [official documentation](https://laravel.com/docs/master/migrations#creating-columns).
+在 [官方文档](https://laravel.com/docs/master/migrations#creating-columns) 中你可以找到全部的字段类型列表.
 
-### Default Timestamp
+### 默认时间戳
 
-While creating migrations, you can use `timestamp()` column type with option
-`useCurrent()` and `useCurrentOnUpdate()`, it will set `CURRENT_TIMESTAMP` as default value.
+当创建迁移文件时，你可以使用带
+`useCurrent()` 和 `useCurrentOnUpdate()` 可选项的 `timestamp()` 类型，这将会设置使相应字段以 `CURRENT_TIMESTAMP` 作为默认值。
 
 ```php
 $table->timestamp('created_at')->useCurrent();
 $table->timestamp('updated_at')->useCurrentOnUpdate();
 ```
 
-### Migration Status
+### 迁移状态
 
-If you want to check what migrations are executed or not yet, no need to look at the database "migrations" table, you can launch `php artisan migrate:status` command.
+如果你想知道迁移是不是已经运行过了，不需要查看 "migrations" 表，你可以运行 `php artisan migrate:status` 命令来查看。
 
-Example result:
+结果示例:
 
 ```
 +------+------------------------------------------------+-------+
@@ -1547,9 +1546,9 @@ Example result:
 +------+------------------------------------------------+-------+
 ```
 
-### Create Migration with Spaces
+### 创建带空格的迁移
 
-When typing `make:migration` command, you don't necessarily have to use underscore `_` symbol between parts, like `create_transactions_table`. You can put the name into quotes and then use spaces instead of underscores.
+当你打入 `make:migration` 命令，你不 “必须” 在不同部分间使用下划线 _ 进行分隔，比如 `create_transactions_table` 。你可以把名字用引号引起来并把下划线换成空格。
 
 ```php
 // This works
@@ -1561,11 +1560,10 @@ php artisan make:migration "create transactions table"
 
 Source: [Steve O on Twitter](https://twitter.com/stephenoldham/status/1353647972991578120)
 
-### Create Column after Another Column
+### 在另一列的后面创建一列
 
-_Notice: Only MySQL_
-
-If you're adding a new column to the existing table, it doesn't necessarily have to become the last in the list. You can specify after which column it should be created:
+注意： 仅 MySQL 可用
+如果你要在已经存在的表里增加一个新列，这个列不 “必须” 成为最后一列，你可以指定这个列创建在哪个列的后面
 
 ```php
 Schema::table('users', function (Blueprint $table) {
@@ -1573,7 +1571,7 @@ Schema::table('users', function (Blueprint $table) {
 });
 ```
 
-If you're adding a new column to the existing table, it doesn't necessarily have to become the last in the list. You can specify before which column it should be created:
+如果你要在已经存在的表里增加一个新列，这个列不 “必须” 成为最后一列，你也可以指定这个列创建在哪个列的前面：
 
 ```php
 Schema::table('users', function (Blueprint $table) {
@@ -1581,7 +1579,7 @@ Schema::table('users', function (Blueprint $table) {
 });
 ```
 
-If you want your column to be the first in your table , then use the first method.
+如果你让创建的列排在表中的第一个，那么可以使用 `first` 方法。
 
 ```php
 Schema::table('users', function (Blueprint $table) {
@@ -1589,10 +1587,10 @@ Schema::table('users', function (Blueprint $table) {
 });
 ```
 
-### Make migration for existing table
+### 为已经存在的表生成迁移文件
 
-If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "_in_xxxxx_table" at the end, or specify "--table" parameter.
-`php artisan change_fields_products_table` generates empty class
+如果你要为已经存的表生成迁移文件，而且你想让 Lavarel 来为你生成 Schema::table ()  代码，那么，在命令后面加入  "_in_xxxxx_table" ，或者指明 "--table" 参数。
+`php artisan make:migration change_fields_products_table` generates empty class
 
 ```php
 class ChangeFieldsProductsTable extends Migration
@@ -1604,7 +1602,7 @@ class ChangeFieldsProductsTable extends Migration
 }
 ```
 
-But add `in_xxxxx_table` `php artisan make:migration change_fields_in_products_table` and it generates class with `Schemma::table()` pre-fileed
+但是，加入 `in_xxxxx_table` `php artisan make:migration change_fields_in_products_table` 生成了填好了 `Schemma::table()` 的类。
 
 ```php
 class ChangeFieldsProductsTable extends Migration
@@ -1618,7 +1616,7 @@ class ChangeFieldsProductsTable extends Migration
 }
 ```
 
-Also you can specify `--table` parameter `php artisan make:migration whatever_you_want --table=products`
+同样，你可以指明 `--table` 参数 `php artisan make:migration whatever_you_want --table=products`
 
 ```php
 class WhateverYouWant extends Migration
@@ -1632,19 +1630,22 @@ class WhateverYouWant extends Migration
 }
 ```
 
-### Output SQL before running migrations
+### 执行迁移前先输出 SQL 语句
 
-When typing `migrate --pretend` command, you get the SQL query that will be executed in the terminal. It's an interesting way to debug SQL if necessary.
+当输入 migrate --pretend 命令，你可以得到将在终端中执行的 SQL 查询。如果有需要的话调试 SQL 的方法，这是个很有趣的方法。
 
 ```php
 // Artisan command
 php artisan migrate --pretend
 ```
 
-### Anonymous Migrations
+### 匿名迁移
 
-The Laravel team released Laravel 8.37 with anonymous migration support, which solves a GitHub issue with migration class name collisions. The core of the problem is that if multiple migrations have the same class name, it'll cause issues when trying to recreate the database from scratch.
-Here's an example from the [pull request](https://github.com/laravel/framework/pull/36906) tests:
+`Laravel`团队发布了`Laravel 8.37`版本 支持匿名迁移，解决了迁移命名冲突的问题。
+
+这个问题的核心是 如果多个迁移有相同的类名 当尝试重新创建数据库时可能会导致问题
+
+以下是一个来自 `pr `的例子
 
 ```php
 use Illuminate\Database\Migrations\Migration;
@@ -1668,12 +1669,13 @@ return new class extends Migration {
 };
 ```
 
-Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)
+由 [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)提供
 
-### You can add "comment" about a column inside your migrations
+### 给迁移添加注释
 
-You can add "comment" about a column inside your migrations and provide useful information.<br>
-If database is managed by someone other than developers, they can look at comments in Table structure before performing any operations.
+在迁移中你可以给字段添加 `comment` 提供有用的信息。
+
+如果数据库被其他开发者管理,他们在任何操作之前可以看这些表结构的注释。
 
 ```php
 $table->unsignedInteger('interval')
@@ -1681,7 +1683,7 @@ $table->unsignedInteger('interval')
     ->comment('This column is used for indexing.')   
 ```
 
-Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1442345998790107137)
+由 [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1442345998790107137)提供
 
 ## Views
 
