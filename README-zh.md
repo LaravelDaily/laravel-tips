@@ -2837,16 +2837,15 @@ Notification::route('mail', 'taylor@example.com')
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (邮件)](#邮件) ➡️ [下一个 (工厂)](#工厂)
 
-- [Artisan command parameters](#artisan-command-parameters)
-- [Maintenance Mode](#maintenance-mode)
-- [Artisan command help](#artisan-command-help)
-- [Exact Laravel version](#exact-laravel-version)
-- [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
+- [Artisan 命令参数](#Artisan-命令参数)
+- [维护模式](#维护模式)
+- [Artisan 命令行帮助](#Artisan-命令行帮助)
+- [确认 Laravel 的版本](#确认-Laravel-的版本)
+- [从任意处使用 Artisan 命令](#从任意处使用-Artisan-命令)
 
+### Artisan 命令参数
 
-### Artisan command parameters
-
-When creating Artisan command, you can ask the input in variety of ways: `$this->confirm()`, `$this->anticipate()`, `$this->choice()`.
+创建 Artisan 命令时，您可以各种方式询问输入：`$this->confirm()` （确认），`$this->perialipate()` (预期输入)，`$this->choice()`(选择)。
 
 ```php
 // Yes or no?
@@ -2861,47 +2860,46 @@ $name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
 $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ```
 
-### Maintenance Mode
+### 维护模式
 
-If you want to enable maintenance mode on your page, execute the down Artisan command:
+如果你想要在页面上启用维护模式，执行下面的 Artisan 命令:
 
 ```bash
 php artisan down
 ```
 
-Then people would see default 503 status page.
+然后人们会看到默认的 503 页面。
+在 Laravel 8 里，你还可以提供的标识：
 
-You may also provide flags, in Laravel 8:
-
-- the path the user should be redirected to
-- the view that should be prerendered
-- secret phrase to bypass maintenance mode
-- status code during maintenance mode
-- retry page reload every X seconds
+用户将会重定向的路径地址
+预渲染的维护模式视图页面
+绕过维护模式的秘钥
+维护模式返回的状态吗
+每 X 秒重新加载页面
 
 ```bash
 php artisan down --redirect="/" --render="errors::503" --secret="1630542a-246b-4b66-afa1-dd72a4c43515" --status=200 --retry=60
 ```
 
-Before Laravel 8:
+在 Laravel 8 之前有：
 
-- message that would be shown
-- retry page reload every X seconds
-- still allow the access to some IP address
+- 维护模式显示的消息
+- 每 X 秒重新加载页面
+- 允许访问的 IP 地址
 
 ```bash
 php artisan down --message="Upgrading Database" --retry=60 --allow=127.0.0.1
 ```
 
-When you've done the maintenance work, just run:
+当你完成了维护工作，只需要运行：
 
 ```bash
 php artisan up
 ```
 
-### Artisan command help
+### Artisan 命令行帮助
 
-To check the options of artisan command, Run artisan commands with `--help` flag. For example, `php artisan make:model --help` and see how many options you have:
+要查看 `Artisan` 命令的相关选项，可以运行 `Artisan` 命令带上 `--help` 标识参数，比如 `php artisan make:model --help` 然后就可以看到你可以用到的诸多选项
 
 ```
 Options:
@@ -2924,14 +2922,14 @@ Options:
   -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
-### Exact Laravel version
+### 确认 Laravel 的版本
 
-Find out exactly what Laravel version you have in your app, by running command
+通过以下命令行，可以查看并确认你的应用所使用 Lavavel 版本
 `php artisan --version`
 
-### Launch Artisan command from anywhere
+### 从任意处使用 Artisan 命令
 
-If you have an Artisan command, you can launch it not only from Terminal, but also from anywhere in your code, with parameters. Use Artisan::call() method:
+你不仅可以在命令行中启动`Artisan` 命令，还可以携带参数地在代码中启动它，使用`Artisan::call()· 方法即可：
 
 ```php
 Route::get('/foo', function () {
@@ -2947,10 +2945,10 @@ Route::get('/foo', function () {
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (Artisan)](#Artisan) ➡️ [下一个 (日志与调试)](#日志与调试)
 
-- [Factory callbacks](#factory-callbacks)
-- [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
-- [Override values and apply custom login to them](#override-values-and-apply-custom-login-to-them)
-- [Using factories with relationships](#using-factories-with-relationships)
+- [工厂回调](#工厂回调)
+- [生成带图像的数据工厂或填充](#生成带图像的数据工厂或填充)
+- [使用自定义逻辑覆盖值](#使用自定义逻辑覆盖值)
+- [使用带关联关系的工厂](#使用带关联关系的工厂)
 
 ### 工厂回调
 
