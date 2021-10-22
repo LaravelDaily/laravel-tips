@@ -1685,24 +1685,24 @@ $table->unsignedInteger('interval')
 
 由 [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1442345998790107137)提供
 
-## Views
+## 视图
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Migrations)](#migrations) ➡️ [Next (Routing)](#routing)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (数据库迁移)](#数据库迁移) ➡️ [下一个 (视图)](#路由)
 
-- [$loop variable in foreach](#loop-variable-in-foreach)
-- [Does view file exist?](#does-view-file-exist)
-- [Error code Blade pages](#error-code-blade-pages)
-- [View without controllers](#view-without-controllers)
-- [Blade @auth](#blade-auth)
-- [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
-- [Create Your Own Blade Directive](#create-your-own-blade-directive)
-- [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)
-- [Use Laravel Blade-X variable binding to save even more space](#use-laravel-blade-x-variable-binding-to-save-even-more-space)
-- [Blade components props](#blade-components-props)
+- [foreach 语句中的 $loop 变量](#foreach-语句中的-$loop 变量)
+- [视图是否存在](#视图是否存在)
+- [错误代码视图页面](#错误代码视图页面)
+- [脱离控制器的视图](#脱离控制器的视图)
+- [Blade @auth 指令](#Blade-@auth 指令)
+- [Blade 视图中的二级 $loop 变量](#Blade-视图中的二级-$loop-变量)
+- [创建你自己的 Blade 指令](#创建你自己的 Blade 指令)
+- [视图指令IncludeIf IncludeWhen IncludeFirst](#视图指令IncludeIf-IncludeWhen-IncludeFirst)
+- [使用Laravel Blade-X 变量绑定节省更多空间](#使用Laravel-Blade-X-变量绑定节省更多空间)
+- [Blade 组件属性](#Blade 组件属性)
 
-### $loop variable in foreach
+### foreach 语句中的 $loop 变量
 
-Inside of foreach loop, check if current entry is first/last by just using `$loop` variable.
+在 `foreach` 循环中，使用 `$loop` 变量来查看当前是否是第一次 / 最后一次循环。
 
 ```blade
 @foreach ($users as $user)
@@ -1718,12 +1718,11 @@ Inside of foreach loop, check if current entry is first/last by just using `$loo
 @endforeach
 ```
 
-There are also other properties like `$loop->iteration` or `$loop->count`.
-Learn more on the [official documentation](https://laravel.com/docs/master/blade#the-loop-variable).
+同样也有诸如 `$loop->iteration` 或 `$loop->count` 等属性。可以在 [官方文档](https://laravel.com/docs/master/blade#the-loop-variable)中查看更多相关内容。
 
-### Does view file exist?
+### 视图是否存在
 
-You can check if View file exists before actually loading it.
+你可以在视图实际加载之前确认该视图文件是否存在。
 
 ```php
 if (view()->exists('custom.page')) {
@@ -1731,19 +1730,19 @@ if (view()->exists('custom.page')) {
 }
 ```
 
-You can even load an array of views and only the first existing will be actually loaded.
+你甚至可以使用一个数组来加载视图，这样只有第一个视图文件确实存在的视图会被加载。
 
 ```php
 return view()->first(['custom.dashboard', 'dashboard'], $data);
 ```
 
-### Error code Blade pages
+### 错误代码视图页面
 
-If you want to create a specific error page for some HTTP code, like 500 - just create a blade file with this code as filename, in `resources/views/errors/500.blade.php`, or `403.blade.php` etc, and it will automatically be loaded in case of that error code.
+如果你想为一些特殊的 HTTP 返回码建立特定的错误页面，比如 `500` —— 只需要使用该码值创建视图文件，比如  `resources/views/errors/500.blade.php` ，或者是 `403.blade.php` 等等，这些视图会在对应的错误码出现时自动被加载。
 
-### View without controllers
+### 脱离控制器的视图
 
-If you want route to just show a certain view, don't create a Controller method, just use `Route::view()` function.
+如果你想让一个路由仅仅显示某个视图，不需要创建控制器，只需要使用 Route::view() 方法即可。
 
 ```php
 // Instead of this
@@ -1760,11 +1759,11 @@ class TextsController extends Controller
 Route::view('about', 'texts.about');
 ```
 
-### Blade @auth
+### Blade @auth 指令
 
-Instead of if-statement to check logged in user, use `@auth` directive.
+不需要使用 if 来检查用户是否登录，使用 @auth 指令即可。
 
-Typical way:
+比较典型的方式是：
 
 ```blade
 @if(auth()->user())
@@ -1772,7 +1771,7 @@ Typical way:
 @endif
 ```
 
-Shorter:
+更短的用法：
 
 ```blade
 @auth
@@ -1780,7 +1779,7 @@ Shorter:
 @endauth
 ```
 
-The opposite is `@guest` directive:
+与 @auth 相对的是 @guest 指令：
 
 ```blade
 @guest
@@ -1788,9 +1787,9 @@ The opposite is `@guest` directive:
 @endguest
 ```
 
-### Two-level $loop variable in Blade
+### Blade 视图中的二级 $loop 变量
 
-In Blade's foreach you can use $loop variable even in two-level loop to reach parent variable.
+你甚至可以在 `Blade` 视图的二级 `foreach` 循环中使用 `$loop` 变量来表示外层的循环变量。
 
 ```blade
 @foreach ($users as $user)
@@ -1802,15 +1801,15 @@ In Blade's foreach you can use $loop variable even in two-level loop to reach pa
 @endforeach
 ```
 
-### Create Your Own Blade Directive
+### 创建你自己的 Blade 指令
 
-It’s very easy - just add your own method in `app/Providers/AppServiceProvider.php`. For example, if you want to have this for replace `<br>` tags with new lines:
+你只需要在 `app/Providers/AppServiceProvider.php` 中添加你自己的方法。举个例子，如果你需要将 `<br>` 标签替换为换行：
 
 ```blade
 <textarea>@br2nl($post->post_text)</textarea>
 ```
 
-Add this directive to AppServiceProvider’s `boot()` method:
+然后将这个指令添加到 `AppServiceProvider` 的 `boot()` 方法中：
 
 ```php
 public function boot()
@@ -1821,29 +1820,28 @@ public function boot()
 }
 ```
 
-### Blade Directives: IncludeIf, IncludeWhen, IncludeFirst
+### 视图指令IncludeIf IncludeWhen IncludeFirst
 
-If you are not sure whether your Blade partial file actually would exist, you may use these condition commands:
-
-This will load header only if Blade file exists
+如果你不确定 Blade 文件是否存在，你可以使用这些条件指令。
+仅当 Blade 文件存在时载入 header：
 
 ```blade
 @includeIf('partials.header')
 ```
 
-This will load header only for user with role_id 1
+仅当用户的 role_id == 1 的时候载入 header：
 
 ```blade
 @includeWhen(auth()->user()->role_id == 1, 'partials.header')
 ```
 
-This will try to load adminlte.header, if missing - will load default.header
+尝试加载 adminlte.header ，如果不存在，则加载 default.header：
 
 ```blade
 @includeFirst('adminlte.header', 'default.header')
 ```
 
-### Use Laravel Blade-X variable binding to save even more space
+### 使用Laravel Blade-X 变量绑定节省更多空间
 
 ```php
 // Using include, the old way
@@ -1856,9 +1854,9 @@ This will try to load adminlte.header, if missing - will load default.header
 <x-post :link="$post->title" />
 ```
 
-Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787795970)
+由 [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787795970)提供
 
-### Blade components props
+### Blade 组件属性
 
 ```php
 // button.blade.php
@@ -1879,7 +1877,7 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787
 <x-button rounded>Submit</x-button>
 ```
 
-Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)
+由 [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)提供
 
 ## Routing
 
