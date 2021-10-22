@@ -1879,9 +1879,9 @@ public function boot()
 
 由 [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)提供
 
-## Routing
+## 路由
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Views)](#views) ➡️ [Next (Validation)](#validation)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (视图)](#视图) ➡️ [下一个 (验证)](#验证)
 
 - [Route group within a group](#route-group-within-a-group)
 - [Wildcard subdomains](#wildcard-subdomains)
@@ -2359,9 +2359,9 @@ class AccountController extends Controller
 
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)
 
-## Validation
+## 验证
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (路由)](#路由) ➡️ [下一个 (集合)](#集合)
 
 - [Image validation](#image-validation)
 - [Custom validation error messages](#custom-validation-error-messages)
@@ -2572,9 +2572,9 @@ $validator->validate();
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
 
-## Collections
+## 集合
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Validation)](#validation) ➡️ [Next (Auth)](#auth)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (验证)](#验证) ➡️ [下一个 (授权)](#授权)
 
 - [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
@@ -2699,9 +2699,9 @@ public function rules()
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
-## Auth
+## 授权
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Collections)](#collections) ➡️ [Next (Mail)](#mail)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (集合)](#集合) ➡️ [下一个 (邮件)](#邮件)
 
 - [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
 - [More Events on User Registration](#more-events-on-user-registration)
@@ -2784,9 +2784,9 @@ Gate::before(function($user, $ability) {
 ```
 
 
-## Mail
+## 邮件
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Auth)](#auth) ➡️ [Next (Artisan)](#artisan)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (授权)](#授权) ➡️ [下一个 (Artisan)](#Artisan)
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
@@ -2835,7 +2835,7 @@ Notification::route('mail', 'taylor@example.com')
 
 ## Artisan
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Mail)](#mail) ➡️ [Next (Factories)](#factories)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (邮件)](#邮件) ➡️ [下一个 (工厂)](#工厂)
 
 - [Artisan command parameters](#artisan-command-parameters)
 - [Maintenance Mode](#maintenance-mode)
@@ -2943,9 +2943,9 @@ Route::get('/foo', function () {
 });
 ```
 
-## Factories
+## 工厂
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Artisan)](#artisan) ➡️ [Next (Log and debug)](#log-and-debug)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (Artisan)](#Artisan) ➡️ [下一个 (日志与调试)](#日志与调试)
 
 - [Factory callbacks](#factory-callbacks)
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
@@ -3007,9 +3007,9 @@ User::factory()->has(Post::factory()->count(3))->create();
 
 Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)
 
-## Log and debug
+## 日志与调试
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (工厂)](#工厂) ➡️ [下一个 (API)](#API)
 
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
@@ -3086,7 +3086,7 @@ Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210
 
 ## API
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Log and debug)](#log-and-debug) ➡️ [Next (Other)](#other)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (日志与调试)](#日志与调试) ➡️ [下一个 (其他)](#其他)
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
@@ -3135,9 +3135,9 @@ public function boot()
 }
 ```
 
-## Other
+## 其他
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (API)](#api)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (API)](#API) 
 
 - [Localhost in .env](#localhost-in-env)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
