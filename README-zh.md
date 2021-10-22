@@ -2952,9 +2952,9 @@ Route::get('/foo', function () {
 - [Override values and apply custom login to them](#override-values-and-apply-custom-login-to-them)
 - [Using factories with relationships](#using-factories-with-relationships)
 
-### Factory callbacks
+### 工厂回调
 
-While using factories for seeding data, you can provide Factory Callback functions to perform some action after record is inserted.
+使用工厂类进行填充数据时，您可以在插入记录后提供回调函数来执行某种操作。
 
 ```php
 $factory->afterCreating(App\User::class, function ($user, $faker) {
@@ -2962,9 +2962,9 @@ $factory->afterCreating(App\User::class, function ($user, $faker) {
 });
 ```
 
-### Generate Images with Seeds/Factories
+### 生成带图像的数据工厂或填充
 
-Did you know that Faker can generate not only text values but also IMAGES? See `avatar` field here - it will generate 50x50 image:
+你是否知道伪造类 (Faker) 不仅可以生成文本值，还可以生成图像？看此处的 avatar 字段，它将生成一个 50x50 的图像:
 
 ```php
 $factory->define(User::class, function (Faker $faker) {
@@ -2979,9 +2979,9 @@ $factory->define(User::class, function (Faker $faker) {
 });
 ```
 
-### Override values and apply custom login to them
+### 使用自定义逻辑覆盖值
 
-When creating records with Factories, you can use Sequence class to override some values and apply custom logic to them.
+当使用工厂类创建记录时，可以使用序列类 (Sequence) 来输入自定义逻辑并将值覆盖
 
 ```php
 $users = User::factory()
@@ -2993,9 +2993,9 @@ $users = User::factory()
                 ->create();
 ```
 
-### Using factories with relationships
+### 使用带关联关系的工厂
 
-When using factories with relationships, Laravel also provides magic methods.
+当使用带关联关系的工厂时，`laravel`也提供了魔术方法:
 
 ```php
 // magic factory relationship methods
@@ -3005,7 +3005,7 @@ User::factory()->hasPosts(3)->create();
 User::factory()->has(Post::factory()->count(3))->create();
 ```
 
-Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)
+由 [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)提供
 
 ## 日志与调试
 
