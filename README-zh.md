@@ -2738,7 +2738,7 @@ class EventServiceProvider extends ServiceProvider
     ];
 ```
 
-### 你知道Auth::once()吗
+### 你知道Authonce()吗
 
 你可以用用户登录一个请求，使用方法 `Auth::once()`。
 不会使用任何会话或 cookie，这意味着该方法在构建无状态 API 时可能很有帮助。
