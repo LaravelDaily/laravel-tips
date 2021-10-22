@@ -1450,7 +1450,7 @@ $query->whereBelongsTo($author, 'author')
 
 ## 数据库迁移
 
-⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
+⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (模型关联)](#模型关联) ➡️ [Next (视图)](#视图)
 
 - [Unsigned Integer](#unsigned-integer)
 - [Order of Migrations](#order-of-migrations)
