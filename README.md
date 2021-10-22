@@ -1,5 +1,9 @@
 # Laravel Tips
 
+[Chinese](./README-zh.md)
+
+---
+
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
@@ -2343,7 +2347,7 @@ protected function prepareForValidation()
         'slug' => Illuminate\Support\Str::slug($this->slug),
     ]);
 }
-``` 
+```
 
 ### Stop on First Validation Error
 
@@ -2555,7 +2559,7 @@ $offer = [
 ];
                 
 $totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
-``` 
+```
 ### With Rule::when() we can conditionally apply validation rules
 Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
 In this example we validate the value of the vote only if the user can actually vote the post.
@@ -3096,7 +3100,7 @@ Route::get('user/{id}', 'ShowProfile');
 Artisan:
 ```bash
 php artisan make:controller ShowProfile --invokable
-``` 
+```
 
 Controller: 
 ```php
