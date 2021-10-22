@@ -840,7 +840,7 @@ $post->author->name;
 // Of course, you can prevent it like this:
 $post->author->name ?? ''
 // or
-@$post->auhtor->name
+@$post->author->name
 
 // But you can do it on Eloquent relationship level:
 // this relation will return an empty App\Author model if no author is attached to the post
