@@ -38,8 +38,8 @@ __更新于 2021/10/17__:现在有194个小提示，分成14类.
 - [Eloquent where 日期方法](#Eloquent-where日期方法)
 - [增量和减量](#增量和减量)
 - [禁止 timestamp 列](#禁止-timestamp-列)
-- [软删除: 多行恢复](#软删除:-多行恢复)
-- [Model all: columns](#Model-all:-columns)
+- [软删除: 多行恢复](#软删除-多行恢复)
+- [Model all: columns](#Model-all-columns)
 - [To Fail or not to Fail](#To-Fail-or-not-to-Fail)
 - [列名修改](#列名修改)
 - [过滤结果集合](#过滤结果集合)
@@ -147,7 +147,7 @@ class Company extends Model
 }
 ```
 
-### 软删除: 多行恢复
+### 软删除-多行恢复
 
 使用软删除时，可以在一个句子中恢复多行。
 
@@ -155,7 +155,7 @@ class Company extends Model
 Post::onlyTrashed()->where('author_id', 1)->restore();
 ```
 
-### Model all: columns
+### Model all-columns
 
 当调用Eloquent's `Model::all()`时你可以指定返回哪些列。
 
