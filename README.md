@@ -2890,7 +2890,6 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14414473563234304
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
 - [Log with context](#log-with-context)
-- [Inline dd()](#inline-dd)
 - [Quickly output an Eloquent query in its SQL form](#quickly-output-an-eloquent-query-in-its-sql-form)
 
 ### Logging with parameters
@@ -2930,18 +2929,6 @@ public function handle(Request $request, Closure $next)
     return $response;
 }
 ```
-
-### Inline dd()
-```php
-// Instead of this
-$clients = Client::where('payment,' 'confirmed')->get();
-dd($clients);
-
-// You can directly dd
-Client::where('payment,' 'confirmed')->get()->dd();
-```
-
-Tip given by [@LaraibiM](https://twitter.com/LaraibiM/status/1437857603263078421)
 
 ### Quickly output an Eloquent query in its SQL form
 If you want to quickly output an Eloquent query in its SQL form, you can invoke the toSql() method onto it like so
