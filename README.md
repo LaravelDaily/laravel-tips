@@ -7,11 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 October 2021__: Currently there are __194 tips__ divided into 14 sections.
+__Update 24 October 2021__: Currently there are __191 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (52 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (50 tips)
 - [Models Relations](#models-relations) (29 tips)
 - [Migrations](#migrations) (12 tips)
 - [Views](#views) (10 tips)
@@ -23,7 +23,7 @@ __Update 24 October 2021__: Currently there are __194 tips__ divided into 14 sec
 - [Artisan](#artisan) (5 tips)
 - [Factories](#factories) (4 tips)
 - [Log and debug](#log-and-debug) (4 tips)
-- [API](#api) (3 tips)
+- [API](#api) (2 tips)
 - [Other](#other) (30 tips)
 
 
@@ -74,7 +74,6 @@ __Update 24 October 2021__: Currently there are __194 tips__ divided into 14 sec
 - [Extra information about the query](#extra-information-about-the-query)
 - [Using the doesntExist() method in Laravel](#using-the-doesntexist-method-in-laravel)
 - [Trait that you want to add to a few Models to call their boot() method automatically](#trait-that-you-want-to-add-to-a-few-models-to-call-their-boot-method-automatically)
-- [Laravel find() function, more powers besides passing an ID to find](#laravel-find-function-more-powers-besides-passing-an-id-to-find)
 - [There are two common ways of determining if a table is empty in Laravel](#there-are-two-common-ways-of-determining-if-a-table-is-empty-in-laravel)
 - [How to prevent “property of non-object” error](#how-to-prevent-property-of-non-object-error)
 - [Get original attributes after mutating an Eloquent record](#get-original-attributes-after-mutating-an-eloquent-record)
@@ -802,17 +801,6 @@ trait MultiTenantModelTrait
 }
 ```
 
-### Laravel find() function, more powers besides passing an ID to find
-```php
-// In find($id) method second argument can be the colums to select
-Studdents::find(1, ['name', 'father_name']);
-// SO find student with id '1' and return name, father_name
-
-// We can pass multople id as an array
-Studdents::find([1,2,3], ['name', 'father_name']);
-// Output: students with IDs 1,2,3 and return their name, father_name
-```
-
 ### There are two common ways of determining if a table is empty in Laravel
 There are two common ways of determining if a table is empty in Laravel. Calling `exists()` or `count()` directly on the model!<br>
 One returns a strict true/false boolean, the other returns an integer which you can use as a falsy in conditionals.
@@ -909,7 +897,6 @@ Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/14479023693882490
 - [Filter hasMany relationships](#filter-hasmany-relationships)
 - [Filter by many-to-many relationship pivot column](#filter-by-many-to-many-relationship-pivot-column)
 - [A shorter way to write whereHas](#a-shorter-way-to-write-whereHas)
-- [Extract repeatable callback into a variable](#Extract-repeatable-callback-into-a-variable)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 
@@ -1305,29 +1292,6 @@ User::whereHas('posts', function ($query) {
 
 // After
 User::whereRelation('posts', 'published_at', '>', now())->get();
-```
-
-### Extract repeatable callback into a variable
-If you have a callback function that is repeating a few times, you can extract it into a variable
-```php
-// You have long repeated callback function inside?
-$results = Model::with('relationships')
-    ->whereHas('relationships', function($query) use ($var1, $var2) {
-        return $query->where('field1', $var1)->where('field2', $var2);
-    })
-    ->withCount('relationships', function($query) use ($var1, $var2) {
-        return $query->where('field1', $var1)->where('field2', $var2);
-    })
-    ->get();
-
-// You can extract that into a variable
-$callback = function($query) use ($var1, $var2) {
-        return $query->where('field1', $var1)->where('field2', $var2);
-    });
-$results = Model::with('relationships')
-    ->whereHas('relationships', $callback)
-    ->withCount('relationships', $callback)
-    ->get();
 ```
 
 ### You can add conditions to your relationships
@@ -2405,6 +2369,22 @@ If your rules are dynamic and depend on some other condition, you can create tha
     }
 ```
 
+### With Rule::when() we can conditionally apply validation rules
+Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
+In this example we validate the value of the vote only if the user can actually vote the post.
+```php
+use Illuminate\Validation\Rule;
+
+public function rules()
+{
+    return [
+        'vote' => Rule::when($user->can('vote', $post), 'required|int|between:1,5'),
+    ]
+}
+```
+
+Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
+
 ### Use this property in the request classes to stop the validation of the whole request attributes
 Use this property in the request classes to stop the validation of the whole request attributes.<br><br>
 
@@ -2568,22 +2548,7 @@ $offer = [
 ];
                 
 $totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
-``` 
-### With Rule::when() we can conditionally apply validation rules
-Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
-In this example we validate the value of the vote only if the user can actually vote the post.
-```php
-use Illuminate\Validation\Rule;
-
-public function rules()
-{
-    return [
-        'vote' => Rule::when($user->can('vote', $post), 'required|int|between:1,5'),
-    ]
-}
 ```
-
-Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
 ## Auth
 
@@ -2948,7 +2913,6 @@ Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
-- [Get rid of that extra inner data wrap](#get-rid-of-that-extra-inner-data-wrap)
 
 ### API Resources: With or Without "data"?
 
@@ -2979,15 +2943,6 @@ public function reorder(Request $request)
     }
 
     return response()->noContent();
-}
-```
-
-### Get rid of that extra inner data wrap
-When creating a Laravel Resource collection, you can get rid of that extra inner data wrap by adding `JsonResource::withoutWrapping();` in your `AppServiceProvider`
-```php
-public function boot()
-{
-    JsonResource::withoutWrapping();
 }
 ```
 
