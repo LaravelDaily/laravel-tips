@@ -7,7 +7,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 21 October 2021__: Currently there are __195 tips__ divided into 14 sections.
+__Update 24 October 2021__: Currently there are __194 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ __Update 21 October 2021__: Currently there are __195 tips__ divided into 14 sec
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (5 tips)
 - [Factories](#factories) (4 tips)
-- [Log and debug](#log-and-debug) (5 tips)
+- [Log and debug](#log-and-debug) (4 tips)
 - [API](#api) (3 tips)
 - [Other](#other) (30 tips)
 
