@@ -1883,30 +1883,30 @@ public function boot()
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (视图)](#视图) ➡️ [下一个 (验证)](#验证)
 
-- [Route group within a group](#route-group-within-a-group)
-- [Wildcard subdomains](#wildcard-subdomains)
-- [What's behind the routes?](#whats-behind-the-routes)
-- [Route Model Binding: You can define a key](#route-model-binding-you-can-define-a-key)
-- [Quickly Navigate from Routes file to Controller](#quickly-navigate-from-routes-file-to-controller)
-- [Route Fallback: When no Other Route is Matched](#route-fallback-when-no-other-route-is-matched)
-- [Route Parameters Validation with RegExp](#route-parameters-validation-with-regexp)
-- [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
-- [Query string parameters to Routes](#query-string-parameters-to-routes)
-- [Separate Routes by Files](#separate-routes-by-files)
-- [Translate Resource Verbs](#translate-resource-verbs)
-- [Custom Resource Route Names](#custom-resource-route-names)
-- [More Readable Route List](#more-readable-route-list)
-- [Eager load relationship](#eager-load-relationship)
-- [Localizing Resource URIs](#localizing-resource-uris)
-- [Resource Controllers naming](#resource-controllers-naming)
-- [Easily highlight your navbar menus](#easily-highlight-your-navbar-menus)
-- [Generate absolute path using route() helper](#generate-absolute-path-using-route-helper)
-- [Override the route binding resolver for each of your models](#override-the-route-binding-resolver-for-each-of-your-models)]
-- [If you need public URL but you want them to be secured](#if-you-need-public-url-but-you-want-them-to-be-secured)
+- [分组中的分组](#分组中的分组)
+- [通配符子域名](#通配符子域名)
+- [Auth::routes调用之后是什么](#routes调用之后是什么)
+- [路由模型绑定-你可以定义一个Key](#路由模型绑定-你可以定义一个Key)
+- [快速从路由导航到控制器](#快速从路由导航到控制器)
+- [备选路由-当没有匹配到任何路由时](#备选路由-当没有匹配到任何路由时)
+- [使用正则进行路由参数验证](#使用正则进行路由参数验证)
+- [限流-全局配置与按用户配置](#限流-全局配置与按用户配置)
+- [路由中的URL参数](#路由中的URL参数)
+- [按文件为路由分类](#按文件为路由分类)
+- [翻译资源中的动词](#翻译资源中的动词)
+- [自定义资源路由名称](#自定义资源路由名称)
+- [可读性更强的路由列表](#可读性更强的路由列表)
+- [预加载](#预加载)
+- [本地化资源URI](#本地化资源URI)
+- [资源控制器命名](#资源控制器命名)
+- [更简单地高亮你的导航栏](#更简单地高亮你的导航栏)
+- [使用route()辅助函数生成绝对路径](#使用route()辅助函数生成绝对路径)
+- [为你的每个模型重写路由绑定解析器](#为你的每个模型重写路由绑定解析器)
+- [如果你需要一个公共URL但是你想让他们更安全](#如果你需要一个公共URL但是你想让他们更安全)
 
-### Route group within a group
+### 分组中的分组
 
-In Routes, you can create a group within a group, assigning a certain middleware only to some URLs in the "parent" group.
+在路由中，你可以在分组中创建分组，来实现仅仅为父分组中的某些路由分配中间件。
 
 ```php
 Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
@@ -1919,9 +1919,9 @@ Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
 });
 ```
 
-### Wildcard subdomains
+### 通配符子域名
 
-You can create route group by dynamic subdomain name, and pass its value to every route.
+你可以在分组中定义变量，来创建动态子域名分组，然后将这个变量传递给每一个子路由。
 
 ```php
 Route::domain('{username}.workspace.com')->group(function () {
@@ -1931,10 +1931,9 @@ Route::domain('{username}.workspace.com')->group(function () {
 });
 ```
 
-### What's behind the routes?
+### routes调用之后是什么
 
-Want to know what routes are actually behind `Auth::routes()`?
-From Laravel 7, it’s in a separate package, so check the file `/vendor/laravel/ui/src/AuthRouteMethods.php`.
+从 Laravel 7 之后，它被分在一个单独的包中，你可以查阅文件 `/vendor/laravel/ui/src/AuthRouteMethods.php`。
 
 ```php
 public function auth()
@@ -1965,12 +1964,11 @@ public function auth()
 }
 ```
 
-Before Laravel 7, check the file `/vendor/laravel/framework/src/illuminate/Routing/Router.php`.
+Laravel 7 之前，请查阅  `/vendor/laravel/framework/src/illuminate/Routing/Router.php`。
 
-### Route Model Binding: You can define a key
+### 路由模型绑定-你可以定义一个Key
 
-You can do Route model binding like `Route::get('api/users/{user}', function (App\User $user) { … }` - but not only by ID field. If you want `{user}` to be a `username`
-field, put this in the model:
+你可以像 `Route::get('api/users/{user}', function (App\User $user) { … }` 这样来进行路由模型绑定，但不仅仅是 ID 字段，如果你想让 {user} 是 username，你可以把它放在模型中：
 
 ```php
 public function getRouteKeyName() {
@@ -1978,25 +1976,25 @@ public function getRouteKeyName() {
 }
 ```
 
-### Quickly Navigate from Routes file to Controller
+### 快速从路由导航到控制器
 
-This thing was optional before Laravel 8, and became a standard main syntax of routing in Laravel 8.
+在 `Laravel 8` 之前，这件事情是可选的。在 `Laravel 8` 中这将成为路由的标准语法
 
-Instead of routing like this:
+不用这么写:
 
 ```php
 Route::get('page', 'PageController@action');
 ```
 
-You can specify the Controller as a class:
+你可以将控制器标识为 `class` 类名:
 
 ```php
 Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
 ```
 
-Then you will be able to click on **PageController** in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
+这样，你就可以在 `PhpStorm`中点击 `PageController` 来跳转到控制器定义，而不是手动去搜索它
 
-Or, to make it shorter, add this to top of Routes file:
+或者你想要让路由的定义更简洁，你可以在路由文件的开始提前引入控制器的类。
 
 ```php
 use App\Http\Controllers\PageController;
@@ -2005,9 +2003,9 @@ use App\Http\Controllers\PageController;
 Route::get('page', [PageController::class, 'action']);
 ```
 
-### Route Fallback: When no Other Route is Matched
+### 备选路由-当没有匹配到任何路由时
 
-If you want to specify additional logic for not-found routes, instead of just throwing default 404 page, you may create a special Route for that, at the very end of your Routes file.
+如果你想为未找到的路由指定其它逻辑，而不是直接显示 404 页面，你可以在路由文件的最后为其创建一个特殊的路由。
 
 ```php
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -2021,9 +2019,9 @@ Route::fallback(function() {
 });
 ```
 
-### Route Parameters Validation with RegExp
+### 使用正则进行路由参数验证
 
-We can validate parameters directly in the route, with “where” parameter. A pretty typical case is to prefix your routes by language locale, like `fr/blog` and `en/article/333`. How do we ensure that those two first letters are not used for some other than language?
+我们可以在路由中使用 `where`参数 来直接验证参数。一个典型的例子是，当使用语言区域的参数来作为路由前缀时，像是 `fr/blog` 和 `en/article/333` 等，这时我们如何来确保这两个首字母没有被用在其他语言呢？
 
 `routes/web.php`:
 
@@ -2037,9 +2035,9 @@ Route::group([
 });
 ```
 
-### Rate Limiting: Global and for Guests/Users
+### 限流-全局配置与按用户配置
 
-You can limit some URL to be called a maximum of 60 times per minute, with `throttle:60,1`:
+你可以使用 `throttle:60,1` 来限制一些 URL 在每分钟内最多被访问 60 次。
 
 ```php
 Route::middleware('auth:api', 'throttle:60,1')->group(function () {
@@ -2049,7 +2047,7 @@ Route::middleware('auth:api', 'throttle:60,1')->group(function () {
 });
 ```
 
-But also, you can do it separately for public and for logged-in users:
+另外，你也可以为公开请求和登录用户分别配置：
 
 ```php
 // maximum of 10 requests for guests, 60 for authenticated users
@@ -2058,7 +2056,7 @@ Route::middleware('throttle:10|60,1')->group(function () {
 });
 ```
 
-Also, you can have a DB field users.rate_limit and limit the amount for specific user:
+此外，你也可以使用数据库字段 `users.rate_limit` 为一些特殊用户设定此值。
 
 ```php
 Route::middleware('auth:api', 'throttle:rate_limit,1')->group(function () {
@@ -2068,9 +2066,9 @@ Route::middleware('auth:api', 'throttle:rate_limit,1')->group(function () {
 });
 ```
 
-### Query string parameters to Routes
+### 路由中的URL参数
 
-If you pass additional parameters to the route, in the array, those key / value pairs will automatically be added to the generated URL's query string.
+如果你在路由中使用数组传入了其它参数，这些键 / 值将会自动配对并且带入 `URL` 查询参数中。
 
 ```php
 Route::get('user/{id}/profile', function ($id) {
@@ -2080,11 +2078,12 @@ Route::get('user/{id}/profile', function ($id) {
 $url = route('profile', ['id' => 1, 'photos' => 'yes']); // Result: /user/1/profile?photos=yes
 ```
 
-### Separate Routes by Files
+### 按文件为路由分类
 
-If you have a set of routes related to a certain "section", you may separate them in a special `routes/XXXXX.php` file, and just include it in `routes/web.php`
+如果你有一组与某些功能相关的路由，你可以将它们放在一个特殊的文件 `routes/XXXXX.php` 中，然后在 `routes/web.php` 中使用 include 引入它。`
 
-Example with `routes/auth.php` in [Laravel Breeze](https://github.com/laravel/breeze/blob/1.x/stubs/routes/web.php) by Taylor Otwell himself: 
+Taylor Otwell 在  [Laravel Breeze](https://github.com/laravel/breeze/blob/1.x/stubs/routes/web.php) 中的例子：
+`routes/auth.php`
 
 
 ```php
@@ -2099,7 +2098,7 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 ```
 
-Then, in `routes/auth.php`:
+然后，在 `routes/auth.php` 中:
 
 ```php
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -2118,7 +2117,7 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
 // ... A dozen more routes
 ```
 
-But you should use this `include()` only when that separate route file has the same settings for prefix/middlewares, otherwise it's better to group them in `app/Providers/RouteServiceProvider`:
+但是，你应该只在路由都各自具有相同的前缀 / 中间件配置时使用 `include()` 来引入路由，否则，更好的选择是将他们分类在 `app/Providers/RouteServiceProvider` 中。
 
 ```php
 public function boot()
@@ -2140,9 +2139,9 @@ public function boot()
 }
 ```
 
-### Translate Resource Verbs
+### 翻译资源中的动词
 
-If you use resource controllers, but want to change URL verbs to non-English for SEO purposes, so instead of `/create` you want Spanish `/crear`, you can configure it by using `Route::resourceVerbs()` method in `App\Providers\RouteServiceProvider`:
+当你使用了资源控制器，但希望变更 `URL` 谓词以适应非英语语言环境下的 `SEO` ，以在路由中用 `/crear` 替换 `/create`，你可以使用 `App\Providers\RouteServiceProvider 中的 Route::resourceVerbs()` 配置。
 
 ```php
 public function boot()
@@ -2156,25 +2155,22 @@ public function boot()
 }
 ```
 
-### Custom Resource Route Names
+### 自定义资源路由名称
 
-When using Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix in the browser and the route name prefix you use all over Laravel project may be different.
+当使用资源路由时，你可以在 `routes/web.php` 中指定 `->names() 参数`，这样一来，在整个 Laravel 项目中，浏览器中的 URL 前缀和路由名称前缀可能会不同。
 
 ```php
 Route::resource('p', ProductController::class)->names('products');
 ```
 
-So this code above will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit`, etc.
-But you would call them in the code by `route('products.index')`, `route('products.create')`, etc.
+这行代码将会生成像 `/p`, `/p/{id}`, `/p/{id}/edit` 这样的路由，但是你可以在代码中使用` route('products.index')`, `route('products.create')` 等方式来调用它们。
 
-### More Readable Route List
+### 可读性更强的路由列表
 
-Have you ever run "php artisan route:list" and then realized that the list takes too much space and hard to read?
-
-Here's the solution: 
-`php artisan route:list --compact` 
-
-Then it shows 3 columns instead of 6 columns: shows only Method / URI / Action.
+你有没有运行过 `php artisan route:list` ，然后发现这个列表又长，可读性又很差。
+另一个方法是：
+`php artisan route:list --compact`
+这样只会输出 3 列，而非 6 列：只展示方法名、 URI 和方法
 
 ```
 +----------+---------------------------------+-------------------------------------------------------------------------+
@@ -2200,7 +2196,7 @@ Then it shows 3 columns instead of 6 columns: shows only Method / URI / Action.
 +----------+---------------------------------+-------------------------------------------------------------------------+
 ```
 
-You can also specify the exact columns you want:
+你还可以特别地指定所需要的列：
 
 `php artisan route:list --columns=Method,URI,Name`
 
@@ -2228,16 +2224,19 @@ You can also specify the exact columns you want:
 +----------+---------------------------------+---------------------+
 ```
 
-### Eager load relationship
+### 预加载
 
-If you use Route Model Binding and think you can't use Eager Loading for relationships, think again.<br>
-So you use Route Model Binding
+如果你使用了路由模型绑定，并且你认为不会在绑定关系中使用预加载，请你再想一想。
+所以当你用了这样的路由模型绑定:
 
 ```php
 public function show(Product $product) {
     //
 }
 ```
+
+但是你有一个从属关系，这时候就不能使用 `$product->with('category')` 预加载了吗？ 
+你当然可以，使用 `->load()` 来加载关系
 
 But you have a belongsTo relationship, and cannot use $product->with('category') eager loading?<br>
 You actually can! Load the relationship with `->load()`
@@ -2249,9 +2248,9 @@ public function show(Product $product) {
 }
 ```
 
-### Localizing Resource URIs
+### 本地化资源URI
 
-If you use resource controllers, but want to change URL verbs to non-English, so instead of `/create` you want Spanish `/crear`, you can configure it with `Route::resourceVerbs()` method.
+如果你使用了资源控制器，但是想要将 URL 谓词变为非英语形式的，比如你想要西班牙语的 `/crear` 而不是 `/create` ，你可以使用 `Route::resourceVerbs()` 方法来配置。
 
 ```php
 public function boot()
@@ -2264,22 +2263,23 @@ public function boot()
 }
 ```
 
-### Resource Controllers naming
+### 资源控制器命名
 
-In Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix and the route name prefix may be different.<br>
-This will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit` etc. But you would call them:
+在资源控制器中，你可以在 `routes/web.php` 中指定 `->names()` 参数，这样 `URL` 前缀与路由前缀可能会不同
+.
+这样会生成诸如  `/p`, `/p/{id}`, `/p/{id}/edit` 等等，但是你可以这样调用它们：
 
-- route('products.index)
-- route('products.create)
-- etc
+`route('products.index)`
+`route('products.create)`
+等等
 
 ```php
 Route::resource('p', \App\Http\Controllers\ProductController::class)->names('products');
 ```
 
-### Easily highlight your navbar menus
+### 更简单地高亮你的导航栏
 
-Use `Route::is('route-name')` to easily highlight your navbar menus
+使用`Route::is('route-name')`来更简单的高亮你的导航栏
 
 ```html
 <ul>
@@ -2292,9 +2292,9 @@ Use `Route::is('route-name')` to easily highlight your navbar menus
 </ul>
 ```
 
-Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1443893957507747849)
+由 [@anwar_nairi](https://twitter.com/anwar_nairi/status/1443893957507747849)提供
 
-### Generate absolute path using route() helper
+### 使用route辅助函数生成绝对路径
 
 ```php
 route('page.show', $page->id);
@@ -2304,11 +2304,11 @@ route('page.show', $page->id, false);
 // /pages/1
 ```
 
-Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1445796035742240770)
+由 [@oliverds_](https://twitter.com/oliverds_/status/1445796035742240770)提供
 
-### Override the route binding resolver for each of your models
+### 为你的每个模型重写路由绑定解析器
 
-You can override the route binding resolver for each of your models. In this example, I have no control over the @ sign in the URL, so using the `resolveRouteBinding` method, I'm able to remove the @ sign and resolve the model.
+你可以为你的所有模型重写路由绑定解析器。在这个例子里，我们没有对`URL` 中的 `@` 符号做任何处理，所以 用``resolveRouteBinding` `我可以移除`@`符号 然后解析模型
 
 ```php
 // Route
@@ -2326,11 +2326,11 @@ public function resolveRouteBinding($value, $field = null)
 }
 ```
 
-Tip given by [@Philo01](https://twitter.com/Philo01/status/1447539300397195269)
+由 [@Philo01](https://twitter.com/Philo01/status/1447539300397195269)提供
 
-### If you need public URL but you want them to be secured
+### 如果你需要一个公共URL但是你想让他们更安全
 
-If you need public URL but you want them to be secured, use Laravel signed URL
+如果你需要一个公共URL但是你想让他们更安全，使用 ` Laravel signed URL`
 
 ```php
 class AccountController extends Controller
@@ -2357,7 +2357,7 @@ class AccountController extends Controller
 }
 ```
 
-Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)
+由 [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)提供
 
 ## 验证
 
