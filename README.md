@@ -24,7 +24,7 @@ __Update 24 October 2021__: Currently there are __193 tips__ divided into 14 sec
 - [Factories](#factories) (4 tips)
 - [Log and debug](#log-and-debug) (4 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (30 tips)
+- [Other](#other) (31 tips)
 
 
 ## DB Models and Eloquent
@@ -2980,6 +2980,7 @@ public function reorder(Request $request)
 - [Laravel Request exists() vs has()](#laravel-request-exists-vs-has)
 - [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
 - [Schedule regular shell commands](#schedule-regular-shell-commands)
+- [HTTP client request without verifying](#http-client-request-without-verifying)
 
 ### Localhost in .env
 
@@ -3405,3 +3406,19 @@ class Kernel extends ConsoleKernel
 ```
 
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)
+
+### HTTP client request without verifying
+Sometimes, you may want to send HTTP request without verifying SSL in your local environment, you can do like so:
+
+```php
+return Http::withoutVerifying()->post('https://example.com');
+```
+
+If you want to set multiple options, you can use `withOptions`.
+
+```php
+return Http::withOptions([
+    'verify' => false,
+    'allow_redirects' => true
+])->post('https://example.com');
+```
