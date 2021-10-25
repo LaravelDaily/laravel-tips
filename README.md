@@ -8,7 +8,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 ---
 
 Or you want the chinese version:
-[Chinese version](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
+[中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
 
 ---
 
