@@ -1,6 +1,6 @@
 # Laravel 编码技巧
 
-为所有工匠们提供的 Laravel 提示和技巧。欢迎PR 提供好点子!
+为所有的`Laravel`开发者们提供的 `Laravel` 提示和技巧。欢迎PR 提供好点子!
 
 想法由[PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa) 提供.
 
@@ -3136,40 +3136,40 @@ public function boot()
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (API)](#API) 
 
-- [Localhost in .env](#localhost-in-env)
-- [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
-- [Composer: check for newer versions](#composer-check-for-newer-versions)
-- [Auto-Capitalize Translations](#auto-capitalize-translations)
-- [Carbon with Only Hours](#carbon-with-only-hours)
-- [Single Action Controllers](#single-action-controllers)
-- [Redirect to Specific Controller Method](#redirect-to-specific-controller-method)
-- [Use Older Laravel Version](#use-older-laravel-version)
-- [Add Parameters to Pagination Links](#add-parameters-to-pagination-links)
-- [Repeatable Callback Functions](#repeatable-callback-functions)
-- [Request: has any](#request-has-any)
-- [Simple Pagination](#simple-pagination)
-- [Data Get Function](#data-get-function)
-- [Blade directive to add true/false conditions](#blade-directive-to-add-truefalse-conditions)
-- [Jobs can be used without queues](#jobs-can-be-used-without-queues)
-- [Use faker outside factories or seeders](#use-faker-outside-factories-or-seeders)
-- [Schedule things](#schedule-things)
-- [Search Laravel docs](#search-laravel-docs)
-- [Filter route:list](#filter-routelist)
-- [Blade directive for not repeating yourself](#blade-directive-for-not-repeating-yourself)
-- [Artisan commands help](#artisan-commands-help)
-- [Disable lazy loading when running your tests](#disable-lazy-loading-when-running-your-tests)
-- [Using two amazing helpers in Laravel will bring magic results](#using-two-amazing-helpers-in-laravel-will-bring-magic-results)
-- [Request parameter default value](#request-parameter-default-value)
-- [Pass middleware directly into the route without register it](#pass-middleware-directly-into-the-route-without-register-it)
-- [Transforming an array to CssClasses](#transforming-an-array-to-cssclasses)
-- ["upcomingInvoice" method in Laravel Cashier (Stripe)](#upcomingInvoice-method-in-laravel-cashier-stripe)
-- [Laravel Request exists() vs has()](#laravel-request-exists-vs-has)
-- [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
-- [Schedule regular shell commands](#schedule-regular-shell-commands)
+- [localhost配置](#localhost配置)
+- [何时运行或不运行composer-update](#何时运行或不运行composer-update)
+- [Composer检查新版本](#Composer检查新版本)
+- [自动大写翻译](#自动大写翻译)
+- [仅含小时的Carbon](#仅含小时的Carbon)
+- [单动作控制器](#单动作控制器)
+- [重定向到特定的控制器方法](#重定向到特定的控制器方法)
+- [使用旧版本的Laravel](#使用旧版本的Laravel)
+- [为分页链接添加参数](#为分页链接添加参数)
+- [可重复回调函数](#可重复回调函数)
+- [$request->hasAny](#$request->hasAny)
+- [简单分页组件](#简单分页组件)
+- [获取数据的方法](#获取数据的方法)
+- [Blade指令增加真假条件s](#Blade指令增加真假条件)
+- [任务允许脱离队列](#任务允许脱离队列)
+- [在工厂类或seeders外部使用Faker](#在工厂类或seeders外部使用Faker)
+- [可以定时执行的事情](#可以定时执行的事情)
+- [检索Laravel文档](#检索Laravel文档)
+- [过滤route-list](#过滤route-list)
+- [自定义Blade指令](#自定义Blade指令)
+- [Artisan命令帮助](#Artisan命令帮助)
+- [当运行测试时禁用懒加载](#当运行测试时禁用懒加载)
+- [使用两个很好用的辅助函数会带来魔法效果](#使用两个很好用的辅助函数会带来魔法效果)
+- [请求参数的默认值](#请求参数的默认值)
+- [在路由中直接传入中间件而不是注册它](#在路由中直接传入中间件而不是注册它)
+- [将数组转化成css类](#将数组转化成css类)
+- [Laravel-Cashier中的upcomingInvoice方法](#Laravel-Cashier中的upcomingInvoice方法)
+- [$request->exists与has](#$request->exists与has)
+- [返回带变量视图的多种方法](#返回带变量视图的多种方法)
+- [调度标准shell命令](#调度标准shell命令)
 
-### Localhost in .env
+### localhost配置
 
-Don't forget to change `APP_URL` in your `.env` file from `http://localhost` to the real URL, cause it will be the basis for any links in your email notifications and elsewhere.
+不要忘记将 `.env` 文件中的 `app_url` 从 `http://localhost` 中改为真实的 `URL`，因为它将是你的电子邮件通知和任何其他链接的基础。
 
 ```
 APP_NAME=Laravel
@@ -3179,13 +3179,13 @@ APP_DEBUG=true
 APP_URL=http://localhost
 ```
 
-### When (NOT) to run "composer update"
+### 何时运行或不运行composer-update
 
-Not so much about Laravel, but... Never run `composer update` on production live server, it's slow and will "break" repository. Always run `composer update` locally on your computer, commit new `composer.lock` to the repository, and run `composer install` on the live server.
+与`Laravel`不是很相关，但是… 永远不要在生产服务器上运行 `composer update` ，它很慢，会 “破坏” 存储库。始终在你电脑上本地运行 `composer update` ，将新的 `composer.lock` 提交到存储库，然后再在生产服务器运行 `composer install`。
 
-### Composer: Check for Newer Versions
+### Composer检查新版本
 
-If you want to find out which of your `composer.json` packages have released newer versions, just run `composer outdated`. You will get a full list with all information, like this below.
+如果你想找出 `composer.json` 包中已经发布的较新版本，直接运行 `composer outdated`。你会得到一个包含所有信息的完整列表，如下所示。
 
 ```
 phpdocumentor/type-resolver 0.4.0 0.7.1
@@ -3195,9 +3195,9 @@ ralouphie/getallheaders     2.0.5 3.0.3 A polyfill for getallheaders.
 sebastian/global-state      2.0.0 3.0.0 Snapshotting of global state
 ```
 
-### Auto-Capitalize Translations
+### 自动大写翻译
 
-In translation files (`resources/lang`), you can specify variables not only as `:variable`, but also capitalized as `:VARIABLE` or `:Variable` - and then whatever value you pass - will be also capitalized automatically.
+在翻译文件中`（resources/lang）`，你不仅可以指定变量为`:variable` ，也可以指定大写为`:VARIABLE` 或 `:Variable`，然后你传递的值也会自动大写。
 
 ```php
 // resources/lang/en/messages.php
@@ -3207,9 +3207,9 @@ In translation files (`resources/lang`), you can specify variables not only as `
 echo __('messages.welcome', ['name' => 'taylor']);
 ```
 
-### Carbon with Only Hours
+### 仅含小时的Carbon
 
-If you want to have a current date without seconds and/or minutes, use Carbon's methods like `setSeconds(0)` or `setMinutes(0)`.
+如果你想有当前日期不包含秒或者分钟，用`Carbon`的方法比如：`setSeconds(0)` 或者  `setMinutes(0)`。
 
 ```php
 // 2020-04-20 08:12:34
@@ -3225,23 +3225,22 @@ echo now()->setSeconds(0)->setMinutes(0);
 echo now()->startOfHour();
 ```
 
-### Single Action Controllers
+### 单动作控制器
 
-If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
-
-Route:
+如果你想创建一个只有一个动作的控制器，你可以使用 __invoke() 方法创建「可调用（invokable）」控制器。
+路由：
 
 ```php
 Route::get('user/{id}', 'ShowProfile');
 ```
 
-Artisan:
+Artisan 命令:
 
 ```bash
 php artisan make:controller ShowProfile --invokable
 ```
 
-Controller: 
+控制器 
 
 ```php
 class ShowProfile extends Controller
@@ -3255,27 +3254,27 @@ class ShowProfile extends Controller
 }
 ```
 
-### Redirect to Specific Controller Method
+### 重定向到特定的控制器方法
 
-You can `redirect()` not only to URL or specific route, but to a specific Controller's specific method, and even pass the parameters. Use this:
+你不仅可以 `redirect()` 到 `URL` 或特定的路由，而且可以跳转到一个特定的控制器里的特定方法，甚至向其传递参数。像这样：
 
 ```php
 return redirect()->action('SomeController@method', ['param' => $value]);
 ```
 
-### Use Older Laravel Version
+### 使用旧版本的Laravel
 
-If you want to use OLDER version instead of the newest Laravel, use this command:
+如果你想用旧版本而非新版本的 `Laravel`，使用这个命令：
 
 ```bash
 composer create-project --prefer-dist laravel/laravel project "7.*"
 ```
 
-Change 7.* to whichever version you want.
+将 `7.*` 更改为任何你想要的版本。
 
-### Add Parameters to Pagination Links
+### 为分页链接添加参数
 
-In default Pagination links, you can pass additional parameters, preserve the original query string, or even point to a specific `#xxxxx` anchor. 
+在默认的分页链接中，你可以传递其他参数，保留原始的查询字符串，甚至指向一个特定的 `#xxxxx` 锚点。
 
 ```blade
 {{ $users->appends(['sort' => 'votes'])->links() }}
@@ -3285,9 +3284,9 @@ In default Pagination links, you can pass additional parameters, preserve the or
 {{ $users->fragment('foo')->links() }}
 ```
 
-### Repeatable Callback Functions
+### 可重复回调函数
 
-If you have a callback function that you need to re-use multiple times, you can assign it to a variable, and then re-use.﻿
+如果你又一个需要多次重复调用的回调函数，你可以将其声明在一个变量中，然后反复使用它。
 
 ```php
 $userCondition = function ($query) {
@@ -3302,9 +3301,9 @@ $articles = Article::with(['comments' => $userCondition])
 ```
 
 
-### Request: has any
+### $request->hasAny
 
-You can check not only one parameter with `$request->has()` method, but also check for multiple parameters present, with `$request->hasAny()﻿`:
+你不仅可以使用 `$request->has()` 方法来查看一个参数，而且可以使用 `$request->hasAny()` 来查看传入的多个参数。
 
 ```php
 public function store(Request $request) 
@@ -3317,9 +3316,9 @@ public function store(Request $request)
 }
 ```
 
-### Simple Pagination
+### 简单分页组件
 
-In pagination, if you want to have just "Previous/next" links instead of all the page numbers (and have fewer DB queries because of that), just change `paginate()` to `simplePaginate()`:
+在分页组件中，如果你只需要「上一页 / 下一页」的链接，而不是需要所有页码，也因此可以使用更少的数据库查询，你只需要将 `simplePaginate() `更改为` paginate()`
 
 ```php
 // Instead of 
@@ -3329,9 +3328,9 @@ $users = User::paginate(10);
 $users = User::simplePaginate(10);
 ```
 
-### Data Get Function
+### 获取数据的方法
 
-If you have an array complex data structure, for example a nested array with objects. You can use `data_get()` helper function retrieves a value from a nested array or object using "dot" notation and wildcard:
+如果你有一个具有复杂数据结构的数组，例如带对象嵌套的数组，你可以使用 `data_get() `助手函数配合通配符和「点」符号，来从嵌套数组或对象中检索值。
 
 ```php
 // We have an array
@@ -3350,16 +3349,16 @@ data_get($yourArray,  '*.product.id');
 // Now we have all products ids [1, 2, 3, 4, 5, etc...]
 ```
 
-### Blade directive to add true/false conditions
+### Blade指令增加真假条件
 
-New in Laravel 8.51: `@class` Blade directive to add true/false conditions on whether some CSS class should be added. Read more in [docs](https://laravel.com/docs/8.x/blade#conditional-classes) <br>
-Before: 
+`Laravel 8.51` 新增 `@class` 指令，用于添加控制 CSS 类的真 / 假条件。可以在 [文档](https://laravel.com/docs/8.x/blade#conditional-classes) <br>中了解更多
+之前: 
 
 ```php
 <div class="@if ($active) underline @endif">`
 ```
 
-Now:
+现在:
 
 ```php
 <div @class(['underline' => $active])>
@@ -3381,12 +3380,11 @@ Now:
 <span class="p-4 text-gray-500 bg-red"></span>
 ```
 
-Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1445417511546023938)
+由 [@Teacoders](https://twitter.com/Teacoders/status/1445417511546023938)提供
 
-### Jobs can be used without queues
+### 任务允许脱离队列
 
-Jobs are discussed in the "Queues" section of the docs, but you can use Jobs without queues, just as classes to delegate tasks to.
-Just call `$this->dispatchNow()` from Controllers
+在文档中，任务是在`队列`章节进行讨论的，但是你可以脱离队列来使用`job`，就像传统的委托任务的类一样。只需在控制器中调用 `$this->dispatchNow()` 即可。
 
 ```php
 public function approve(Article $article)
@@ -3397,10 +3395,11 @@ public function approve(Article $article)
 }
 ```
 
-### Use faker outside factories or seeders
+### 在工厂类或seeders外部使用Faker
 
-If you want to generate some fake data, you can use Faker even outside factories or seeds, in any class.<br>
-_Keep in mind: to use it in __production__, you need to move faker from `"require-dev"` to `"require"` in `composer.json`_
+如果你想要生成一些假数据，你可以在模型工厂或 Seeds 中，甚至任何类的外部使用 Faker。
+
+注意：要在生产模式 `production` 中使用它的话，你需要在 `composer.json` 中，将 faker 从 "require-dev" 移动到 "require" 中。
 
 ```php
 use Faker;
@@ -3415,10 +3414,11 @@ class WhateverController extends Controller
 }
 ```
 
-### Schedule things
+### 可以定时执行的事情
 
-You can schedule things to run daily/hourly in a lot of different structures.<br>
-You can schedule an artisan command, a Job class, an invokable class, a callback function, and even execute a shell script.
+你可以让一些事情以每小时、每天，或是其他时间模式执行。
+
+你可以安排 `artisan` 命令、作业类、可调用类、回调函数、甚至是 `shell` 脚本去定时执行。
 
 ```php
 use App\Jobs\Heartbeat;
@@ -3447,19 +3447,23 @@ protected function schedule(Schedule $schedule)
 }
 ```
 
-### Search Laravel docs
+### 检索Laravel文档
 
-If you want to search Laravel Docs for some keyword, by default it gives you only the TOP 5 results. Maybe there are more?<br>
-If you want to see ALL results, you may go to the Github Laravel docs repository and search there directly. https://github.com/laravel/docs
+如果你想使用一些关键词来检索 `Laravel` 文档，默认情况下只会给出 5 个结果。或许还能给出更多结果。
 
-### Filter route:list
+如果你想要看全部的结果，你可以前往 `Laravel` 文档 的` Github` [仓库](https://github.com/laravel/docs) 直接搜索。
 
-New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619)
 
-### Blade directive for not repeating yourself
 
-If you keep doing the same formatting of the data in multiple Blade files, you may create your own Blade directive.<br>
-Here's an example of money amount formatting using the method from Laravel Cashier.
+### 过滤route-list
+Laravel 8.34 新增： `php artisan route:list` 获得了新的参数 `--except-path`，你可以把一些你不想看见的路由过滤掉。
+
+ [原始PR](https://github.com/laravel/framework/pull/36619)
+
+### 自定义Blade指令
+
+如果你在不同的 `Blade` 文件中格式化数据，可以尝试创建自己的 `Blade` 指令。
+下面这一段是来自 `Laravel Cashier` 包的例子：
 
 ```php
 "require": {
@@ -3483,24 +3487,26 @@ public function boot()
 @endif
 ```
 
-### Artisan commands help
+### Artisan命令帮助
 
-If you are not sure about the parameters of some Artisan command, or you want to know what parameters are available, just type `php artisan help [a command you want]`.
+如果您不确定某些 Artisan 命令的参数，或者您想知道可用的参数，只需键入 `php artisan help [command]`。
 
-### Disable lazy loading when running your tests
 
-If you don't want to prevent lazy loading when running your tests you can disable it
+
+
+### 当运行测试时禁用懒加载
+
+当运行测试时如果你想排除掉懒加载 你可以禁用掉懒加载
 
 ```php
 Model::preventLazyLoading(!$this->app->isProduction() && !$this->app->runningUnitTests());
 ```
 
-Tip given by [@djgeisi](https://twitter.com/djgeisi/status/1435538167290073090)
+由 [@djgeisi](https://twitter.com/djgeisi/status/1435538167290073090)提供
 
-### Using two amazing helpers in Laravel will bring magic results
+### 使用两个很好用的辅助函数会带来魔法效果
 
-Using two amazing helpers in Laravel will bring magic results...<br>
-In this case, the service will be called and retried (retry). If it stills failing, it will be reported, but the request won't fail (rescue)
+在这个例子中 服务将会被调用并重试。如果仍然失败 将会被报告。但是请求不会失败。(rescue)
 
 ```php
 rescue(function () {
@@ -3510,11 +3516,11 @@ rescue(function () {
 });
 ```
 
-Tip given by [@JuanDMeGon](https://twitter.com/JuanDMeGon/status/1435466660467683328)
+由 [@JuanDMeGon](https://twitter.com/JuanDMeGon/status/1435466660467683328)提供
 
-### Request parameter default value
+### 请求参数的默认值
 
-Here we are checking if there is a per_page (or any other parameter) value then we will use it, otherwise, we will use a default one.
+以下是我们检测我们使用的`per_page`值是否存在 否则我们用默认值
 
 ```php
 // Isteand of this
@@ -3524,18 +3530,18 @@ $perPage = request()->per_page ? request()->per_page : 20;
 $perPage = request('per_page', 20);
 ```
 
-Tip given by [@devThaer](https://twitter.com/devThaer/status/1437521022631165957)
+由 [@devThaer](https://twitter.com/devThaer/status/1437521022631165957)提供
 
-### Pass middleware directly into the route without register it
+### 在路由中直接传入中间件而不是注册它
 
 ```php
 Route::get('posts', PostController::class)
     ->middleware(['auth', CustomMiddleware::class])
 ```
 
-Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1438258486815690766)
+由 [@sky_0xs](https://twitter.com/sky_0xs/status/1438258486815690766)提供
 
-### Transforming an array to CssClasses
+### 将数组转化成css类
 
 ```php
 use Illuminate\Support\Arr;
@@ -3552,12 +3558,13 @@ $classes = Arr::toCssClasses($array);
  */
 ```
 
-Tip given by [@dietsedev](https://twitter.com/dietsedev/status/1438550428833271808)
+由 [@dietsedev](https://twitter.com/dietsedev/status/1438550428833271808)提供
 
-### "upcomingInvoice" method in Laravel Cashier (Stripe)
+### Laravel-Cashier中的upcomingInvoice方法
 
-You can show how much a customer will pay in the next billing cycle.<br>
-There is a "upcomingInvoice" method in Laravel Cashier (Stripe) to get the upcoming invoice details.
+您可以显示客户将在下一个计费周期支付的金额。<br>
+
+在`Laravel Cashier（Stripe）`中有一个“upcomingInvoice”方法来获取即将到来的发票详细信息。
 
 ```php
 Route::get('/profile/invoices', function (Request $request) {
@@ -3568,9 +3575,9 @@ Route::get('/profile/invoices', function (Request $request) {
 });
 ```
 
-Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1439997820228890626)
+由 [@oliverds_](https://twitter.com/oliverds_/status/1439997820228890626)提供
 
-### Laravel Request exists() vs has()
+### $request->exists与has
 
 ```php
 // https://example.com?popular
@@ -3582,9 +3589,9 @@ $request->exists('popular') // true
 $request->has('popular') // true
 ```
 
-Tip given by [@coderahuljat](https://twitter.com/coderahuljat/status/1442191143244951552)
+由 [@coderahuljat](https://twitter.com/coderahuljat/status/1442191143244951552)提供
 
-### There are multiple ways to return a view with variables
+### 返回带变量视图的多种方法
 
 ```php
 // First way ->with()
@@ -3609,9 +3616,9 @@ return view('index', $data);
 return view('index', compact('projects', 'tasks'));
 ```
 
-### Schedule regular shell commands
+### 调度标准shell命令
 
-We can schedule regular shell commands within Laravel scheduled command
+我们可以使用`scheduled  command`调度标准shell命令
 
 ```php
 // app/Console/Kernel.php
@@ -3625,4 +3632,4 @@ class Kernel extends ConsoleKernel
 }
 ```
 
-Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)
+由y [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)提供
