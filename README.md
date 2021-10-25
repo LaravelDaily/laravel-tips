@@ -1,9 +1,5 @@
 # Laravel Tips
 
-[Chinese](./README-zh.md)
-
----
-
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
@@ -11,23 +7,23 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 17 October 2021__: Currently there are __194 tips__ divided into 14 sections.
+__Update 24 October 2021__: Currently there are __191 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (52 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (50 tips)
 - [Models Relations](#models-relations) (29 tips)
 - [Migrations](#migrations) (12 tips)
 - [Views](#views) (10 tips)
-- [Routing](#routing) (19 tips)
+- [Routing](#routing) (20 tips)
 - [Validation](#validation) (12 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
 - [Artisan](#artisan) (5 tips)
 - [Factories](#factories) (4 tips)
-- [Log and debug](#log-and-debug) (5 tips)
-- [API](#api) (3 tips)
+- [Log and debug](#log-and-debug) (4 tips)
+- [API](#api) (2 tips)
 - [Other](#other) (30 tips)
 
 
@@ -78,7 +74,6 @@ __Update 17 October 2021__: Currently there are __194 tips__ divided into 14 sec
 - [Extra information about the query](#extra-information-about-the-query)
 - [Using the doesntExist() method in Laravel](#using-the-doesntexist-method-in-laravel)
 - [Trait that you want to add to a few Models to call their boot() method automatically](#trait-that-you-want-to-add-to-a-few-models-to-call-their-boot-method-automatically)
-- [Laravel find() function, more powers besides passing an ID to find](#laravel-find-function-more-powers-besides-passing-an-id-to-find)
 - [There are two common ways of determining if a table is empty in Laravel](#there-are-two-common-ways-of-determining-if-a-table-is-empty-in-laravel)
 - [How to prevent “property of non-object” error](#how-to-prevent-property-of-non-object-error)
 - [Get original attributes after mutating an Eloquent record](#get-original-attributes-after-mutating-an-eloquent-record)
@@ -86,7 +81,7 @@ __Update 17 October 2021__: Currently there are __194 tips__ divided into 14 sec
 
 ### Reuse or clone query()
 
-Typically, we need to query multiple time from a filtered query. So, most of the time we use `query()` method, 
+Typically, we need to query multiple time from a filtered query. So, most of the time we use `query()` method,
 
 let's write a query for getting today created active and inactive products
 
@@ -102,7 +97,7 @@ if($today){
 
 // lets get active and inactive products
 $active_products = $query->where('status', 1)->get(); // this line modified the $query object variable
-$inactive_products = $query->where('status', 0)->get(); // so here we will not find any incative products
+$inactive_products = $query->where('status', 0)->get(); // so here we will not find any inactive products
 ```
 
 But, after getting `$active products` the` $query `will be modified. So, `$inactive_products` will not find any inactive products from `$query`  and that will return blank collection every time. Cause, that will try to find inactive products from `$active_products` (`$query` will return active products only).
@@ -438,7 +433,7 @@ DB::statement('ALTER TABLE projects AUTO_INCREMENT=123');
 
 ### Use DB Transactions
 
-If you have two DB operations performed, and second may get an error, then you should rollback the first one, right? 
+If you have two DB operations performed, and second may get an error, then you should rollback the first one, right?
 
 For that, I suggest to use DB Transactions, it's really easy in Laravel:
 
@@ -538,7 +533,7 @@ So you can store it as a JSON, but when retrieved from DB, it can be used as an 
 
 If you have two very similar Models (like shipping address and billing address) and you need to make a copy of one to another, you can use `replicate()` method and change some properties after that.
 
-Example from the [official docs](https://laravel.com/docs/8.x/eloquent#replicating-models): 
+Example from the [official docs](https://laravel.com/docs/8.x/eloquent#replicating-models):
 
 ```php
 $shipping = Address::create([
@@ -556,9 +551,9 @@ $billing = $shipping->replicate()->fill([
 $billing->save();
 ```
 
-### Reduce Memory 
+### Reduce Memory
 
-Sometimes we need to load a huge amount of data into memory. For example: 
+Sometimes we need to load a huge amount of data into memory. For example:
 ```php
 $orders = Order::all();
 ```
@@ -649,7 +644,7 @@ You can do this
 return Product::find($this->productIDs)
 ```
 
-### Perform any action on failure 
+### Perform any action on failure
 When looking for a record, you may want to perform some actions if it's not found.
 In addition to `->firstOrFail()` which just throws 404, you can perform any action on failure, just do `->firstOr(function() { ... })`
 ```php
@@ -755,7 +750,7 @@ Illuminate\Support\Collection {#5344
 
 Tip given by [@amit_merchant](https://twitter.com/amit_merchant/status/1432277631320223744)
 
-### Using the doesntExist() method in Laravel 
+### Using the doesntExist() method in Laravel
 ```php
 // This works
 if ( 0 === $model->where('status', 'pending')->count() ) {
@@ -806,17 +801,6 @@ trait MultiTenantModelTrait
 }
 ```
 
-### Laravel find() function, more powers besides passing an ID to find
-```php
-// In find($id) method second argument can be the colums to select
-Studdents::find(1, ['name', 'father_name']);
-// SO find student with id '1' and return name, father_name
-
-// We can pass multople id as an array
-Studdents::find([1,2,3], ['name', 'father_name']);
-// Output: students with IDs 1,2,3 and return their name, father_name
-```
-
 ### There are two common ways of determining if a table is empty in Laravel
 There are two common ways of determining if a table is empty in Laravel. Calling `exists()` or `count()` directly on the model!<br>
 One returns a strict true/false boolean, the other returns an integer which you can use as a falsy in conditionals.
@@ -844,7 +828,7 @@ $post->author->name;
 // Of course, you can prevent it like this:
 $post->author->name ?? ''
 // or
-@$post->auhtor->name
+@$post->author->name
 
 // But you can do it on Eloquent relationship level:
 // this relation will return an empty App\Author model if no author is attached to the post
@@ -913,7 +897,6 @@ Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/14479023693882490
 - [Filter hasMany relationships](#filter-hasmany-relationships)
 - [Filter by many-to-many relationship pivot column](#filter-by-many-to-many-relationship-pivot-column)
 - [A shorter way to write whereHas](#a-shorter-way-to-write-whereHas)
-- [Extract repeatable callback into a variable](#Extract-repeatable-callback-into-a-variable)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 
@@ -1199,7 +1182,7 @@ if (method_exists($user, 'roles')) {
 
 ### Pivot Table with Extra Relations
 
-In many-to-many relationship, your pivot table may contain extra fields, and even extra relationships to other Model. 
+In many-to-many relationship, your pivot table may contain extra fields, and even extra relationships to other Model.
 
 Then generate a separate Pivot Model:
 
@@ -1309,29 +1292,6 @@ User::whereHas('posts', function ($query) {
 
 // After
 User::whereRelation('posts', 'published_at', '>', now())->get();
-```
-
-### Extract repeatable callback into a variable
-If you have a callback function that is repeating a few times, you can extract it into a variable
-```php
-// You have long repeated callback function inside?
-$results = Model::with('relationships')
-    ->whereHas('relationships', function($query) use ($var1, $var2) {
-        return $query->where('field1', $var1)->where('field2', $var2);
-    })
-    ->withCount('relationships', function($query) use ($var1, $var2) {
-        return $query->where('field1', $var1)->where('field2', $var2);
-    })
-    ->get();
-
-// You can extract that into a variable
-$callback = function($query) use ($var1, $var2) {
-        return $query->where('field1', $var1)->where('field2', $var2);
-    });
-$results = Model::with('relationships')
-    ->whereHas('relationships', $callback)
-    ->withCount('relationships', $callback)
-    ->get();
 ```
 
 ### You can add conditions to your relationships
@@ -1817,8 +1777,9 @@ Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825
 - [Resource Controllers naming](#resource-controllers-naming)
 - [Easily highlight your navbar menus](#easily-highlight-your-navbar-menus)
 - [Generate absolute path using route() helper](#generate-absolute-path-using-route-helper)
-- [Override the route binding resolver for each of your models](#override-the-route-binding-resolver-for-each-of-your-models)]
+- [Override the route binding resolver for each of your models](#override-the-route-binding-resolver-for-each-of-your-models)
 - [If you need public URL but you want them to be secured](#if-you-need-public-url-but-you-want-them-to-be-secured)
+- [Using Gate in middleware method](#using-gate-in-middleware-method)
 
 ### Route group within a group
 
@@ -1994,7 +1955,7 @@ $url = route('profile', ['id' => 1, 'photos' => 'yes']); // Result: /user/1/prof
 
 If you have a set of routes related to a certain "section", you may separate them in a special `routes/XXXXX.php` file, and just include it in `routes/web.php`
 
-Example with `routes/auth.php` in [Laravel Breeze](https://github.com/laravel/breeze/blob/1.x/stubs/routes/web.php) by Taylor Otwell himself: 
+Example with `routes/auth.php` in [Laravel Breeze](https://github.com/laravel/breeze/blob/1.x/stubs/routes/web.php) by Taylor Otwell himself:
 
 
 ```php
@@ -2081,8 +2042,8 @@ But you would call them in the code by `route('products.index')`, `route('produc
 
 Have you ever run "php artisan route:list" and then realized that the list takes too much space and hard to read?
 
-Here's the solution: 
-`php artisan route:list --compact` 
+Here's the solution:
+`php artisan route:list --compact`
 
 Then it shows 3 columns instead of 6 columns: shows only Method / URI / Action.
 
@@ -2208,7 +2169,7 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14457960357422407
 You can override the route binding resolver for each of your models. In this example, I have no control over the @ sign in the URL, so using the `resolveRouteBinding` method, I'm able to remove the @ sign and resolve the model.
 ```php
 // Route
-Route::get('{product:slug', Controller::class);
+Route::get('{product:slug}', Controller::class);
 
 // Request
 https://nodejs.pub/@unlock/hello-world
@@ -2253,6 +2214,18 @@ class AccountController extends Controller
 
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)
 
+
+### Using Gate in middleware method
+You can use the gates you specified in `App\Providers\AuthServiceProvider` in middleware method.
+
+To do this, you just need to put inside the `can:` and the names of the necessary gates.
+
+```php
+Route::put('/post/{post}', function (Post $post) {
+    // The current user may update the post...
+})->middleware('can:update,post');
+```
+
 ## Validation
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
@@ -2264,12 +2237,12 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467
 - [Change Default Validation Messages](#change-default-validation-messages)
 - [Prepare for Validation](#prepare-for-validation)
 - [Stop on First Validation Error](#stop-on-first-validation-error)
-- [Throw 422 status code without using validete() or Form Request](#throw-422-status-code-without-using-validate-or-form-request)
+- [Throw 422 status code without using validate() or Form Request](#throw-422-status-code-without-using-validate-or-form-request)
 - [Rules depending on some other conditions](#rules-depending-on-some-other-conditions)
-- [With Rule::when() we can conditionally apply validation rules](#with-rule-when-we-can-conditionally-apply-validation-rules)
+- [With Rule::when() we can conditionally apply validation rules](#with-rulewhen-we-can-conditionally-apply-validation-rules)
 - [Use this property in the request classes to stop the validation of the whole request attributes](#use-this-property-in-the-request-classes-to-stop-the-validation-of-the-whole-request-attributes)
-- [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#rule-unique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
-- [Validator::sometimes() method allows us to define when a validation rule should be applied](#validator-sometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
+- [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#ruleunique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
+- [Validator::sometimes() method allows us to define when a validation rule should be applied](#validatorsometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
 
 ### Image validation
 
@@ -2395,6 +2368,22 @@ If your rules are dynamic and depend on some other condition, you can create tha
         //
     }
 ```
+
+### With Rule::when() we can conditionally apply validation rules
+Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
+In this example we validate the value of the vote only if the user can actually vote the post.
+```php
+use Illuminate\Validation\Rule;
+
+public function rules()
+{
+    return [
+        'vote' => Rule::when($user->can('vote', $post), 'required|int|between:1,5'),
+    ]
+}
+```
+
+Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
 ### Use this property in the request classes to stop the validation of the whole request attributes
 Use this property in the request classes to stop the validation of the whole request attributes.<br><br>
@@ -2542,7 +2531,7 @@ it will solve the issue of next pages(?page=2&...) index count from continue.
 
 ### Higher order collection methods
 
-Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax.  This example calculates the 
+Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax.  This example calculates the
 price per group of products on an offer.
 
 ```php
@@ -2560,21 +2549,6 @@ $offer = [
                 
 $totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
 ```
-### With Rule::when() we can conditionally apply validation rules
-Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
-In this example we validate the value of the vote only if the user can actually vote the post.
-```php
-use Illuminate\Validation\Rule;
-
-public function rules()
-{
-    return [
-        'vote' => Rule::when($user->can('vote', $post), 'required|int|between:1,5'),
-    ]
-}
-```
-
-Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
 ## Auth
 
@@ -2641,7 +2615,7 @@ public function setPasswordAttribute($value)
 
 ### Override Permissions for Super Admin
 
-If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file. 
+If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file.
 
 ```php
 // Intercept any Gate and check if it's super admin
@@ -2881,7 +2855,6 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14414473563234304
 - [Logging with parameters](#logging-with-parameters)
 - [More convenient DD](#more-convenient-dd)
 - [Log with context](#log-with-context)
-- [Inline dd()](#inline-dd)
 - [Quickly output an Eloquent query in its SQL form](#quickly-output-an-eloquent-query-in-its-sql-form)
 
 ### Logging with parameters
@@ -2922,18 +2895,6 @@ public function handle(Request $request, Closure $next)
 }
 ```
 
-### Inline dd()
-```php
-// Instead of this
-$clients = Client::where('payment,' 'confirmed')->get();
-dd($clients);
-
-// You can directly dd
-Client::where('payment,' 'confirmed')->get()->dd();
-```
-
-Tip given by [@LaraibiM](https://twitter.com/LaraibiM/status/1437857603263078421)
-
 ### Quickly output an Eloquent query in its SQL form
 If you want to quickly output an Eloquent query in its SQL form, you can invoke the toSql() method onto it like so
 ```php
@@ -2952,7 +2913,6 @@ Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
-- [Get rid of that extra inner data wrap](#get-rid-of-that-extra-inner-data-wrap)
 
 ### API Resources: With or Without "data"?
 
@@ -2986,15 +2946,6 @@ public function reorder(Request $request)
 }
 ```
 
-### Get rid of that extra inner data wrap
-When creating a Laravel Resource collection, you can get rid of that extra inner data wrap by adding `JsonResource::withoutWrapping();` in your `AppServiceProvider`
-```php
-public function boot()
-{
-    JsonResource::withoutWrapping();
-}
-```
-
 ## Other
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (API)](#api)
@@ -3025,7 +2976,7 @@ public function boot()
 - [Request parameter default value](#request-parameter-default-value)
 - [Pass middleware directly into the route without register it](#pass-middleware-directly-into-the-route-without-register-it)
 - [Transforming an array to CssClasses](#transforming-an-array-to-cssclasses)
-- ["upcomingInvoice" method in Laravel Cashier (Stripe)](#upcomingInvoice-method-in-laravel-cashier-stripe)
+- ["upcomingInvoice" method in Laravel Cashier (Stripe)](#upcominginvoice-method-in-laravel-cashier-stripe)
 - [Laravel Request exists() vs has()](#laravel-request-exists-vs-has)
 - [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
 - [Schedule regular shell commands](#schedule-regular-shell-commands)
@@ -3102,7 +3053,7 @@ Artisan:
 php artisan make:controller ShowProfile --invokable
 ```
 
-Controller: 
+Controller:
 ```php
 class ShowProfile extends Controller
 {
@@ -3135,7 +3086,7 @@ Change 7.* to whichever version you want.
 
 ### Add Parameters to Pagination Links
 
-In default Pagination links, you can pass additional parameters, preserve the original query string, or even point to a specific `#xxxxx` anchor. 
+In default Pagination links, you can pass additional parameters, preserve the original query string, or even point to a specific `#xxxxx` anchor.
 
 ```blade
 {{ $users->appends(['sort' => 'votes'])->links() }}
@@ -3212,7 +3163,7 @@ data_get($yourArray,  '*.product.id');
 
 ### Blade directive to add true/false conditions
 New in Laravel 8.51: `@class` Blade directive to add true/false conditions on whether some CSS class should be added. Read more in [docs](https://laravel.com/docs/8.x/blade#conditional-classes) <br>
-Before: 
+Before:
 ```php
 <div class="@if ($active) underline @endif">`
 ```

@@ -893,7 +893,7 @@ $post->author->name;
 // 当然你可以像这样阻止错误:
 $post->author->name ?? ''
 // 或者
-@$post->auhtor->name
+@$post->author->name
 
 // 但你可以在Eloquent关系层面上做到这一点。
 // 如果没有作者关联帖子，这种关系将返回一个空的App/Author模型。
@@ -1903,6 +1903,7 @@ public function boot()
 - [使用route()辅助函数生成绝对路径](#使用route()辅助函数生成绝对路径)
 - [为你的每个模型重写路由绑定解析器](#为你的每个模型重写路由绑定解析器)
 - [如果你需要一个公共URL但是你想让他们更安全](#如果你需要一个公共URL但是你想让他们更安全)
+- [在中间件中使用Gate](#在中间件中使用Gate)
 
 ### 分组中的分组
 
@@ -2312,7 +2313,7 @@ route('page.show', $page->id, false);
 
 ```php
 // Route
-Route::get('{product:slug', Controller::class);
+Route::get('{product:slug}', Controller::class);
 
 // Request
 https://nodejs.pub/@unlock/hello-world
@@ -2358,6 +2359,16 @@ class AccountController extends Controller
 ```
 
 由 [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)提供
+
+### 在中间件中使用Gate
+你可以在中间件中使用在 `App\Providers\AuthServiceProvider`设置的`Gate` 
+
+怎么做呢?你可以在路由中添加`can:`和必要`gate`的名字
+```php
+Route::put('/post/{post}', function (Post $post) {
+    // The current user may update the post...
+})->middleware('can:update,post');
+```
 
 ## 验证
 
@@ -3008,7 +3019,6 @@ User::factory()->has(Post::factory()->count(3))->create();
 - [日志记录参数](#日志记录参数)
 - [更方便的 DD](#更方便的-DD)
 - [使用 context 日志](#使用-context-日志)
-- [行内dd()](#行内dd())
 - [快速输出Query的sql](#快速输出Query的sql)
 
 ### 日志记录参数
@@ -3051,17 +3061,6 @@ public function handle(Request $request, Closure $next)
 }
 ```
 
-### 行内dd()
-
-```php
-// Instead of this
-$clients = Client::where('payment,' 'confirmed')->get();
-dd($clients);
-
-// You can directly dd
-Client::where('payment,' 'confirmed')->get()->dd();
-```
-
 由 [@LaraibiM](https://twitter.com/LaraibiM/status/1437857603263078421)提供
 
 ### 快速输出Query的sql
@@ -3082,23 +3081,9 @@ Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (日志与调试)](#日志与调试) ➡️ [下一个 (其他)](#其他)
 
-- [API 资源 带不带data](#API-资源-带不带data)
 - [API 返回一切正常](#API-返回一切正常)
 - [去掉额外的内部数据包装](#去掉额外的内部数据包装)
 
-### API 资源 带不带data
-
-如果您使用 `Eloquent API Resource` 去返回数据，它们将自动封装到 `data` 中。如果要将其删除，请在 `app/Providers/AppServiceProvider.php` 中添加` JsonResource::withoutWrapping()`;
-
-```php
-class AppServiceProvider extends ServiceProvider
-{
-    public function boot()
-    {
-        JsonResource::withoutWrapping();
-    }
-}
-```
 
 由 [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230637544321029)提供
 
