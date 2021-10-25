@@ -7,16 +7,16 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 October 2021__: Currently there are __191 tips__ divided into 14 sections.
+__Update 24 October 2021__: Currently there are __193 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (50 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (48 tips)
 - [Models Relations](#models-relations) (29 tips)
 - [Migrations](#migrations) (12 tips)
 - [Views](#views) (10 tips)
-- [Routing](#routing) (20 tips)
-- [Validation](#validation) (12 tips)
+- [Routing](#routing) (21 tips)
+- [Validation](#validation) (13 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (4 tips)
