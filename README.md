@@ -7,6 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
+Or you want the chinese version:
+[中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
+
+---
+
 __Update 25 October 2021__: Currently there are __194 tips__ divided into 14 sections.
 
 ## Table of Contents
