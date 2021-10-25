@@ -7,7 +7,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 October 2021__: Currently there are __193 tips__ divided into 14 sections.
+__Update 25 October 2021__: Currently there are __194 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -3422,3 +3422,6 @@ return Http::withOptions([
     'allow_redirects' => true
 ])->post('https://example.com');
 ```
+
+Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
+
