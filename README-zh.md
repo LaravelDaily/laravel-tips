@@ -8,7 +8,7 @@
 
 ---
 
-__更新于 2021/10/25__:现在有193个小提示，分成14类.
+__更新于 2021/10/25__:现在有194个小提示，分成14类.
 
 
 
@@ -27,7 +27,7 @@ __更新于 2021/10/25__:现在有193个小提示，分成14类.
 - [工厂](#工厂) (4 提示)
 - [日志与调试](#日志与调试) (4 提示)
 - [API](#api) (2 提示)
-- [其他](#其他) (30 提示)
+- [其他](#其他) (31 提示)
 
 
 ## 数据库模型与 Eloquent
@@ -3617,3 +3617,23 @@ class Kernel extends ConsoleKernel
 ```
 
 由y [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)提供
+
+
+
+### 无需SSL验证的HTTP请求
+有时候你可能会在本地发送一个无需`SSL`验证的`HTTP`请求 可以如下这么干:
+
+```php
+return Http::withoutVerifying()->post('https://example.com');
+```
+
+如果想设置一些选项 可以使用 ``withOptions``
+
+```php
+return Http::withOptions([
+    'verify' => false,
+    'allow_redirects' => true
+])->post('https://example.com');
+```
+
+由 [@raditzfarhan](https://github.com/raditzfarhan)提供

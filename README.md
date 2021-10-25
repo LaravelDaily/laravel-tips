@@ -7,7 +7,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 October 2021__: Currently there are __195 tips__ divided into 14 sections.
+__Update 25 October 2021__: Currently there are __194 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ __Update 24 October 2021__: Currently there are __195 tips__ divided into 14 sec
 - [Factories](#factories) (4 tips)
 - [Log and debug](#log-and-debug) (4 tips)
 - [API](#api) (2 tips)
-- [Other](#other) (30 tips)
+- [Other](#other) (31 tips)
 
 
 ## DB Models and Eloquent
@@ -3405,3 +3405,21 @@ class Kernel extends ConsoleKernel
 ```
 
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)
+
+### HTTP client request without verifying
+Sometimes, you may want to send HTTP request without verifying SSL in your local environment, you can do like so:
+
+```php
+return Http::withoutVerifying()->post('https://example.com');
+```
+
+If you want to set multiple options, you can use `withOptions`.
+
+```php
+return Http::withOptions([
+    'verify' => false,
+    'allow_redirects' => true
+])->post('https://example.com');
+```
+
+Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
