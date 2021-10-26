@@ -898,7 +898,7 @@ $post->author->name ?? ''
 // 但你可以在Eloquent关系层面上做到这一点。
 // 如果没有作者关联帖子，这种关系将返回一个空的App/Author模型。
 public function author() {
-    return $this->belongsTo('App\Author')->withDefaults();
+    return $this->belongsTo('App\Author')->withDefault();
 }
 // 或者
 public function author() {

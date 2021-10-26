@@ -833,7 +833,7 @@ $post->author->name ?? ''
 // But you can do it on Eloquent relationship level:
 // this relation will return an empty App\Author model if no author is attached to the post
 public function author() {
-    return $this->belongsTo('App\Author')->withDefaults();
+    return $this->belongsTo('App\Author')->withDefault();
 }
 // or
 public function author() {
