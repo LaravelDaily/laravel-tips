@@ -24,7 +24,7 @@ __Update 25 October 2021__: Currently there are __194 tips__ divided into 14 sec
 - [Validation](#validation) (13 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
-- [Mail](#mail) (4 tips)
+- [Mail](#mail) (5 tips)
 - [Artisan](#artisan) (5 tips)
 - [Factories](#factories) (4 tips)
 - [Log and debug](#log-and-debug) (4 tips)
@@ -1489,7 +1489,7 @@ Schema::table('users', function (Blueprint $table) {
 ```
 
 ### Make migration for existing table
-If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "_in_xxxxx_table" at the end, or specify "--table" parameter.
+If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "_in_xxxxx_table" or "_to_xxxxx_table" at the end, or specify "--table" parameter.
 `php artisan change_fields_products_table` generates empty class
 ```php
 class ChangeFieldsProductsTable extends Migration
@@ -2645,6 +2645,7 @@ Gate::before(function($user, $ability) {
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
 - [Preview Mailables](#preview-mailables)
+- [Preview Mail without Mailables](#preview-mail-without-mailables)
 - [Default Email Subject in Laravel Notifications](#default-email-subject-in-laravel-notifications)
 - [Send Notifications to Anyone](#send-notifications-to-anyone)
 
@@ -2662,6 +2663,20 @@ Route::get('/mailable', function () {
     return new App\Mail\InvoicePaid($invoice);
 });
 ```
+
+### Preview Mail without Mailables
+
+You can also preview your email without Mailables. For instance, when you are creating notification, you can specify the markdown that may be use for your mail notification. 
+
+```php
+use Illuminate\Notifications\Messages\MailMessage;
+
+Route::get('/mailable', function () {
+    $invoice = App\Invoice::find(1);
+    return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice));
+});
+```
+You may also use other methods provided by `MailMessage` object such as `view` and others.
 
 ### Default Email Subject in Laravel Notifications
 
