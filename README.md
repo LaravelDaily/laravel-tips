@@ -2673,7 +2673,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 Route::get('/mailable', function () {
     $invoice = App\Invoice::find(1);
-    return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice));
+    return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice'));
 });
 ```
 You may also use other methods provided by `MailMessage` object such as `view` and others.
