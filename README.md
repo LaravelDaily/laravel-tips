@@ -18,7 +18,7 @@ __Update 11 November 2021__: Currently there are __195 tips__ divided into 14 se
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (48 tips)
 - [Models Relations](#models-relations) (29 tips)
-- [Migrations](#migrations) (12 tips)
+- [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
 - [Routing](#routing) (21 tips)
 - [Validation](#validation) (13 tips)
@@ -1363,7 +1363,7 @@ Tip given by [@danjharrin](https://twitter.com/danjharrin/status/144540633440545
 - [Output SQL before running migrations](#output-sql-before-running-migrations)
 - [Anonymous Migrations](#anonymous-migrations)
 - [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
-- [Checking For Table / Column Existence](#checking-for-table-column-existence)
+- [Checking For Table / Column Existence](#checking-for-table--column-existence)
 
 
 ### Unsigned Integer
