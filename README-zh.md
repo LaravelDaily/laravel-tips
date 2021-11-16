@@ -8,7 +8,7 @@
 
 ---
 
-__更新于 2021/11/1__6:现在有195个小提示，分成14类.
+__更新于 2021/11/1__6:现在有196个小提示，分成14类.
 
 
 
@@ -16,7 +16,7 @@ __更新于 2021/11/1__6:现在有195个小提示，分成14类.
 
 - [数据库模型与 Eloquent](#数据库模型与-Eloquent) (48 提示)
 - [模型关联](#模型关联) (29 提示)
-- [数据库迁移](#数据库迁移) (12 提示)
+- [数据库迁移](#数据库迁移) (13 提示)
 - [视图](#视图) (10 提示)
 - [路由](#路由) (21 提示)
 - [验证](#验证) (13 提示)
@@ -1684,6 +1684,21 @@ $table->unsignedInteger('interval')
 ```
 
 由 [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1442345998790107137)提供
+
+### 表名表字段检测
+
+你可以使用 `hasTable` 和 `hasColumn` 方法检测表或字段是否存在。
+
+```php
+if (Schema::hasTable('users')) {
+    // The "users" table exists...
+}
+if (Schema::hasColumn('users', 'email')) {
+    // The "users" table exists and has an "email" column...
+}
+```
+
+ [@dipeshsukhia](https://github.com/dipeshsukhia)提供
 
 ## 视图
 

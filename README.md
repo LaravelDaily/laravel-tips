@@ -7,13 +7,13 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 11 November2021__: Currently there are __195 tips__ divided into 14 sections.
+__Update 11 November2021__: Currently there are __196 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (52 tips)
 - [Models Relations](#models-relations) (29 tips)
-- [Migrations](#migrations) (12 tips)
+- [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
 - [Routing](#routing) (21 tips)
 - [Validation](#validation) (13 tips)
@@ -1358,6 +1358,7 @@ Tip given by [@danjharrin](https://twitter.com/danjharrin/status/144540633440545
 - [Output SQL before running migrations](#output-sql-before-running-migrations)
 - [Anonymous Migrations](#anonymous-migrations)
 - [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
+- [Checking For Table / Column Existence](#checking-for-table-column-existence)
 
 
 ### Unsigned Integer
@@ -1568,6 +1569,20 @@ $table->unsignedInteger('interval')
 ```
 
 Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1442345998790107137)
+
+### Checking For Table / Column Existence
+
+You may check for the existence of a table or column using the hasTable and hasColumn methods:
+```php
+if (Schema::hasTable('users')) {
+    // The "users" table exists...
+}
+if (Schema::hasColumn('users', 'email')) {
+    // The "users" table exists and has an "email" column...
+}
+```
+
+Tip given by [@dipeshsukhia](https://github.com/dipeshsukhia)
 
 ## Views
 
