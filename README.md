@@ -7,7 +7,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 25 October 2021__: Currently there are __194 tips__ divided into 14 sections.
+__Update 11 November2021__: Currently there are __195 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -2672,6 +2672,8 @@ Route::get('/mailable', function () {
 });
 ```
 You may also use other methods provided by `MailMessage` object such as `view` and others.
+
+Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
 
 ### Default Email Subject in Laravel Notifications
 

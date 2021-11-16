@@ -8,7 +8,7 @@
 
 ---
 
-__更新于 2021/10/25__:现在有194个小提示，分成14类.
+__更新于 2021/11/1__6:现在有195个小提示，分成14类.
 
 
 
@@ -2828,6 +2828,8 @@ Route::get('/mailable', function () {
 });
 ```
 你也可以使用``MailMessage` `对象提供的`view`方法和其他方法。
+
+由 [@raditzfarhan](https://github.com/raditzfarhan)提供
 
 ### Laravel 通知中的默认邮件主题
 
