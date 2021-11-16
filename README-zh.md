@@ -2824,7 +2824,7 @@ Route::get('/mailable', function () {
 use Illuminate\Notifications\Messages\MailMessage;
 Route::get('/mailable', function () {
     $invoice = App\Invoice::find(1);
-    return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice));
+    return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice'));
 });
 ```
 你也可以使用``MailMessage` `对象提供的`view`方法和其他方法。
