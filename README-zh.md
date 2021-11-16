@@ -22,7 +22,7 @@ __更新于 2021/10/25__:现在有194个小提示，分成14类.
 - [验证](#验证) (13 提示)
 - [集合](#集合) (6 提示)
 - [授权](#授权) (5 提示)
-- [邮件](#邮件) (4 提示)
+- [邮件](#邮件) (5 提示)
 - [Artisan](#artisan) (5 提示)
 - [工厂](#工厂) (4 提示)
 - [日志与调试](#日志与调试) (4 提示)
@@ -1589,7 +1589,7 @@ Schema::table('users', function (Blueprint $table) {
 
 ### 为已经存在的表生成迁移文件
 
-如果你要为已经存的表生成迁移文件，而且你想让 Lavarel 来为你生成 Schema::table ()  代码，那么，在命令后面加入  "_in_xxxxx_table" ，或者指明 "--table" 参数。
+如果你要为已经存的表生成迁移文件，而且你想让 Lavarel 来为你生成 Schema::table ()  代码，那么，在命令后面加入  "_in_xxxxx_table" 或"_to_xxxxx_table"，或者指明 "--table" 参数。
 `php artisan make:migration change_fields_products_table` generates empty class
 
 ```php
@@ -2797,8 +2797,9 @@ Gate::before(function($user, $ability) {
 
 1. [测试邮件存入laravel.log](#测试邮件存入laravel.log)
 2. [预览邮件](#预览邮件)
-3. [Laravel 通知中的默认邮件主题](#Laravel-通知中的默认邮件主题)
-4. [向任何人发送通知](#向任何人发送通知)
+3. [不使用Mailables预览邮件](#不使用Mailables预览邮件)
+4. [Laravel 通知中的默认邮件主题](#Laravel-通知中的默认邮件主题)
+5. [向任何人发送通知](#向任何人发送通知)
 
 ### 测试邮件存入laravel.log
 
@@ -2814,6 +2815,19 @@ Route::get('/mailable', function () {
     return new App\Mail\InvoicePaid($invoice);
 });
 ```
+
+### 不使用Mailables预览邮件
+
+不使用Mailables你也可以预览你的邮件。举个例子，当你创建通知的时候你可以指定你的邮件通知中可能用到的markdown文件。
+
+```php
+use Illuminate\Notifications\Messages\MailMessage;
+Route::get('/mailable', function () {
+    $invoice = App\Invoice::find(1);
+    return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice));
+});
+```
+你也可以使用``MailMessage` `对象提供的`view`方法和其他方法。
 
 ### Laravel 通知中的默认邮件主题
 
