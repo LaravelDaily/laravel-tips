@@ -876,6 +876,7 @@ DB::unprepared(
     file_get_contents(__DIR__ . './dump.sql')
 );
 ```
+Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/1447902369388249091)
 
 ### The crossJoinSub method of the query constructor
 Using the CROSS JOIN subquery
