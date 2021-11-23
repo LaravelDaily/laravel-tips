@@ -923,7 +923,7 @@ class PostTagPivot extends Pivot
 // Somewhere in the Controller
 public function getPostTags($id)
 {
-    return Post::findOrFail($id)->tags()->orderPivotBy('flag', 'desc')->get();
+    return Post::findOrFail($id)->tags()->orderByPivot('flag', 'desc')->get();
 }
 ```
 
@@ -932,7 +932,7 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 ### Find a single record from a database
 The `sole()` method will return only one record that matches the criteria. If no such entry is found, then a `NoRecordsFoundException` will be thrown. If multiple records are found, then a `MultipleRecordsFoundException` will be thrown.
 ```php
-DB::table('products')->where('ref', '#123')->sole()
+DB::table('products')->where('ref', '#123')->sole();
 ```
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
