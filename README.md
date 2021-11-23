@@ -894,6 +894,50 @@ DB::table('orders')
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 
+### Belongs to Many Pivot table naming
+
+To determine the table name of the relationship's intermediate table, Eloquent will join the two related model names in alphabetical order. 
+
+This would mean a join between `Post` and `Tag` could be added like this:
+
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+}
+```
+However, you are free to override this convention, and you would need to specify the join table in the second argument.
+
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'posts_tags');
+    }
+}
+```
+If you wish to be explicit about the primary keys you can also supply these as third and fourth arguments.
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
+    }
+}
+```
+Tip given by [@iammikek](https://twitter.com/iammikek)
+
 ### Order by Pivot Fields
 `BelongsToMany::orderByPivot()` allows you to directly sort the results of a BelongsToMany relationship query.
 ```php
@@ -908,7 +952,7 @@ class Post extends Model
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'posts_tags', 'post_id', 'tag_id')
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id')
             ->using(PostTagPivot::class)
             ->withTimestamps()
             ->withPivot('flag');
@@ -917,7 +961,7 @@ class Post extends Model
 
 class PostTagPivot extends Pivot
 {
-    protected $table = 'posts_tags';
+    protected $table = 'post_tag';
 }
 
 // Somewhere in the Controller
