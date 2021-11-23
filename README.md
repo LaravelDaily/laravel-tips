@@ -12,11 +12,11 @@ Or you want the chinese version:
 
 ---
 
-__Update 22 November 2021__: Currently there are __204 tips__ divided into 14 sections.
+__Update 23 November 2021__: Currently there are __205 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (55 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
 - [Models Relations](#models-relations) (30 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
@@ -85,6 +85,7 @@ __Update 22 November 2021__: Currently there are __204 tips__ divided into 14 se
 - [A simple way to seed a database](#a-simple-way-to-seed-a-database)
 - [The crossJoinSub method of the query constructor](#the-crossJoinSub-method-of-the-query-constructor)
 - [Order by Pivot Fields](#order-by-pivot-fields)
+- [Belongs to Many Pivot table naming](#belongs-to-many-pivot-table-naming)
 - [Find a single record from a database](#find-a-single-record-from-a-database)
 - [Automatic records chunking](#automatic-records-chunking)
 - [Updating the model without dispatching events](#updating-the-model-without-dispatching-events)
