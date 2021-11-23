@@ -2466,6 +2466,7 @@ Route::put('/post/{post}', function (Post $post) {
 - [Use this property in the request classes to stop the validation of the whole request attributes](#use-this-property-in-the-request-classes-to-stop-the-validation-of-the-whole-request-attributes)
 - [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#ruleunique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
 - [Validator::sometimes() method allows us to define when a validation rule should be applied](#validatorsometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
+- [Array elements validation](#array-elements-validation)
 
 ### Image validation
 
@@ -2667,6 +2668,30 @@ $validator->validate();
 ```
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
+
+### Array elements validation
+If you want to validate elements of an array that you submited use dot notation in rules with '*'
+```php
+// say you have this array
+// array in request 'user_info'
+$request->validated()->user_info = [
+    [
+        'name' => 'Qasim',
+        'age' => 26,
+    ],
+    [
+        'name' => 'Ahmed',
+        'age' => 23,
+    ],
+];
+
+// Rule
+$rules = [
+    'user_info.*.name' => ['required', 'alpha'],
+    'user_info.*.age' => ['required', 'numeric'],
+];
+
+```
 
 ## Collections
 
