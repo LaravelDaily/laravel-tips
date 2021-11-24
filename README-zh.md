@@ -8,14 +8,14 @@
 
 ---
 
-__更新于 2021/11/1__6:现在有196个小提示，分成14类.
+__更新于 2021/11/24:现在有个小提示，分成14类.
 
 
 
 ## 目录
 
-- [数据库模型与 Eloquent](#数据库模型与-Eloquent) (48 提示)
-- [模型关联](#模型关联) (29 提示)
+- [数据库模型与 Eloquent](#数据库模型与-Eloquent) (55 提示)
+- [模型关联](#模型关联) (30 提示)
 - [数据库迁移](#数据库迁移) (13 提示)
 - [视图](#视图) (10 提示)
 - [路由](#路由) (21 提示)
@@ -78,11 +78,17 @@ __更新于 2021/11/1__6:现在有196个小提示，分成14类.
 42. [获取查询语句的额外信息](#获取查询语句的额外信息)
 43. [在 Laravel 中使用doesntExist()方法](#在-Laravel-中使用doesntExist()方法)
 44. [在一些模型的 boot () 方法中自动调用一个特性](#在一些模型的-boot-()-方法中自动调用一个特性)
-45. [Laravel 的 find () 方法，比只传一个 ID 更多的选择](#Laravel-的-find-()-方法，比只传一个-ID-更多的选择)
 46. [在 Laravel 中有两种常见的方法来确定一个表是否为空表](#在-Laravel-中有两种常见的方法来确定一个表是否为空表)
 47. [如何避免 property of non-object 错误](#如何避免-property-of-non-object-错误)
 48. [Eloquent 数据改变后获取原始数据](#Eloquent-数据改变后获取原始数据)
 49. [一种更简单创建数据库的方法](#一种更简单创建数据库的方法)
+49. [Query构造器的crossJoinSub方法](#Query构造器的crossJoinSub 方法)
+50. [根据Pivot字段排序](#根据Pivot字段排序)
+51. [从数据库中查询一条记录](#从数据库中查询一条记录)
+52. [记录自动分块](#记录自动分块)
+53. [更新模型而不触发事件](#更新模型而不触发事件)
+54. [定时清理过期记录中的模型](#定时清理过期记录中的模型)
+55. [不变的日期和对它们的强制转换](#不变的日期和对它们的强制转换)
 
 
 
@@ -936,6 +942,138 @@ DB::unprepared(
 
 由 [@w3Nicolas](https://twitter.com/w3Nicolas/status/1447902369388249091)提供
 
+### Query构造器的crossJoinSub方法
+使用CROSS JOIN交叉连接
+
+```php
+use Illuminate\Support\Facades\DB;
+$totalQuery = DB::table('orders')->selectRaw('SUM(price) as total');
+DB::table('orders')
+    ->select('*')
+    ->crossJoinSub($totalQuery, 'overall')
+    ->selectRaw('(price / overall.total) * 100 AS percent_of_total')
+    ->get();
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+### 根据Pivot字段排序
+
+`BelongsToMany::orderByPivot()` 允许你直接对`BelongsToMany `关系查询的结果集进行排序。
+
+```php
+class Tag extends Model
+{
+    public $table = 'tags';
+}
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'posts_tags', 'post_id', 'tag_id')
+            ->using(PostTagPivot::class)
+            ->withTimestamps()
+            ->withPivot('flag');
+    }
+}
+class PostTagPivot extends Pivot
+{
+    protected $table = 'posts_tags';
+}
+// Somewhere in the Controller
+public function getPostTags($id)
+{
+    return Post::findOrFail($id)->tags()->orderPivotBy('flag', 'desc')->get();
+}
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+
+
+### 从数据库中查询一条记录
+
+`sole()`方法将会只返回一条匹配标准的记录。如果没找到，将会抛出`NoRecordsFoundException` 异常。如果发现了多条记录，抛出`MultipleRecordsFoundException` 异常
+
+```php
+DB::table('products')->where('ref', '#123')->sole()
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+### 记录自动分块
+
+与`each()`相同，但是更简单使用。`chunks`自动将记录分成多块。
+
+```php
+return User::orderBy('name')->chunkMap(fn ($user) => [
+    'id' => $user->id,
+    'name' => $user->name,
+]), 25);
+```
+
+由[@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+### 更新模型而不触发事件
+有时候你需要更新一个模型但是不想发送任何事件 我们可以使用`updateQuietly`做到, 底层使用了`saveQuietly`方法。
+
+```php
+$flight->updateQuietly(['departed' => false]);
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+### 定时清理过期记录中的模型
+定期清理过时记录的模型。有了这个特性，Laravel将自动完成这项工作，只需调整内核类中`model:prune`命令的频率
+
+```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+class Flight extends Model
+{
+    use Prunable;
+    /**
+     * Get the prunable model query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subMonth());
+    }
+}
+```
+此外，在修剪方法中，可以设置删除模型之前必须执行的操作：
+
+```php
+protected function pruning()
+{
+    // Removing additional resources,
+    // associated with the model. For example, files.
+    Storage::disk('s3')->delete($this->filename);
+}
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+### 不变的日期和对它们的强制转换
+Laravel 8.53 介绍了`immutable_date` 和`immutable_datetime` 将日期转换为Immutable`.
+
+转换成`CarbonImmutable `，而不是常规的`Carbon `实例。
+
+```php
+class User extends Model
+{
+    public $casts = [
+        'date_field'     => 'immutable_date',
+        'datetime_field' => 'immutable_datetime',
+    ];
+}
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
 ## 模型关联
 
 ⬆️ [回到顶部](#Laravel-编码技巧) ⬅️ [上一个 (数据库模型与 Eloquent)](#数据库模型与-Eloquent) ➡️ [下一个 (数据库迁移)](#数据库迁移)
@@ -1447,6 +1585,21 @@ $query->whereBelongsTo($author, 'author')
 ```
 
 由 [@danjharrin](https://twitter.com/danjharrin/status/1445406334405459974)提供
+
+### 使用is()方法比较一对一关系模型
+
+我们可以在相关联的模型中做比较 而不需要其他数据库访问。
+
+```php
+// BEFORE: the foreign key is taken from the Post model
+$post->author_id === $user->id;
+// BEFORE: An additional request is made to get the User model from the Author relationship
+$post->author->is($user);
+// AFTER
+$post->author()->is($user);
+```
+
+由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
 
 ## 数据库迁移
 

@@ -7,12 +7,12 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 11 November2021__: Currently there are __196 tips__ divided into 14 sections.
+__Update 24 November2021__: Currently there are __204 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (52 tips)
-- [Models Relations](#models-relations) (29 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (55 tips)
+- [Models Relations](#models-relations) (30 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
 - [Routing](#routing) (21 tips)
@@ -78,6 +78,13 @@ __Update 11 November2021__: Currently there are __196 tips__ divided into 14 sec
 46. [How to prevent “property of non-object” error](#how-to-prevent-property-of-non-object-error)
 47. [Get original attributes after mutating an Eloquent record](#get-original-attributes-after-mutating-an-eloquent-record)
 48. [A simple way to seed a database](#a-simple-way-to-seed-a-database)
+49. [The crossJoinSub method of the query constructor](#the-crossJoinSub-method-of-the-query-constructor)
+50.  [Order by Pivot Fields](#order-by-pivot-fields)
+51. [Find a single record from a database](#find-a-single-record-from-a-database)
+52. [Automatic records chunking](#automatic-records-chunking)
+53. [Updating the model without dispatching events](#updating-the-model-without-dispatching-events)
+54. [Periodic cleaning of models from obsolete records](#periodic-cleaning-of-models-from-obsolete-records)
+55. [Immutable dates and casting to them](#immutable-dates-and-casting-to-them)
 
 ### Reuse or clone query()
 
@@ -867,6 +874,125 @@ DB::unprepared(
 
 Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/1447902369388249091)
 
+### The crossJoinSub method of the query constructor
+Using the CROSS JOIN subquery
+```php
+use Illuminate\Support\Facades\DB;
+$totalQuery = DB::table('orders')->selectRaw('SUM(price) as total');
+DB::table('orders')
+    ->select('*')
+    ->crossJoinSub($totalQuery, 'overall')
+    ->selectRaw('(price / overall.total) * 100 AS percent_of_total')
+    ->get();
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### Order by Pivot Fields
+`BelongsToMany::orderByPivot()` allows you to directly sort the results of a BelongsToMany relationship query.
+```php
+class Tag extends Model
+{
+    public $table = 'tags';
+}
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'posts_tags', 'post_id', 'tag_id')
+            ->using(PostTagPivot::class)
+            ->withTimestamps()
+            ->withPivot('flag');
+    }
+}
+class PostTagPivot extends Pivot
+{
+    protected $table = 'posts_tags';
+}
+// Somewhere in the Controller
+public function getPostTags($id)
+{
+    return Post::findOrFail($id)->tags()->orderPivotBy('flag', 'desc')->get();
+}
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### Find a single record from a database
+The `sole()` method will return only one record that matches the criteria. If no such entry is found, then a `NoRecordsFoundException` will be thrown. If multiple records are found, then a `MultipleRecordsFoundException` will be thrown.
+```php
+DB::table('products')->where('ref', '#123')->sole()
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### Automatic records chunking
+Similar to `each()` method, but easier to use. Automatically splits the result into parts (chunks).
+```php
+return User::orderBy('name')->chunkMap(fn ($user) => [
+    'id' => $user->id,
+    'name' => $user->name,
+]), 25);
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### Updating the model without dispatching events
+Sometimes you need to update the model without sending any events. We can now do this with the `updateQuietly()` method, which under the hood uses the `saveQuietly()` method.
+```php
+$flight->updateQuietly(['departed' => false]);
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### Periodic cleaning of models from obsolete records
+To periodically clean models of obsolete records. With this trait, Laravel will do this automatically, only you need to adjust the frequency of the `model:prune` command in the Kernel class.
+```php
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+class Flight extends Model
+{
+    use Prunable;
+    /**
+     * Get the prunable model query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subMonth());
+    }
+}
+```
+Also, in the pruning method, you can set the actions that must be performed before deleting the model:
+```php
+protected function pruning()
+{
+    // Removing additional resources,
+    // associated with the model. For example, files.
+    Storage::disk('s3')->delete($this->filename);
+}
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### Immutable dates and casting to them
+Laravel 8.53 introduces the `immutable_date` and `immutable_datetime` castes that convert dates to `Immutable`.
+
+Cast to CarbonImmutable instead of a regular Carbon instance.
+```php
+class User extends Model
+{
+    public $casts = [
+        'date_field'     => 'immutable_date',
+        'datetime_field' => 'immutable_datetime',
+    ];
+}
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
 ## Models Relations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
@@ -899,6 +1025,7 @@ Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/14479023693882490
 - [A shorter way to write whereHas](#a-shorter-way-to-write-whereHas)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
+-  [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
 
 
 ### OrderBy on Eloquent relationships
@@ -1341,6 +1468,19 @@ $query->whereBelongsTo($author, 'author')
 ```
 
 Tip given by [@danjharrin](https://twitter.com/danjharrin/status/1445406334405459974)
+
+### The `is()` method of one-to-one relationships for comparing models
+We can now make comparisons between related models without further database access.
+```php
+// BEFORE: the foreign key is taken from the Post model
+$post->author_id === $user->id;
+// BEFORE: An additional request is made to get the User model from the Author relationship
+$post->author->is($user);
+// AFTER
+$post->author()->is($user);
+```
+
+Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 
 ## Migrations
 
