@@ -8,7 +8,7 @@
 
 ---
 
-__更新于 2021/11/24:现在有个小提示，分成14类.
+__更新于 2021/11/24:现在有205个小提示，分成14类.
 
 
 
@@ -83,12 +83,13 @@ __更新于 2021/11/24:现在有个小提示，分成14类.
 48. [Eloquent 数据改变后获取原始数据](#Eloquent-数据改变后获取原始数据)
 49. [一种更简单创建数据库的方法](#一种更简单创建数据库的方法)
 49. [Query构造器的crossJoinSub方法](#Query构造器的crossJoinSub 方法)
-50. [根据Pivot字段排序](#根据Pivot字段排序)
-51. [从数据库中查询一条记录](#从数据库中查询一条记录)
-52. [记录自动分块](#记录自动分块)
-53. [更新模型而不触发事件](#更新模型而不触发事件)
-54. [定时清理过期记录中的模型](#定时清理过期记录中的模型)
-55. [不变的日期和对它们的强制转换](#不变的日期和对它们的强制转换)
+50. [belongsToMany的中间表命名](#belongsToMany的中间表命名)
+51. [根据Pivot字段排序](#根据Pivot字段排序)
+52. [从数据库中查询一条记录](#从数据库中查询一条记录)
+53. [记录自动分块](#记录自动分块)
+54. [更新模型而不触发事件](#更新模型而不触发事件)
+55. [定时清理过期记录中的模型](#定时清理过期记录中的模型)
+56. [不变的日期和对它们的强制转换](#不变的日期和对它们的强制转换)
 
 
 
@@ -957,6 +958,47 @@ DB::table('orders')
 
 由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
 
+### belongsToMany的中间表命名
+
+为了决定 关系表的中间表, Eloquent将按字母顺序连接两个相关的型号名称。
+
+这意味着可以这样添加“Post”和“Tag”之间的连接：
+
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+}
+```
+但是，您可以自由重写此约定，并且需要在第二个参数中指定联接表。
+
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'posts_tags');
+    }
+}
+```
+如果希望明确说明主键，还可以将其作为第三个和第四个参数提供。
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
+    }
+}
+```
+由 [@iammikek](https://twitter.com/iammikek)提供
+
 ### 根据Pivot字段排序
 
 `BelongsToMany::orderByPivot()` 允许你直接对`BelongsToMany `关系查询的结果集进行排序。
@@ -984,7 +1026,7 @@ class PostTagPivot extends Pivot
 // Somewhere in the Controller
 public function getPostTags($id)
 {
-    return Post::findOrFail($id)->tags()->orderPivotBy('flag', 'desc')->get();
+    return Post::findOrFail($id)->tags()->orderByPivot('flag', 'desc')->get();
 }
 ```
 
@@ -997,7 +1039,7 @@ public function getPostTags($id)
 `sole()`方法将会只返回一条匹配标准的记录。如果没找到，将会抛出`NoRecordsFoundException` 异常。如果发现了多条记录，抛出`MultipleRecordsFoundException` 异常
 
 ```php
-DB::table('products')->where('ref', '#123')->sole()
+DB::table('products')->where('ref', '#123')->sole();
 ```
 
 由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供

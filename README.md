@@ -7,11 +7,11 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 November2021__: Currently there are __204 tips__ divided into 14 sections.
+__Update 24 November2021__: Currently there are __205 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (55 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
 - [Models Relations](#models-relations) (30 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
@@ -79,12 +79,13 @@ __Update 24 November2021__: Currently there are __204 tips__ divided into 14 sec
 47. [Get original attributes after mutating an Eloquent record](#get-original-attributes-after-mutating-an-eloquent-record)
 48. [A simple way to seed a database](#a-simple-way-to-seed-a-database)
 49. [The crossJoinSub method of the query constructor](#the-crossJoinSub-method-of-the-query-constructor)
-50.  [Order by Pivot Fields](#order-by-pivot-fields)
-51. [Find a single record from a database](#find-a-single-record-from-a-database)
-52. [Automatic records chunking](#automatic-records-chunking)
-53. [Updating the model without dispatching events](#updating-the-model-without-dispatching-events)
-54. [Periodic cleaning of models from obsolete records](#periodic-cleaning-of-models-from-obsolete-records)
-55. [Immutable dates and casting to them](#immutable-dates-and-casting-to-them)
+50.  [Belongs to Many Pivot table naming](#belongs-to-many-pivot-table-naming)
+51.  [Order by Pivot Fields](#order-by-pivot-fields)
+52. [Find a single record from a database](#find-a-single-record-from-a-database)
+53. [Automatic records chunking](#automatic-records-chunking)
+54. [Updating the model without dispatching events](#updating-the-model-without-dispatching-events)
+55. [Periodic cleaning of models from obsolete records](#periodic-cleaning-of-models-from-obsolete-records)
+56. [Immutable dates and casting to them](#immutable-dates-and-casting-to-them)
 
 ### Reuse or clone query()
 
@@ -888,6 +889,47 @@ DB::table('orders')
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 
+### Belongs to Many Pivot table naming
+
+To determine the table name of the relationship's intermediate table, Eloquent will join the two related model names in alphabetical order. 
+
+This would mean a join between `Post` and `Tag` could be added like this:
+
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+}
+```
+However, you are free to override this convention, and you would need to specify the join table in the second argument.
+
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'posts_tags');
+    }
+}
+```
+If you wish to be explicit about the primary keys you can also supply these as third and fourth arguments.
+```php
+class Post extends Model
+{
+    public $table = 'posts';
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
+    }
+}
+```
+Tip given by [@iammikek](https://twitter.com/iammikek)
+
 ### Order by Pivot Fields
 `BelongsToMany::orderByPivot()` allows you to directly sort the results of a BelongsToMany relationship query.
 ```php
@@ -913,7 +955,7 @@ class PostTagPivot extends Pivot
 // Somewhere in the Controller
 public function getPostTags($id)
 {
-    return Post::findOrFail($id)->tags()->orderPivotBy('flag', 'desc')->get();
+    return Post::findOrFail($id)->tags()->orderByPivot('flag', 'desc')->get();
 }
 ```
 
@@ -922,7 +964,7 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 ### Find a single record from a database
 The `sole()` method will return only one record that matches the criteria. If no such entry is found, then a `NoRecordsFoundException` will be thrown. If multiple records are found, then a `MultipleRecordsFoundException` will be thrown.
 ```php
-DB::table('products')->where('ref', '#123')->sole()
+DB::table('products')->where('ref', '#123')->sole();
 ```
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
