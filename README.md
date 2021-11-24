@@ -12,7 +12,7 @@ Or you want the chinese version:
 
 ---
 
-__Update 23 November 2021__: Currently there are __205 tips__ divided into 14 sections.
+__Update 24 November 2021__: Currently there are __206 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ __Update 23 November 2021__: Currently there are __205 tips__ divided into 14 se
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
 - [Routing](#routing) (21 tips)
-- [Validation](#validation) (13 tips)
+- [Validation](#validation) (14 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (5 tips)
@@ -2690,8 +2690,10 @@ $rules = [
     'user_info.*.name' => ['required', 'alpha'],
     'user_info.*.age' => ['required', 'numeric'],
 ];
-
 ```
+
+Tip given by [HydroMoon](https://github.com/HydroMoon)
+
 
 ## Collections
 
