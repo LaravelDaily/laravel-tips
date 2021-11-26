@@ -12,14 +12,14 @@ Or you want the chinese version:
 
 ---
 
-__Update 24 November 2021__: Currently there are __206 tips__ divided into 14 sections.
+__Update 26 November 2021__: Currently there are __207 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
 - [Models Relations](#models-relations) (30 tips)
 - [Migrations](#migrations) (13 tips)
-- [Views](#views) (10 tips)
+- [Views](#views) (11 tips)
 - [Routing](#routing) (21 tips)
 - [Validation](#validation) (14 tips)
 - [Collections](#collections) (6 tips)
@@ -1805,6 +1805,7 @@ Tip given by [@dipeshsukhia](https://github.com/dipeshsukhia)
 - [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)
 - [Use Laravel Blade-X variable binding to save even more space](#use-laravel-blade-x-variable-binding-to-save-even-more-space)
 - [Blade components props](#blade-components-props)
+- [Blade Autocomplete typehint](#blade-autocomplete-typehint)
 
 ### $loop variable in foreach
 
@@ -1977,6 +1978,20 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787
 ```
 
 Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)
+
+### Blade Autocomplete typehint
+```php
+@php
+    /* @var App\Models\User $user */
+@endphp
+
+<div>
+    // your ide will typehint the property for you 
+    {{$user->email}}
+</div>
+```
+
+Tip given by [@freekmurze](https://twitter.com/freekmurze/status/1455466663927746560)
 
 ## Routing
 
