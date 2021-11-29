@@ -8,7 +8,7 @@
 
 ---
 
-__更新于 2021/11/29:现在有206个小提示，分成14类.
+__更新于 2021/11/29:现在有207个小提示，分成14类.
 
 
 
@@ -17,7 +17,7 @@ __更新于 2021/11/29:现在有206个小提示，分成14类.
 - [数据库模型与 Eloquent](#数据库模型与-Eloquent) (55 提示)
 - [模型关联](#模型关联) (30 提示)
 - [数据库迁移](#数据库迁移) (13 提示)
-- [视图](#视图) (10 提示)
+- [视图](#视图) (11 提示)
 - [路由](#路由) (21 提示)
 - [验证](#验证) (14 提示)
 - [集合](#集合) (6 提示)
@@ -1910,6 +1910,7 @@ if (Schema::hasColumn('users', 'email')) {
 8. [视图指令IncludeIf IncludeWhen IncludeFirst](#视图指令IncludeIf-IncludeWhen-IncludeFirst)
 9. [使用Laravel Blade-X 变量绑定节省更多空间](#使用Laravel-Blade-X-变量绑定节省更多空间)
 10. [Blade 组件属性](#Blade-组件属性)
+11. [Blade类型提示](#Blade类型提示)
 
 ### foreach 语句中的 $loop 变量
 
@@ -2089,6 +2090,19 @@ public function boot()
 ```
 
 由 [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)提供
+
+### Blade类型提示
+```php
+@php
+    /* @var App\Models\User $user */
+@endphp
+<div>
+    // your ide will typehint the property for you 
+    {{$user->email}}
+</div>
+```
+
+由 [@freekmurze](https://twitter.com/freekmurze/status/1455466663927746560)提供
 
 ## 路由
 

@@ -7,14 +7,14 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 November2021__: Currently there are __206 tips__ divided into 14 sections.
+__Update 24 November2021__: Currently there are __207 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
 - [Models Relations](#models-relations) (30 tips)
 - [Migrations](#migrations) (13 tips)
-- [Views](#views) (10 tips)
+- [Views](#views) (11 tips)
 - [Routing](#routing) (21 tips)
 - [Validation](#validation) (14 tips)
 - [Collections](#collections) (6 tips)
@@ -1780,6 +1780,7 @@ Tip given by [@dipeshsukhia](https://github.com/dipeshsukhia)
 - [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)
 - [Use Laravel Blade-X variable binding to save even more space](#use-laravel-blade-x-variable-binding-to-save-even-more-space)
 - [Blade components props](#blade-components-props)
+- [Blade Autocomplete typehint](#blade-autocomplete-typehint)
 
 ### $loop variable in foreach
 
@@ -1801,6 +1802,19 @@ Inside of foreach loop, check if current entry is first/last by just using `$loo
 
 There are also other properties like `$loop->iteration` or `$loop->count`.
 Learn more on the [official documentation](https://laravel.com/docs/master/blade#the-loop-variable).
+
+### Blade Autocomplete typehint
+```php
+@php
+    /* @var App\Models\User $user */
+@endphp
+<div>
+    // your ide will typehint the property for you 
+    {{$user->email}}
+</div>
+```
+
+Tip given by [@freekmurze](https://twitter.com/freekmurze/status/1455466663927746560)
 
 ### Does view file exist?
 
