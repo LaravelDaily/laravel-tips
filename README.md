@@ -7,7 +7,7 @@ Hey, like these tips? Also check out my premium [Laravel courses](https://larave
 
 ---
 
-__Update 24 November2021__: Currently there are __205 tips__ divided into 14 sections.
+__Update 24 November2021__: Currently there are __206 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ __Update 24 November2021__: Currently there are __205 tips__ divided into 14 sec
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (10 tips)
 - [Routing](#routing) (21 tips)
-- [Validation](#validation) (13 tips)
+- [Validation](#validation) (14 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (5 tips)
@@ -2441,6 +2441,7 @@ Route::put('/post/{post}', function (Post $post) {
 - [Use this property in the request classes to stop the validation of the whole request attributes](#use-this-property-in-the-request-classes-to-stop-the-validation-of-the-whole-request-attributes)
 - [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#ruleunique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
 - [Validator::sometimes() method allows us to define when a validation rule should be applied](#validatorsometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
+- [Array elements validation](#array-elements-validation)
 
 ### Image validation
 
@@ -2642,6 +2643,30 @@ $validator->validate();
 ```
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
+
+### Array elements validation
+If you want to validate elements of an array that you submited use dot notation in rules with '*'
+```php
+// say you have this array
+// array in request 'user_info'
+$request->validated()->user_info = [
+    [
+        'name' => 'Qasim',
+        'age' => 26,
+    ],
+    [
+        'name' => 'Ahmed',
+        'age' => 23,
+    ],
+];
+// Rule
+$rules = [
+    'user_info.*.name' => ['required', 'alpha'],
+    'user_info.*.age' => ['required', 'numeric'],
+];
+```
+
+Tip given by [HydroMoon](https://github.com/HydroMoon)
 
 ## Collections
 

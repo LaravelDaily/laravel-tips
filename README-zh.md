@@ -8,7 +8,7 @@
 
 ---
 
-__更新于 2021/11/24:现在有205个小提示，分成14类.
+__更新于 2021/11/29:现在有206个小提示，分成14类.
 
 
 
@@ -19,7 +19,7 @@ __更新于 2021/11/24:现在有205个小提示，分成14类.
 - [数据库迁移](#数据库迁移) (13 提示)
 - [视图](#视图) (10 提示)
 - [路由](#路由) (21 提示)
-- [验证](#验证) (13 提示)
+- [验证](#验证) (14 提示)
 - [集合](#集合) (6 提示)
 - [授权](#授权) (5 提示)
 - [邮件](#邮件) (5 提示)
@@ -2598,6 +2598,8 @@ Route::put('/post/{post}', function (Post $post) {
 11. [unique规则在软删除全局作用域中无效](#unique规则在软删除全局作用域中无效)
 12. [sometimes方法允许你定义验证器在什么时候被应用](#sometimes方法允许你定义验证器在什么时候被应用)
 13. [提交自定义验证规则](#提交自定义验证规则)
+14. [数组元素验证](#数组元素验证)
+
 ### 图片验证
 
 在验证上传的图片时，可以指定所需的尺寸
@@ -2790,6 +2792,32 @@ $validator->validate();
 ```
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
+
+### 数组元素验证
+
+如果你想要验证提交的数组元素，使用带`*`号的点符号。
+
+```php
+// say you have this array
+// array in request 'user_info'
+$request->validated()->user_info = [
+    [
+        'name' => 'Qasim',
+        'age' => 26,
+    ],
+    [
+        'name' => 'Ahmed',
+        'age' => 23,
+    ],
+];
+// Rule
+$rules = [
+    'user_info.*.name' => ['required', 'alpha'],
+    'user_info.*.age' => ['required', 'numeric'],
+];
+```
+
+由[HydroMoon](https://github.com/HydroMoon)提供
 
 ### 提交自定义验证规则
 
