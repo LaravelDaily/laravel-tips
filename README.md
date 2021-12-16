@@ -2570,6 +2570,10 @@ $request->validate([
     'body' => 'required',
 ]);
 ```
+If you need to stop validation on the first error in `FormRequest` class, you can set `stopOnFirstFailure` property to `true`:
+```php
+protected $stopOnFirstFailure = true;
+```
 
 ### Throw 422 status code without using validate() or Form Request
 If you don't use validate() or Form Request, but still need to throw errors with the same 422 status code and error structure, you can do it manually `throw ValidationException::withMessages()`
