@@ -3268,6 +3268,7 @@ public function reorder(Request $request)
 - [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
 - [Schedule regular shell commands](#schedule-regular-shell-commands)
 - [HTTP client request without verifying](#http-client-request-without-verifying)
+- [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
 
 ### Localhost in .env
 
@@ -3712,3 +3713,29 @@ return Http::withOptions([
 
 Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
 
+### New way to define accessor and mutator
+
+New way to define attribute accessors and mutators in Laravel 8.77:
+
+```php
+// Before, two-method approach
+public function setTitleAttribute($value)
+{
+    $this->attributes['title'] = strtolower($value);
+}
+public function getTitleAttribute($value)
+{
+    return strtolower($value);
+}
+ 
+// New approach
+protected function title(): Attribute
+{
+    return new Attribute(
+        get: fn ($value) => strtoupper($value),
+        set: fn ($value) => strtolower($value),
+    );
+}
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1473697808456851466)
