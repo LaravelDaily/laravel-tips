@@ -2703,6 +2703,12 @@ $request->validate([
 ]);
 ```
 
+如果你需要停止首次错误验证，可以设置``FormRequest` `类中``$stopOnFirstFailure`为`true`:
+
+```php
+protected $stopOnFirstFailure = true;
+```
+
 ### 不使用validate或者FormRequest就抛出422
 
 如果您不使用 `validate()` 或 `Form Request`，但仍然需要使用相同的 `422` 状态码和错误结构抛出错误，那么可以手动抛出 `throw ValidationException::withMessages()`
