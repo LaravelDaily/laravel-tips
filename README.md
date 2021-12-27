@@ -12,12 +12,12 @@ Or you want the chinese version:
 
 ---
 
-__Update 26 November 2021__: Currently there are __207 tips__ divided into 14 sections.
+__Update 27 December 2021__: Currently there are __208 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
-- [Models Relations](#models-relations) (30 tips)
+- [Models Relations](#models-relations) (31 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (11 tips)
 - [Routing](#routing) (21 tips)
@@ -1082,7 +1082,7 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 - [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
-- [`whereHas()` multiple connections](#where-has-multiple-connection)
+- [`whereHas()` multiple connections](#wherehas-multiple-connections)
 
 
 ### OrderBy on Eloquent relationships
