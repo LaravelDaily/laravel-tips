@@ -1082,6 +1082,7 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 - [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
+- [`whereHas()` multiple connections](#where-has-multiple-connection)
 
 
 ### OrderBy on Eloquent relationships
@@ -1539,6 +1540,39 @@ $post->author()->is($user);
 ```
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### `whereHas()` multiple connections
+
+```php
+// User Model
+class User extends Model
+{
+    protected $connection = 'conn_1';
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+
+// Post Model
+class Post extends Model
+{
+    protected $connection = 'conn_2';
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}
+
+// wherehas()
+$posts = Post::whereHas('user', function ($query) use ($request) {
+      $query->from('db_name_conn_1.users')->where(...);
+  })->get();
+```
+
+Tip given by [@adityaricki](https://twitter.com/adityaricki2)
 
 ## Migrations
 
