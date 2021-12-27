@@ -2703,7 +2703,7 @@ $request->validate([
 ]);
 ```
 
-如果你需要停止首次错误验证，可以设置``FormRequest` `类中``$stopOnFirstFailure`为`true`:
+如果你需要停止首次错误验证，可以设置`FormRequest` 类中`$stopOnFirstFailure`为`true`:
 
 ```php
 protected $stopOnFirstFailure = true;
