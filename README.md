@@ -1068,7 +1068,7 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 -  [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
--   [`whereHas()` multiple connections](#where-has-multiple-connection)
+-   [`whereHas()` multiple connections](#wherehas-multiple-connections)
 
 
 ### OrderBy on Eloquent relationships
