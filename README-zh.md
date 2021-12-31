@@ -8,14 +8,14 @@
 
 ---
 
-__更新于 2021/11/29:现在有207个小提示，分成14类.
+__更新于 2021/12/31:现在有208个小提示，分成14类.
 
 
 
 ## 目录
 
 - [数据库模型与 Eloquent](#数据库模型与-Eloquent) (55 提示)
-- [模型关联](#模型关联) (30 提示)
+- [模型关联](#模型关联) (31 提示)
 - [数据库迁移](#数据库迁移) (13 提示)
 - [视图](#视图) (11 提示)
 - [路由](#路由) (21 提示)
@@ -1149,6 +1149,8 @@ class User extends Model
 27. [提取一个重复回调作为变量](#提取一个重复回调作为变量)
 28. [你可以为你的模型关联添加条件](#你可以为你的模型关联添加条件)
 29. [新的 Eloquent 查询构建器方法 whereBelongsTo()](#新的-Eloquent-查询构建器方法-whereBelongsTo())
+30. [使用is()方法比较一对一关系模型](#使用is()方法比较一对一关系模型)
+31.  [`whereHas()`多连接](#where-has-multiple-connection)
 
 
 ### 在 Eloquent 关系中使用 OrderBy
@@ -1642,6 +1644,35 @@ $post->author()->is($user);
 ```
 
 由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
+
+### `whereHas()`多连接
+
+```php
+// User Model
+class User extends Model
+{
+    protected $connection = 'conn_1';
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+// Post Model
+class Post extends Model
+{
+    protected $connection = 'conn_2';
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}
+// wherehas()
+$posts = Post::whereHas('user', function ($query) use ($request) {
+      $query->from('db_name_conn_1.users')->where(...);
+  })->get();
+```
+
+由 [@adityaricki](https://twitter.com/adityaricki2)提供
 
 ## 数据库迁移
 
