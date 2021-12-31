@@ -1150,7 +1150,7 @@ class User extends Model
 28. [你可以为你的模型关联添加条件](#你可以为你的模型关联添加条件)
 29. [新的 Eloquent 查询构建器方法 whereBelongsTo()](#新的-Eloquent-查询构建器方法-whereBelongsTo())
 30. [使用is()方法比较一对一关系模型](#使用is()方法比较一对一关系模型)
-31.  [`whereHas()`多连接](#whereHas()多连接)
+31.  [`whereHas()`多连接](#whereHas多连接)
 
 
 ### 在 Eloquent 关系中使用 OrderBy
@@ -1645,7 +1645,7 @@ $post->author()->is($user);
 
 由 [@PascalBaljet](https://twitter.com/pascalbaljet)提供
 
-### whereHas()多连接
+### whereHas多连接
 
 ```php
 // User Model
