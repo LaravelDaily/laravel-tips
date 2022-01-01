@@ -2506,12 +2506,12 @@ To do this, you can use `fn() =>`, it looks easier.
 
 ```php
 // Instead of
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/example', function () {
+    return User::all();
 });
 
 // You can
-Route::get('/dashboard', fn () => view('dashboard'));
+Route::get('/dashboard', fn () => User::all());
 ```
 
 ## Validation
