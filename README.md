@@ -2052,7 +2052,7 @@ Tip given by [@freekmurze](https://twitter.com/freekmurze/status/145546666392774
 - [Override the route binding resolver for each of your models](#override-the-route-binding-resolver-for-each-of-your-models)
 - [If you need public URL but you want them to be secured](#if-you-need-public-url-but-you-want-them-to-be-secured)
 - [Using Gate in middleware method](#using-gate-in-middleware-method)
-- [Simple route with arrow function](#)
+- [Simple route with arrow function](#simple-route-with-arrow-function)
 
 ### Route group within a group
 
