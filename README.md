@@ -2511,7 +2511,7 @@ Route::get('/example', function () {
 });
 
 // You can
-Route::get('/dashboard', fn () => User::all());
+Route::get('/example', fn () => User::all());
 ```
 
 ## Validation
