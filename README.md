@@ -12,24 +12,24 @@ Or you want the chinese version:
 
 ---
 
-__Update 1 January 2022__: Currently there are __209 tips__ divided into 14 sections.
+__Update 3 January 2022__: Currently there are __260 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
-- [Models Relations](#models-relations) (31 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (72 tips)
+- [Models Relations](#models-relations) (33 tips)
 - [Migrations](#migrations) (13 tips)
-- [Views](#views) (11 tips)
+- [Views](#views) (14 tips)
 - [Routing](#routing) (22 tips)
-- [Validation](#validation) (14 tips)
+- [Validation](#validation) (17 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (5 tips)
 - [Artisan](#artisan) (5 tips)
-- [Factories](#factories) (4 tips)
-- [Log and debug](#log-and-debug) (4 tips)
-- [API](#api) (2 tips)
-- [Other](#other) (31 tips)
+- [Factories](#factories) (6 tips)
+- [Log and debug](#log-and-debug) (5 tips)
+- [API](#api) (1 tips)
+- [Other](#other) (54 tips)
 
 
 ## DB Models and Eloquent
