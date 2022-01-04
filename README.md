@@ -1089,7 +1089,7 @@ User::findOrFail([1, 2, 3, 99]);
 Tip given by [@timacdonald87](https://twitter.com/timacdonald87/status/1457499557684604930)
 
 ### Prunable trait to automatically remove models from your database
-You can use the Prunable trait to automatically remove models from your database. For example, you can permanently remove soft deleted models after a few days.
+New in Laravel 8.50: You can use the Prunable trait to automatically remove models from your database. For example, you can permanently remove soft deleted models after a few days.
 
 ```php
 class File extends Model
