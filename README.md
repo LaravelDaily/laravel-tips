@@ -12,11 +12,11 @@ Or you want the chinese version:
 
 ---
 
-__Update 3 January 2022__: Currently there are __260 tips__ divided into 14 sections.
+__Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (72 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (70 tips)
 - [Models Relations](#models-relations) (33 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (14 tips)
@@ -29,7 +29,7 @@ __Update 3 January 2022__: Currently there are __260 tips__ divided into 14 sect
 - [Factories](#factories) (6 tips)
 - [Log and debug](#log-and-debug) (5 tips)
 - [API](#api) (1 tips)
-- [Other](#other) (54 tips)
+- [Other](#other) (50 tips)
 
 
 ## DB Models and Eloquent
@@ -97,9 +97,7 @@ __Update 3 January 2022__: Currently there are __260 tips__ divided into 14 sect
 - [Date convention](#date-convention)
 - [Eloquent multiple upserts](#eloquent-multiple-upserts)
 - [Retrieve the Query Builder after filtering the results](#retrieve-the-query-builder-after-filtering-the-results)
-- [When you're counting related models, opt for aggregates](#when-youre-counting-related-models-opt-for-aggregates)
 - [Custom casts](#custom-casts)
-- [Don't trigger events when saving](#dont-trigger-events-when-saving)
 - [Order based on a related model's average or count](#order-based-on-a-related-models-average-or-count)
 - [Return transactions result](#return-transactions-result)
 - [Remove several global scopes from query](#remove-several-global-scopes-from-query)
@@ -1203,27 +1201,6 @@ if ($nthUsers->isNotEmpty()) {
 
 Tip given by [@RBilloir](https://twitter.com/RBilloir/status/1462529494917566465)
 
-### When you're counting related models, opt for aggregates
-When you're counting related models, opt for aggregates!<br>
-Thumbs down Using the `count()` method on a  collection of related models is a tad slower.
-```php
-// In your controller
-$user = User::withCount('articles');
-
-// Or, to add a constraint to the aggregate
-$user = User::withCount([
-    'articles' => fn ($query) => $query->live();
-]);
-
-// In your view
-$user->articles_count
-
-// Instead of
-$user->articles->count();
-```
-
-Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1462753602385108995)
-
 ### Custom casts
 You can create custom casts to have Laravel automatically format your Eloquent model data. Here's an example that capitalises a user's name when it is retrieved or changed.
 ```php
@@ -1250,21 +1227,6 @@ class User extends Model
 ```
 
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1462828232206659586)
-
-### Don't trigger events when saving
-You can use the `saveQuietly()` method on the model if you don't want to trigger model events.
-```php
-public function quietly()
-{
-    $user = User::findOrFail(1);
-    $user->name = 'Martin Joo';
-    
-    // Will not trigger any model event
-    $user->saveQuietly();
-}
-```
-
-Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1465289689154265091)
 
 ### Order based on a related model's average or count
 Did you ever need to order based on a related model's average or count?<br>
@@ -1301,7 +1263,17 @@ $invoice = DB::transaction(function () {
 
 ### Remove several global scopes from query
 When using Eloquent Global Scopes, you not only can use MULTIPLE scopes, but also remove certain scopes when you don't need them, by providing the array to `withoutGlobalScopes()`<br>
-[Link to docs](https://laravel.com/docs/8.x/eloquent#global-scopes)
+[Link to docs](https://laravel.com/docs/8.x/eloquent#removing-global-scopes)
+
+```php
+// Remove all of the global scopes...
+User::withoutGlobalScopes()->get();
+
+// Remove some of the global scopes...
+User::withoutGlobalScopes([
+    FirstScope::class, SecondScope::class
+])->get();
+```
 
 ### Order JSON column attribute
 With Eloquent you can order results by a JSON column attribute
@@ -1897,7 +1869,7 @@ $user->roles()->updateExistingPivot(
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1461414850341621760)
 
 ### Relation that will get the newest (or oldest) item
-In an Eloquent model can define a relation that will get the newest (or oldest) item of another relation.
+New in Laravel 8.42: In an Eloquent model can define a relation that will get the newest (or oldest) item of another relation.
 ```php
 public function historyItems(): HasMany
 {
@@ -3252,6 +3224,14 @@ when using Form Requests for validation, by default the validation error will re
 Just define the property of `$redirect` or `$redirectRoute`.<br>
 [Link to docs](https://laravel.com/docs/8.x/validation#customizing-the-redirect-location)
 
+```php
+// The URI that users should be redirected to if validation fails./
+protected $redirect = '/dashboard';
+
+// The route that users should be redirected to if validation fails.
+protected $redirectRoute = 'dashboard';
+```
+
 ### Mac validation rule
 New mac_address validation rule added in Laravel 8.77
 
@@ -3890,7 +3870,6 @@ Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501
 - [Extending Laravel classes](#extending-laravel-classes)
 - [Can feature](#can-feature)
 - [Temporary download URLs](#temporary-download-urls)
-- [Display the release version](#display-the-release-version)
 - [Dealing with deeply-nested arrays](#dealing-with-deeply-nested-arrays)
 - [Customize how your exceptions are rendered](#customize-how-your-exceptions-are-rendered)
 - [The tap helper](#the-tap-helper)
@@ -3900,13 +3879,10 @@ Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501
 - [Dust out your bloated route file](#dust-out-your-bloated-route-file)
 - [You can send e-mails to a custom log file](#you-can-send-e-mails-to-a-custom-log-file)
 - [Markdown made easy](#markdown-made-easy)
-- [Simplify if on a request with whenFilled() helper](#simplify-if-on-a-request-with-whenFilled-helper)
-- [Use observers if you need to listen to many events](#use-observers-if-you-need-to-listen-to-many-events)
-- [Make use of the 'abort', 'abort_if' and 'abort_unless' helpers](#make-use-of-the-abort-abort_if-and-abort_unless-helpers)
-- [Laravel's chain magic](#laravels-chain-magic)
+- [Simplify if on a request with whenFilled() helper](#simplify-if-on-a-request-with-whenfilled-helper)
 - [Pass arguments to middleware](#pass-arguments-to-middleware)
 - [Get value from session and forget](#get-value-from-session-and-forget)
-- [$request->date() method](#requestdate-method)
+- [$request->date() method](#request-date-method)
 - [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
 
 ### Localhost in .env
@@ -4362,6 +4338,9 @@ class MigrationsTest extends TestCase
     {
         // We just test if the migrations succeeds or throws an exception
         $this->expectNotToPerformAssertions();
+        
+        
+       Artisan::call('migrate:fresh', ['--path' => '/databse/migrations/task1']);
     }
 }
 ```
@@ -4436,11 +4415,6 @@ public function download(File $file)
 ```
 
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
-
-### Display the release version
-Want to display the release version in your Laravel app (e.g. footer)?
-
-Create a `version` key in `config/app.php`, then reference it in your Blade template with `{{ config('app.version') }}`
 
 ### Dealing with deeply-nested arrays
 Dealing with deeply-nested arrays can result in missing key / value exceptions. Fortunately, Laravel's data_get() helper makes this easy to avoid. It also supports deeply-nested objects.<br><br>
@@ -4645,56 +4619,6 @@ public function store(Request $request)
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1467886802711293959)
-
-### Use observers if you need to listen to many events
-If you need listening to many events from the same model in #laravel, a great option is to use #observers.<br>
-In this example, I refresh the user cache every update.
-
-```php
-class UserObserver
-{
-    public function updated(User $user)
-    {
-        UpdateUserCache::dispatch($user);
-    }
-}
-```
-
-Tip given by [@paulocastellano](https://twitter.com/paulocastellano/status/1468277233332756481)
-
-### Make use of the 'abort', 'abort_if' and 'abort_unless' helpers
-Make use of the `abort`, `abort_if` and `abort_unless` helpers to throw an HTTP exception and halt execution at any layer of your application.
-```php
-class DeletePodcastAction
-{
-    public function execure(User $user, Podcast $podcast)
-    {
-        if (! $podcast->owner($user)) {
-            abort(403, 'You do not own this podcast');
-        }
-    }
-}
-```
-
-Laravel also includes the usefull `abort_if` and `abort_unless` helpers, which we can use to simplify any conditionals
-```php
-abort_if($podcast->isLive(), 403, 'The podcast is currently streaming');
-
-abort_unless($podcast->owner($user), 403, 'You do not own this podcast');
-```
-
-Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1470423275658481673)
-
-### Laravel's chain magic
-```php
-// instead of...
-collect(request('sales'))->filter('qty');
-
-// you can...
-request()->collect('sales')->filter('qty');
-```
-
-Tip given by [@rcubitto](https://twitter.com/rcubitto/status/1471557340537180177)
 
 ### Pass arguments to middleware
 You can pass arguments to your middleware for specific routes by appending ':' followed by the value. For example, I'm enforcing different authentication methods based on the route using a single middleware.
