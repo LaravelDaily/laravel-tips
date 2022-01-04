@@ -4360,7 +4360,7 @@ class MigrationsTest extends TestCase
 {
     public function test_successful_foreign_key_in_migrations()
     {
-        // We just test if the migrations succeeds or thwors an exception
+        // We just test if the migrations succeeds or throws an exception
         $this->expectNotToPerformAssertions();
     }
 }
