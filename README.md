@@ -1167,7 +1167,7 @@ protected $dates = [
 Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1459174062132019212)
 
 ### Eloquent multiple upserts
-he upsert() method will insert or update multiple records.
+The upsert() method will insert or update multiple records.
 
 - First array: the values to insert or update
 - Second: unique identifier columns used in the select statement
