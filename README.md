@@ -3893,7 +3893,7 @@ Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501
 - [Display the release version](#display-the-release-version)
 - [Dealing with deeply-nested arrays](#dealing-with-deeply-nested-arrays)
 - [Customize how your exceptions are rendered](#customize-how-your-exceptions-are-rendered)
-- [The ta' helper](#the-tap-helper)
+- [The tap helper](#the-tap-helper)
 - [Reset all of the remaining time units](#reset-all-of-the-remaining-time-units)
 - [Scheduled commands in the console kernel can automatically email their output if something goes wrong](#scheduled-commands-in-the-console-kernel-can-automatically-email-their-output-if-something-goes-wrong)
 - [Be careful when constructing your custom filtered queries using GET parameters](#be-careful-when-constructing-your-custom-filtered-queries-using-get-parameters)
