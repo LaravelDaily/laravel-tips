@@ -1137,7 +1137,7 @@ $posts = Post::with('user')->get();
 // You can add a subselect to only retrieve the user's name...
 $posts = Post::withAggregate('user', 'name')->get();
 
-// THis will add a 'user_name' attribute to the POst instance:
+// This will add a 'user_name' attribute to the Post instance:
 $posts->first()->user_name;
 ```
 
