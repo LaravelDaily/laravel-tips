@@ -12,15 +12,15 @@ Or you want the chinese version:
 
 ---
 
-__Update 26 November 2021__: Currently there are __207 tips__ divided into 14 sections.
+__Update 1 January 2022__: Currently there are __209 tips__ divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
-- [Models Relations](#models-relations) (30 tips)
+- [Models Relations](#models-relations) (31 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (11 tips)
-- [Routing](#routing) (21 tips)
+- [Routing](#routing) (22 tips)
 - [Validation](#validation) (14 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
@@ -1082,6 +1082,7 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 - [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
+- [`whereHas()` multiple connections](#wherehas-multiple-connections)
 
 
 ### OrderBy on Eloquent relationships
@@ -1539,6 +1540,39 @@ $post->author()->is($user);
 ```
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
+
+### `whereHas()` multiple connections
+
+```php
+// User Model
+class User extends Model
+{
+    protected $connection = 'conn_1';
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+
+// Post Model
+class Post extends Model
+{
+    protected $connection = 'conn_2';
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}
+
+// wherehas()
+$posts = Post::whereHas('user', function ($query) use ($request) {
+      $query->from('db_name_conn_1.users')->where(...);
+  })->get();
+```
+
+Tip given by [@adityaricki](https://twitter.com/adityaricki2)
 
 ## Migrations
 
@@ -2018,6 +2052,7 @@ Tip given by [@freekmurze](https://twitter.com/freekmurze/status/145546666392774
 - [Override the route binding resolver for each of your models](#override-the-route-binding-resolver-for-each-of-your-models)
 - [If you need public URL but you want them to be secured](#if-you-need-public-url-but-you-want-them-to-be-secured)
 - [Using Gate in middleware method](#using-gate-in-middleware-method)
+- [Simple route with arrow function](#simple-route-with-arrow-function)
 
 ### Route group within a group
 
@@ -2462,6 +2497,21 @@ To do this, you just need to put inside the `can:` and the names of the necessar
 Route::put('/post/{post}', function (Post $post) {
     // The current user may update the post...
 })->middleware('can:update,post');
+```
+
+### Simple route with arrow function 
+You can use php arrow function in routing, without having to use anonymous function.
+
+To do this, you can use `fn() =>`, it looks easier.
+
+```php
+// Instead of
+Route::get('/example', function () {
+    return User::all();
+});
+
+// You can
+Route::get('/example', fn () => User::all());
 ```
 
 ## Validation
