@@ -4530,7 +4530,7 @@ Tip given by [@SteveTheBauman](https://twitter.com/SteveTheBauman/status/1448045
 ### Scheduled commands in the console kernel can automatically email their output if something goes wrong
 Did you know that any commands you schedule in the console kernel can automatically email their output if something goes wrong
 ```php
-$shedule
+$schedule
     ->command(PruneOrganizationsCOmmand::class)
     ->hourly()
     ->emailOutputOnFailure(config('mail.support'));
