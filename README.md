@@ -3829,7 +3829,7 @@ public function reorder(Request $request)
 ```
 
 ### Avoid N+1 queries in API resources
-ou can avoid N+1 queries in API resources by using the `whenLoaded()` method.<br>
+You can avoid N+1 queries in API resources by using the `whenLoaded()` method.<br>
 This will only append the department if it’s already loaded in the Employee model.<br>
 Without `whenLoaded()` there is always a query for the department
 ```php
