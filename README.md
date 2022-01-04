@@ -1113,7 +1113,7 @@ class File extends Model
 }
 
 // Add to Prune comment to your shedule (app/Console/Kernel.php)
-$shedule->command(PruneCommand::class)->daily();
+$schedule->command(PruneCommand::class)->daily();
 ```
 
 Tip by [@Philo01](https://twitter.com/Philo01/status/1457626443782008834)
