@@ -4453,7 +4453,7 @@ $value = $payload['request']['user']['name']
 
 Instead, use the `data_get()` helper to access a deeply-nested array item using dot notation.
 ```php
-$value = date_get($payload, 'request.user.name');
+$value = data_get($payload, 'request.user.name');
 ```
 
 We can also avoid any errors caused by missing properties by supplying a default value.
