@@ -16,7 +16,7 @@ __Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sect
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (70 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (71 tips)
 - [Models Relations](#models-relations) (33 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (14 tips)
@@ -104,6 +104,7 @@ __Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sect
 - [Order JSON column attribute](#order-JSON-column-attribute)
 - [Get single column's value from the first result](#get-single-columns-value-from-the-first-result)
 - [Check if altered value changed key](#check-if-altered-value-changed-key)
+- [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
 
 ### Reuse or clone query()
 
@@ -1321,6 +1322,32 @@ $user->originalIsEquivalent('name'); // false
 ```
 
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1475843987181379599)
+
+### New way to define accessor and mutator
+
+New way to define attribute accessors and mutators in Laravel 8.77:
+
+```php
+// Before, two-method approach
+public function setTitleAttribute($value)
+{
+    $this->attributes['title'] = strtolower($value);
+}
+public function getTitleAttribute($value)
+{
+    return strtoupper($value);
+}
+ 
+// New approach
+protected function title(): Attribute
+{
+    return new Attribute(
+        get: fn ($value) => strtoupper($value),
+        set: fn ($value) => strtolower($value),
+}
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1473697808456851466)
 
 ## Models Relations
 
@@ -3884,7 +3911,6 @@ Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501
 - [Get value from session and forget](#get-value-from-session-and-forget)
 - [$request->date() method](#request-date-method)
 - [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
-- [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
 
 ### Localhost in .env
 
@@ -4685,29 +4711,3 @@ $employees = Employee::paginate(10)->through(fn ($employee) => [
 ```
 
 Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1475073910383120399)
-
-### New way to define accessor and mutator
-
-New way to define attribute accessors and mutators in Laravel 8.77:
-
-```php
-// Before, two-method approach
-public function setTitleAttribute($value)
-{
-    $this->attributes['title'] = strtolower($value);
-}
-public function getTitleAttribute($value)
-{
-    return strtoupper($value);
-}
- 
-// New approach
-protected function title(): Attribute
-{
-    return new Attribute(
-        get: fn ($value) => strtoupper($value),
-        set: fn ($value) => strtolower($value),
-}
-```
-
-Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1473697808456851466)
