@@ -16,7 +16,7 @@ __Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sect
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (70 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (71 tips)
 - [Models Relations](#models-relations) (33 tips)
 - [Migrations](#migrations) (13 tips)
 - [Views](#views) (14 tips)
@@ -104,6 +104,7 @@ __Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sect
 - [Order JSON column attribute](#order-JSON-column-attribute)
 - [Get single column's value from the first result](#get-single-columns-value-from-the-first-result)
 - [Check if altered value changed key](#check-if-altered-value-changed-key)
+- [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
 
 ### Reuse or clone query()
 
@@ -1321,6 +1322,32 @@ $user->originalIsEquivalent('name'); // false
 ```
 
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1475843987181379599)
+
+### New way to define accessor and mutator
+
+New way to define attribute accessors and mutators in Laravel 8.77:
+
+```php
+// Before, two-method approach
+public function setTitleAttribute($value)
+{
+    $this->attributes['title'] = strtolower($value);
+}
+public function getTitleAttribute($value)
+{
+    return strtoupper($value);
+}
+ 
+// New approach
+protected function title(): Attribute
+{
+    return new Attribute(
+        get: fn ($value) => strtoupper($value),
+        set: fn ($value) => strtolower($value),
+}
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1473697808456851466)
 
 ## Models Relations
 
@@ -4413,7 +4440,6 @@ public function download(File $file)
     );
 }
 ```
-
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
 
 ### Dealing with deeply-nested arrays
