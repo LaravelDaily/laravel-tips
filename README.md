@@ -12,7 +12,7 @@ Or you want the chinese version:
 
 ---
 
-__Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sections.
+__Update 5 January 2022__: Currently there are __255 tips__ divided into 14 sections.
 
 ## Table of Contents
 
