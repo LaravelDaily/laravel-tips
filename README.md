@@ -12,24 +12,24 @@ Or you want the chinese version:
 
 ---
 
-__Update 1 January 2022__: Currently there are __209 tips__ divided into 14 sections.
+__Update 4 January 2022__: Currently there are __254 tips__ divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](#db-models-and-eloquent) (56 tips)
-- [Models Relations](#models-relations) (31 tips)
+- [DB Models and Eloquent](#db-models-and-eloquent) (70 tips)
+- [Models Relations](#models-relations) (33 tips)
 - [Migrations](#migrations) (13 tips)
-- [Views](#views) (11 tips)
+- [Views](#views) (14 tips)
 - [Routing](#routing) (22 tips)
-- [Validation](#validation) (14 tips)
+- [Validation](#validation) (17 tips)
 - [Collections](#collections) (6 tips)
 - [Auth](#auth) (5 tips)
 - [Mail](#mail) (5 tips)
 - [Artisan](#artisan) (5 tips)
-- [Factories](#factories) (4 tips)
-- [Log and debug](#log-and-debug) (4 tips)
-- [API](#api) (2 tips)
-- [Other](#other) (31 tips)
+- [Factories](#factories) (6 tips)
+- [Log and debug](#log-and-debug) (5 tips)
+- [API](#api) (1 tips)
+- [Other](#other) (50 tips)
 
 
 ## DB Models and Eloquent
@@ -91,6 +91,19 @@ __Update 1 January 2022__: Currently there are __209 tips__ divided into 14 sect
 - [Updating the model without dispatching events](#updating-the-model-without-dispatching-events)
 - [Periodic cleaning of models from obsolete records](#periodic-cleaning-of-models-from-obsolete-records)
 - [Immutable dates and casting to them](#immutable-dates-and-casting-to-them)
+- [The findOrFail method also accepts a list of ids](#the-findorfail-method-also-accepts-a-list-of-ids)
+- [Prunable trait to automatically remove models from your database](#prunable-trait-to-automatically-remove-models-from-your-database)
+- [withAggregate method](#withaggregate-method)
+- [Date convention](#date-convention)
+- [Eloquent multiple upserts](#eloquent-multiple-upserts)
+- [Retrieve the Query Builder after filtering the results](#retrieve-the-query-builder-after-filtering-the-results)
+- [Custom casts](#custom-casts)
+- [Order based on a related model's average or count](#order-based-on-a-related-models-average-or-count)
+- [Return transactions result](#return-transactions-result)
+- [Remove several global scopes from query](#remove-several-global-scopes-from-query)
+- [Order JSON column attribute](#order-JSON-column-attribute)
+- [Get single column's value from the first result](#get-single-columns-value-from-the-first-result)
+- [Check if altered value changed key](#check-if-altered-value-changed-key)
 
 ### Reuse or clone query()
 
@@ -1049,6 +1062,266 @@ class User extends Model
 
 Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 
+### The findOrFail method also accepts a list of ids
+The findOrFail method also accepts a list of ids. If any of these ids are not found, then it "fails".<br>
+Nice if you need to retrieve a specific set of models and don't want to have to check that the count you got was the count you expected
+
+```php
+User::create(['id' => 1]);
+User::create(['id' => 2);
+User::create(['id' => 3]);
+
+// Retrives the user...
+$user = User::findOrFail(1);
+
+// Throws a 404 because the user doesn't exist...
+User::findOrFail(99);
+
+// Retrives all 3 users...
+$users = User::findOrFail([1, 2, 3]);
+
+// Throws because it is unable to find *all* of the users
+User::findOrFail([1, 2, 3, 99]);
+```
+
+Tip given by [@timacdonald87](https://twitter.com/timacdonald87/status/1457499557684604930)
+
+### Prunable trait to automatically remove models from your database
+New in Laravel 8.50: You can use the Prunable trait to automatically remove models from your database. For example, you can permanently remove soft deleted models after a few days.
+
+```php
+class File extends Model
+{
+    use SoftDeletes;
+    
+    // Add Prunable trait
+    use Prunable;
+    
+    public function prunable()
+    {
+        // Files matching this query will be pruned
+        return static::query()->where('deleted_at', '<=', now()->subDays(14));
+    }
+    
+    protected function pruning()
+    {
+        // Remove the file from s3 before deleting the model
+        Storage::disk('s3')->delete($this->filename);
+    }
+}
+
+// Add PruneCommand to your schedule (app/Console/Kernel.php)
+$schedule->command(PruneCommand::class)->daily();
+```
+
+Tip by [@Philo01](https://twitter.com/Philo01/status/1457626443782008834)
+
+### withAggregate method
+Under the hood, the withAvg/withCount/withSum and other methods in Eloquent use the 'withAggregate' method. You can use this method to add a subselect based on a relationship
+
+```php
+// Eloquent Model
+class Post extends Model
+{
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+}
+
+// Instead of eager loading all users...
+$posts = Post::with('user')->get();
+
+// You can add a subselect to only retrieve the user's name...
+$posts = Post::withAggregate('user', 'name')->get();
+
+// This will add a 'user_name' attribute to the Post instance:
+$posts->first()->user_name;
+```
+
+Tip given by [@pascalbaljet](https://twitter.com/pascalbaljet/status/1457702666352594947)
+
+### Date convention
+Using the `something_at` convention instead of just a boolean in Laravel models gives you visibility into when a flag was changed – like when a product went live.
+
+```php
+// Migration
+Schema::table('products', function (Blueprint $table) {
+    $table->datetime('live_at')->nullable();
+});
+
+// In your model
+public function live()
+{
+    return !is_null($this->live_at);
+}
+
+// Also in your model
+protected $dates = [
+    'live_at'
+];
+```
+
+Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1459174062132019212)
+
+### Eloquent multiple upserts
+The upsert() method will insert or update multiple records.
+
+- First array: the values to insert or update
+- Second: unique identifier columns used in the select statement
+- Third: columns that you want to update if the record exists
+
+```php
+Flight::upsert([
+    ['departure' => 'Oakland', 'destination' => 'San Diego', 'price' => 99],
+    ['departure' => 'Chicago', 'destination' => 'New York', 'price' => 150],
+], ['departure', 'destination'], ['price']);
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1461591319516647426)
+
+### Retrieve the Query Builder after filtering the results
+To retrieve the Query Builder after filtering the results: you can use `->toQuery()`.<br>
+The method internally use the first model of the collection and a `whereKey` comparison on the Collection models.
+```php
+// Retrieve all logged_in users
+$loggedInUsers = User::where('logged_in', true)->get();
+
+// Filter them using a Collection method or php filtering
+$nthUsers = $loggedInUsers->nth(3);
+
+// You can't do this on the collection
+$nthUsers->update(/* ... */);
+
+// But you can retrieve the Builder using ->toQuery()
+if ($nthUsers->isNotEmpty()) {
+    $nthUsers->toQuery()->update(/* ... */);
+}
+```
+
+Tip given by [@RBilloir](https://twitter.com/RBilloir/status/1462529494917566465)
+
+### Custom casts
+You can create custom casts to have Laravel automatically format your Eloquent model data. Here's an example that capitalises a user's name when it is retrieved or changed.
+```php
+class CapitalizeWordsCast implements CastsAttributes
+{
+    public function get($model, string $key, $value, array $attributes)
+    {
+        return ucwords($value);
+    }
+    
+    public function set($model, string $key, $value, array $attributes)
+    {
+        return ucwords($value);
+    }
+}
+
+class User extends Model
+{
+    protected $casts = [
+        'name'  => CapitalizeWordsCast::class,
+        'email' => 'string',
+    ]; 
+}
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1462828232206659586)
+
+### Order based on a related model's average or count
+Did you ever need to order based on a related model's average or count?<br>
+It's easy with Eloquent!
+```php
+public function bestBooks()
+{
+    Book::query()
+        ->withAvg('ratings as average_rating', 'rating')
+        ->orderByDesc('average_rating');
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1466769691385335815)
+
+### Return transactions result
+If you have a DB transaction and want to return its result, there are at least two ways, see the example
+```php
+// 1. You can pass the parameter by reference
+$invoice = NULL;
+DB::transaction(function () use (&$invoice) {
+    $invoice = Invoice::create(...);
+    $invoice->items()->attach(...);
+})
+
+// 2. Or shorter: just return trasaction result
+$invoice = DB::transaction(function () {
+    $invoice = Invoice::create(...);
+    $invoice->items()->attach(...);
+    
+    return $invoice;
+});
+```
+
+### Remove several global scopes from query
+When using Eloquent Global Scopes, you not only can use MULTIPLE scopes, but also remove certain scopes when you don't need them, by providing the array to `withoutGlobalScopes()`<br>
+[Link to docs](https://laravel.com/docs/8.x/eloquent#removing-global-scopes)
+
+```php
+// Remove all of the global scopes...
+User::withoutGlobalScopes()->get();
+
+// Remove some of the global scopes...
+User::withoutGlobalScopes([
+    FirstScope::class, SecondScope::class
+])->get();
+```
+
+### Order JSON column attribute
+With Eloquent you can order results by a JSON column attribute
+```php
+// JSON column example:
+// bikes.settings = {"is_retired": false}
+$bikes = Bike::where('athlete_id', $this->athleteId)
+        ->orderBy('name')
+        ->orderByDesc('settings->is_retired')
+        ->get();
+```
+
+Tip given by [@brbcoding](https://twitter.com/brbcoding/status/1473353537983856643)
+
+### Get single column's value from the first result
+You can use `value()` method to get single column's value from the first result of a query
+
+```php
+// Instead of
+Integration::where('name', 'foo')->first()->active;
+
+// You can use
+Integration::where('name', 'foo')->value('active');
+
+// or this to throw an exception if no records found
+Integration::where('name', 'foo')->valueOrFail('active')';
+```
+
+Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1475572530215796744)
+
+### Check if altered value changed key
+Ever wanted to know if the changes you've made to a model have altered the value for a  key? No problem, simply reach for originalIsEquivalent.
+
+```php
+$user = User::first(); // ['name' => "John']
+
+$user->name = 'John';
+
+$user->originalIsEquivalent('name'); // true
+
+$user->name = 'David'; // Set directly
+$user->fill(['name' => 'David']); // Or set via fill
+
+$user->originalIsEquivalent('name'); // false
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1475843987181379599)
+
 ## Models Relations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](#db-models-and-eloquent) ➡️ [Next (Migrations)](#migrations)
@@ -1083,7 +1356,8 @@ Tip given by [@PascalBaljet](https://twitter.com/pascalbaljet)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 - [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
 - [`whereHas()` multiple connections](#wherehas-multiple-connections)
-
+- [Update an existing pivot record](#update-an-existing-pivot-record)
+- [Relation that will get the newest (or oldest) item](#relation-that-will-get-the-newest-or-oldest-item)
 
 ### OrderBy on Eloquent relationships
 
@@ -1574,6 +1848,44 @@ $posts = Post::whereHas('user', function ($query) use ($request) {
 
 Tip given by [@adityaricki](https://twitter.com/adityaricki2)
 
+### Update an existing pivot record
+If you want to update an existing pivot record on the table, use `updateExistingPivot` instead of `syncWithPivotValues`.
+
+```php
+// Migrations
+Schema::create('role_user', function ($table) {
+    $table->unsignedId('user_id');
+    $table->unsignedId('role_id');
+    $table->timestamp('assigned_at');
+})
+
+// first param for the record id
+// second param for the pivot records
+$user->roles()->updateExistingPivot(
+    $id, ['assigned_at' => now()],    
+);
+```
+
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1461414850341621760)
+
+### Relation that will get the newest (or oldest) item
+New in Laravel 8.42: In an Eloquent model can define a relation that will get the newest (or oldest) item of another relation.
+```php
+public function historyItems(): HasMany
+{
+    return $this
+        ->hasMany(ApplicationHealthCheckHistoryItem::class)
+        ->orderByDesc('created_at');
+}
+
+public function latestHistoryItem(): HasOne
+{
+    return $this
+        ->hasOne(ApplicationHealthCheckHistoryItem::class)
+        ->latestOfMany();
+}
+```
+
 ## Migrations
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Models Relations)](#models-relations) ➡️ [Next (Views)](#views)
@@ -1840,6 +2152,10 @@ Tip given by [@dipeshsukhia](https://github.com/dipeshsukhia)
 - [Use Laravel Blade-X variable binding to save even more space](#use-laravel-blade-x-variable-binding-to-save-even-more-space)
 - [Blade components props](#blade-components-props)
 - [Blade Autocomplete typehint](#blade-autocomplete-typehint)
+- [Component Syntax Tip](#component-syntax-tip)
+- [Automatically highlight nav links](#automatically-highlight-nav-links)
+- [Cleanup loops](#cleanup-loops)
+- [Simple way to tidy up your Blade views](#simple-way-to-tidy-up-your-blade-views)
 
 ### $loop variable in foreach
 
@@ -2026,6 +2342,118 @@ Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825
 ```
 
 Tip given by [@freekmurze](https://twitter.com/freekmurze/status/1455466663927746560)
+
+### Component Syntax Tip
+Did you know that if you pass colon (:) before the component parameter, you can directly pass variables without print statement `{{ }}`?
+```php
+<x-navbar title="{{ $title }}"/>
+
+// you can do instead
+
+<x-navbar :title="$title"/>
+```
+
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1457056634363072520)
+
+### Automatically highlight nav links
+Automatically highlight nav links when exact URL matches, or pass a path or route name pattern.<br>
+A Blade component with request and CSS classes helpers makes it ridiculously simple to show active/inactive state.
+
+```php
+class NavLink extends Component
+{
+    public function __construct($href, $active = null)
+    {
+        $this->href = $href;
+        $this->active = $active ?? $href;        
+    }
+    
+    public function render(): View
+    {
+        $classes = ['font-medium', 'py-2', 'text-primary' => $this->isActive()];
+        
+        return view('components.nav-link', [
+            'class' => Arr::toCssClasses($classes);
+        ]);
+    }
+    
+    protected function isActive(): bool
+    {
+        if (is_bool($this->active)) {
+            return $this->active;
+        }
+        
+        if (request()->is($this->active)) {
+            return true;
+        }
+        
+        if (request()->fullUrlIs($this->active)) {
+            return true;
+        }
+        
+        return request()->routeIs($this->active);
+    }
+}
+```
+
+```blade
+<a href="{{ $href }}" {{ $attributes->class($class) }}>
+    {{ $slot }}
+</a>
+```
+
+```blade
+<x-nav-link :href="route('projects.index')">Projects</x-nav-link>
+<x-nav-link :href="route('projects.index')" active="projects.*">Projects</x-nav-link>
+<x-nav-link :href="route('projects.index')" active="projects/*">Projects</x-nav-link>
+<x-nav-link :href="route('projects.index')" :active="$tab = 'projects'">Projects</x-nav-link>
+```
+
+Tip given by [@mpskovvang](https://twitter.com/mpskovvang/status/1459646197635944455)
+
+### Cleanup loops
+Did you know the Blade `@each` directive can help cleanup loops in your templates?
+```blade
+// good
+@foreach($item in $items)
+    <div>
+        <p>Name: {{ $item->name }}
+        <p>Price: {{ $item->price }}
+    </div>
+@endforeach
+
+// better (HTML extracted into partial)
+@each('partials.item', $items, 'item')
+```
+
+Tip given by [@kirschbaum_dev](https://twitter.com/kirschbaum_dev/status/1463205294914297861)
+
+### Simple way to tidy up your Blade views
+A simple way to tidy up your Blade views!<br>
+Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
+```blade
+<!-- if/loop combination -->
+@if ($orders->count())
+    @foreach($orders as $order)
+        <div>
+            {{ $order->id }}
+        </div>
+    @endforeach
+@else
+    <p>You haven't placed any orders yet.</p>
+@endif
+
+<!-- Forelse alternative -->
+@forelse($orders as $order)
+    <div>
+        {{ $order->id }}
+    </div>
+@empty
+    <p>You haven't placed any orders yet.</p>
+@endforelse
+```
+
+Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1465674086022107137)
 
 ## Routing
 
@@ -2532,6 +2960,9 @@ Route::get('/example', fn () => User::all());
 - [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#ruleunique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
 - [Validator::sometimes() method allows us to define when a validation rule should be applied](#validatorsometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
 - [Array elements validation](#array-elements-validation)
+- [Password::defaults method](#passworddefaults-method)
+- [Form Requests for validation redirection](#form-requests-for-validation-redirection)
+- [Mac validation rule](#mac-validation-rule)
 
 ### Image validation
 
@@ -2763,6 +3194,54 @@ $rules = [
 
 Tip given by [HydroMoon](https://github.com/HydroMoon)
 
+### Password::defaults method
+You can enforce specific rules when validating user-supplied passwords by using the Password::defaults method. It includes options for requiring letters, numbers, symbols, and more.
+```php
+class AppServiceProvider
+{
+    public function boot(): void
+    {
+        Password::defaults(function () {
+            return Password::min(12)
+                ->letters()
+                ->numbers()
+                ->symbols()
+                ->mixedCase()
+                ->uncompromised();
+        })
+    }
+}
+
+request()->validate([
+    ['password' => ['required', Password::defaults()]]
+])
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1463190613260603395)
+
+### Form Requests for validation redirection
+when using Form Requests for validation, by default the validation error will redirect back to the previous page, but you can override it.<br>
+Just define the property of `$redirect` or `$redirectRoute`.<br>
+[Link to docs](https://laravel.com/docs/8.x/validation#customizing-the-redirect-location)
+
+```php
+// The URI that users should be redirected to if validation fails./
+protected $redirect = '/dashboard';
+
+// The route that users should be redirected to if validation fails.
+protected $redirectRoute = 'dashboard';
+```
+
+### Mac validation rule
+New mac_address validation rule added in Laravel 8.77
+
+```php
+$trans = $this->getIlluminateArrayTranslator();
+$validator = new Validator($trans, ['mac' => '01-23-45-67-89-ab'], ['mac' => 'mac_address']);
+$this->assertTrue($validator->passes());
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1475500006673027072)
 
 ## Collections
 
@@ -2774,6 +3253,7 @@ Tip given by [HydroMoon](https://github.com/HydroMoon)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
 - [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
 - [Higher order collection methods](#higher-order-collection-methods)
+- 
 
 ### Don’t Filter by NULL in Collections
 
@@ -3133,6 +3613,8 @@ Route::get('/foo', function () {
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
 - [Override values and apply custom login to them](#override-values-and-apply-custom-login-to-them)
 - [Using factories with relationships](#using-factories-with-relationships)
+- [Create models without dispatching any events](#create-models-without-dispatching-any-events)
+- [Useful for() method](#useful-for-method)
 
 ### Factory callbacks
 
@@ -3185,6 +3667,33 @@ User::factory()->has(Post::factory()->count(3))->create();
 
 Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)
 
+### Create models without dispatching any events
+Sometimes you may wish to `update` a given model without dispatching any events. You may accomplish this using the `updateQuietly` method
+```php
+Post::factory()->createOneQuietly();
+
+Post::factory()->count(3)->createQuietly();
+
+Post::factory()->createManyQuietly([
+    ['message' => 'A new comment'],
+    ['message' => 'Another new comment'],
+]);
+```
+
+### Useful for() method
+The Laravel factory has a very useful `for()` method. You can use it to create `belongsTo()` relationships.
+```php
+public function run()
+{
+    Product::factory()
+        ->count(3);
+        ->for(Category::factory()->create())
+        ->create();    
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1461002439629361158)
+
 ## Log and debug
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Factories)](#factories) ➡️ [Next (API)](#api)
@@ -3193,6 +3702,7 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14414473563234304
 - [More convenient DD](#more-convenient-dd)
 - [Log with context](#log-with-context)
 - [Quickly output an Eloquent query in its SQL form](#quickly-output-an-eloquent-query-in-its-sql-form)
+- [Log all the database queries during development](#log-all-the-database-queries-during-development)
 
 ### Logging with parameters
 
@@ -3243,6 +3753,20 @@ dd($invoices)
 
 Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210)
 
+### Log all the database queries during development
+If you want to log all the database queries during development add this snippet to your AppServiceProvider
+```php
+public function boot()
+{
+    if (App::environment('local')) {
+        DB::listen(function ($query) {
+            logger(Str::replaceArray('?', $query->bindings, $query->sql));
+        });
+    }
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473262634405449730)
 
 ## API
 
@@ -3250,6 +3774,7 @@ Tip given by [@devThaer](https://twitter.com/devThaer/status/1438816135881822210
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
+- [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
 
 ### API Resources: With or Without "data"?
 
@@ -3282,6 +3807,28 @@ public function reorder(Request $request)
     return response()->noContent();
 }
 ```
+
+### Avoid N+1 queries in API resources
+You can avoid N+1 queries in API resources by using the `whenLoaded()` method.<br>
+This will only append the department if it’s already loaded in the Employee model.<br>
+Without `whenLoaded()` there is always a query for the department
+```php
+class EmplyeeResource extends JsonResource
+{
+    public function toArray($request): array
+    {
+        return [
+            'id' => $this->uuid,
+            'fullName' => $this->full_name,
+            'email' => $this->email,
+            'jobTitle' => $this->job_title,
+            'department' => DepartmentResource::make($this->whenLoaded('department')),
+        ];
+    }
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501071362)
 
 ## Other
 
@@ -3318,6 +3865,25 @@ public function reorder(Request $request)
 - [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
 - [Schedule regular shell commands](#schedule-regular-shell-commands)
 - [HTTP client request without verifying](#http-client-request-without-verifying)
+- [Test that doesn't assert anything ](#test-that-doesnt-assert-anything)
+- ["Str::mask()" method](#strmask-method)
+- [Extending Laravel classes](#extending-laravel-classes)
+- [Can feature](#can-feature)
+- [Temporary download URLs](#temporary-download-urls)
+- [Dealing with deeply-nested arrays](#dealing-with-deeply-nested-arrays)
+- [Customize how your exceptions are rendered](#customize-how-your-exceptions-are-rendered)
+- [The tap helper](#the-tap-helper)
+- [Reset all of the remaining time units](#reset-all-of-the-remaining-time-units)
+- [Scheduled commands in the console kernel can automatically email their output if something goes wrong](#scheduled-commands-in-the-console-kernel-can-automatically-email-their-output-if-something-goes-wrong)
+- [Be careful when constructing your custom filtered queries using GET parameters](#be-careful-when-constructing-your-custom-filtered-queries-using-get-parameters)
+- [Dust out your bloated route file](#dust-out-your-bloated-route-file)
+- [You can send e-mails to a custom log file](#you-can-send-e-mails-to-a-custom-log-file)
+- [Markdown made easy](#markdown-made-easy)
+- [Simplify if on a request with whenFilled() helper](#simplify-if-on-a-request-with-whenfilled-helper)
+- [Pass arguments to middleware](#pass-arguments-to-middleware)
+- [Get value from session and forget](#get-value-from-session-and-forget)
+- [$request->date() method](#request-date-method)
+- [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
 
 ### Localhost in .env
 
@@ -3762,3 +4328,360 @@ return Http::withOptions([
 
 Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
 
+### Test that doesn't assert anything 
+Test that doesn't assert anything, just launch something which may or may not throw an exception
+
+```php
+class MigrationsTest extends TestCase
+{
+    public function test_successful_foreign_key_in_migrations()
+    {
+        // We just test if the migrations succeeds or throws an exception
+        $this->expectNotToPerformAssertions();
+        
+        
+       Artisan::call('migrate:fresh', ['--path' => '/databse/migrations/task1']);
+    }
+}
+```
+
+### "Str::mask()" method
+Laravel 8.69 released with "Str::mask()" method which masks a portion of string with a repeated character
+
+```php
+class PasswordResetLinkController extends Controller
+{
+    public function sendResetLinkResponse(Request $request)
+    {
+        $userEmail = User::where('email', $request->email)->value('email'); // username@domain.com
+        
+        $maskedEmail = Str::mask($userEmail, '*', 4); // user***************
+        
+        // If needed, you provide a negative number as the third argument to the mask method,
+        // which will instruct the method to begin masking at the given distance from the end of the string
+        
+        $maskedEmail = Str::mask($userEmail, '*', -16, 6); // use******domain.com
+    }
+}
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1457029765634744322)
+
+### Extending Laravel classes
+There is a method called macro on a lot of built-in Laravel classes. For example Collection, Str, Arr, Request, Cache, File, and so on.<br>
+You can define your own methods on these classes like this:
+
+```php
+Str::macro('lowerSnake', function (string $str) {
+    return Str::lower(Str::snake($str));
+});
+
+// Will return: "my-string"
+Str::lowerSnake('MyString');
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1457635252466298885)
+
+### Can feature
+If you are running Laravel `v8.70`, you can chain `can()` method directly instead of `middleware('can:..')`
+
+```php
+// instead of
+Route::get('users/{user}/edit', function (User $user) {
+    ...
+})->middleware('can:edit,user');
+
+// you can do this
+Route::get('users/{user}/edit', function (User $user) {
+    ...
+})->can('edit' 'user');
+
+// PS: you must write UserPolicy to be able to do this in both cases
+```
+
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1458179766192853001)
+
+### Temporary download URLs
+You can use temporary download URLs for your cloud storage resources to prevent unwanted access. For example, when a user wants to download a file, we redirect to an s3 resource but have the URL expire in 5 seconds.
+
+```php
+public function download(File $file)
+{
+    // Initiate file download by redirecting to a temporary s3 URL that expires in 5 seconds
+    return redirect()->to(
+        Storage::disk('s3')->temporaryUrl($file->name, now()->addSeconds(5))
+    );
+}
+```
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
+
+### Dealing with deeply-nested arrays
+Dealing with deeply-nested arrays can result in missing key / value exceptions. Fortunately, Laravel's data_get() helper makes this easy to avoid. It also supports deeply-nested objects.<br><br>
+
+Deeply-nested arrays are a nightmare when they may be missing properties that you need.<br>
+In the example below, if either `request`, `user` or `name` are missing then you'll get errors.
+```php
+$value = $payload['request']['user']['name']
+```
+
+Instead, use the `data_get()` helper to access a deeply-nested array item using dot notation.
+```php
+$value = data_get($payload, 'request.user.name');
+```
+
+We can also avoid any errors caused by missing properties by supplying a default value.
+```php
+$value = data_get($payload, 'request.user.name', 'John');
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1460970984568094722)
+
+### Customize how your exceptions are rendered
+You can customize how your exceptions are rendered by adding a 'render' method to your exception.<br>
+For example, this allows you to return JSON instead of a Blade view when the request expects JSON.
+
+```php
+abstract class BaseException extends Exception
+{
+    public function render(Request $request)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'meta' => [
+                    'valid'   => false,
+                    'status'  => static::ID,
+                    'message' => $this->getMessage(),
+                ],
+            ], $this->getCode());
+        }
+        
+        return response()->view('errors.' . $this->getCode(), ['exception' => $this], $this->getCode());
+    }
+}
+```
+
+```php
+class LicenseExpiredException extends BaseException
+{
+    public const ID = 'EXPIRED';
+    protected $code = 401;
+    protected $message = 'Given license has expired.'
+}
+```
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1461331239240192003/)
+
+### The tap helper
+The `tap` helper is a great way to remove a separate return statement after calling a method on an object. Makes things nice and clean
+```php
+// without tap
+$user->update(['name' => 'John Doe']);
+
+return $user;
+
+// with tap()
+return tap($user)->update(['name' => 'John Doe']);
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1462058149314183171)
+
+### Reset all of the remaining time units
+You can insert an exclamation into the `DateTime::createFromFormat` method to reset all of the remaining time units
+```php
+// 2021-10-12 21:48:07.0
+DateTime::createFromFormat('Y-m-d', '2021-10-12');
+
+// 2021-10-12 00:00:00.0
+DateTime::createFromFormat('!Y-m-d', '2021-10-12');
+
+2021-10-12 21:00:00.0
+DateTime::createFromFormat('!Y-m-d H', '2021-10-12');
+```
+
+Tip given by [@SteveTheBauman](https://twitter.com/SteveTheBauman/status/1448045021006082054)
+
+### Scheduled commands in the console kernel can automatically email their output if something goes wrong
+Did you know that any commands you schedule in the console kernel can automatically email their output if something goes wrong
+```php
+$schedule
+    ->command(PruneOrganizationsCOmmand::class)
+    ->hourly()
+    ->emailOutputOnFailure(config('mail.support'));
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1463160409905455104)
+
+### Be careful when constructing your custom filtered queries using GET parameters
+```php
+if (request()->has('since')) {
+    // example.org/?since=
+    // fails with illegal operator and value combination
+    $query->whereDate('created_at', '<=', request('since'));
+}
+
+if (request()->input('name')) {
+    // example.org/?name=0
+    // fails to apply query filter because evaluates to false
+    $query->where('name', request('name'));
+}
+
+if (request()->filled('key')) {
+    // correct way to check if get parameter has value
+}
+```
+
+Tip given by [@mc0de](https://twitter.com/mc0de/status/1465209203472146434)
+
+### Dust out your bloated route file
+Dust out your bloated route file and split it up to keep things organized
+```php
+class RouteServiceProvider extends ServiceProvider
+{
+    public function boot()
+    {
+        $this->routes(function () {
+            Route::prefix('api/v1')
+                ->middleware('api')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/api.php'));
+                
+            Route::prefix('webhooks')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/webhooks.php'));
+    
+            Route::middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/web.php'));
+                
+            if ($this->app->environment('local')) {
+                Route::middleware('web')
+                    ->namespace($this->namespace)
+                    ->group(base_path('routes/local.php'));
+            }
+        });
+    }
+}
+```
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1466068376330153984)
+
+### You can send e-mails to a custom log file
+In Laravel you can send e-mails to a custom log file.
+
+You can set your environment variables like this:
+
+```
+MAIL_MAILER=log
+MAIL_LOG_CHANNEL=mail
+```
+
+And also configure your log channel:
+```php
+'mail' => [
+    'driver' => 'single',
+    'path' => storage_path('logs/mails.log'),
+    'level' => env('LOG_LEVEL', 'debug'),
+],
+```
+
+Now you have all your e-mails in /logs/mails.log<br>
+It's a good use case to quickly test your mails.
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1466362508571131904)
+
+### Markdown made easy
+Laravel provides an interface to convert markdown in HTML out of the box, without the need to install new composer packages.
+```php
+$html = Str::markdown('# Changelogfy')
+```
+
+Output:
+```
+<h1>Changelogfy</h1>
+```
+
+Tip given by [@paulocastellano](https://twitter.com/paulocastellano/status/1467478502400315394)
+
+### Simplify if on a request with whenFilled() helper
+We often write if statements to check if a value is present on a request or not.<br>
+You can simplify it with the `whenFilled()` helper.
+
+```php
+public function store(Request $request)
+{
+    $request->whenFilled('status', function (string $status)) {
+        // Do something amazing with the status here!
+    }, function () {
+        // This it called when status is not filled
+    });
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1467886802711293959)
+
+### Pass arguments to middleware
+You can pass arguments to your middleware for specific routes by appending ':' followed by the value. For example, I'm enforcing different authentication methods based on the route using a single middleware.
+```php
+Route::get('...')->middleware('auth.license');
+Route::get('...')->middleware('auth.license:bearer');
+Route::get('...')->middleware('auth.license:basic');
+```
+
+```php
+class VerifyLicense
+{
+    public function  handle(Request $request, Closure $next, $type = null)
+    {
+        $licenseKey  = match ($type) {
+            'basic'  => $request->getPassword(),
+            'bearer' => $request->bearerToken(),
+            default  => $request->get('key')
+        };
+        
+        // Verify license and return response based on the authentication type
+    }
+}
+```
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1471864630486179840)
+
+### Get value from session and forget
+If you need to grab something from the Laravel session, then forget it immediately, consider using `session()->pull($value)`. It completes both steps for you.
+
+```php
+// Before
+$path = session()->get('before-github-redirect', '/components');
+
+session()->forget('before-github-redirect');
+
+return redirect($path);
+
+// After
+return redirect(session()->pull('before-github-redirect', '/components'))
+```
+
+Tip given by [@jasonlbeggs](https://twitter.com/jasonlbeggs/status/1471905631619715077)
+
+### $request->date() method
+New in this week's Laravel v8.77: `$request->date()` method.<br>
+Now you don't need to call Carbon manually, you can do something like: `$post->publish_at = $request->date('publish_at')->addHour()->startOfHour();`<br>
+[Link to full pr](https://github.com/laravel/framework/pull/39945) by [@DarkGhostHunter](https://twitter.com/DarkGhostHunter)
+
+### Use through instead of map when using pagination
+When you want to map paginated data and return only a subset of the fields, use `through` rather than `map`. The `map` breaks the pagination object and changes it's identity. While, `through` works on the paginated data itself
+```php
+// Don't: Mapping paginated data
+$employees = Employee::paginate(10)->map(fn ($employee) => [
+    'id' => $employee->id,
+    'name' => $employee->name
+])
+
+// Do: Mapping paginated data
+$employees = Employee::paginate(10)->through(fn ($employee) => [
+    'id' => $employee->id,
+    'name' => $employee->name
+])
+```
+
+Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1475073910383120399)
