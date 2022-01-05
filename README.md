@@ -4698,7 +4698,7 @@ public function setTitleAttribute($value)
 }
 public function getTitleAttribute($value)
 {
-    return strtolower($value);
+    return strtoupper($value);
 }
  
 // New approach
