@@ -2969,6 +2969,24 @@ Route::get('/example', function () {
 Route::get('/example', fn () => User::all());
 ```
 
+### Laravel UI Routes
+More options & readable.
+
+```php
+// Default
+Auth::routes();
+
+// Tip 
+Auth::routes([
+    'login'    => true,
+    'logout'   => true,
+    'register' => true,
+    'reset'    => true,  // for resetting passwords
+    'confirm'  => false, // for additional password confirmations
+    'verify'   => false, // for email verification
+]);
+```
+
 ## Validation
 
 ⬆️ [Go to top](#laravel-tips) ⬅️ [Previous (Routing)](#routing) ➡️ [Next (Collections)](#collections)
