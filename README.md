@@ -2538,8 +2538,9 @@ Route::domain('{username}.workspace.com')->group(function () {
 
 ### What's behind the routes?
 
-Want to know what routes are actually behind `Auth::routes()`?
-From Laravel 7, it’s in a separate package, so check the file `/vendor/laravel/ui/src/AuthRouteMethods.php`.
+If you use [Laravel UI package](https://github.com/laravel/ui), you likely want to know what routes are actually behind `Auth::routes()`?
+
+You can check the file `/vendor/laravel/ui/src/AuthRouteMethods.php`.
 
 ```php
 public function auth()
@@ -2570,7 +2571,26 @@ public function auth()
 }
 ```
 
-Before Laravel 7, check the file `/vendor/laravel/framework/src/illuminate/Routing/Router.php`.
+The default use of that function is simply this:
+
+```php
+Auth::routes(); // no parameters
+```
+
+But you can provide parameters to enable o disable certain routes:
+
+```php
+Auth::routes([
+    'login'    => true,
+    'logout'   => true,
+    'register' => true,
+    'reset'    => true,  // for resetting passwords
+    'confirm'  => false, // for additional password confirmations
+    'verify'   => false, // for email verification
+]);
+```
+
+Tip is based on [suggestion](https://github.com/LaravelDaily/laravel-tips/pull/57) by [MimisK13](https://github.com/MimisK13)
 
 ### Route Model Binding: You can define a key
 
