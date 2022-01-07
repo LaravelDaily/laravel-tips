@@ -2577,7 +2577,7 @@ The default use of that function is simply this:
 Auth::routes(); // no parameters
 ```
 
-But you can provide parameters to enable o disable certain routes:
+But you can provide parameters to enable or disable certain routes:
 
 ```php
 Auth::routes([
