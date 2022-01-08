@@ -1,6 +1,6 @@
 ## Factories
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Artisan)](Artisan.md) ➡️ [Next (Log and debug)](Log-and-Debug.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Artisan)](Artisan.md) ➡️ [Next (Log and debug)](Log_and_Debug.md)
 
 - [Factory callbacks](#factory-callbacks)
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
