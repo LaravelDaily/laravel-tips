@@ -27,6 +27,6 @@ __Update 5 January 2022__: Currently there are __255 tips__ divided into 14 sect
 - [Mail](Mail.md) (5 tips)
 - [Artisan](Artisan.md) (5 tips)
 - [Factories](Factories.md) (6 tips)
-- [Log and debug](Log_and_debug.md) (5 tips)
+- [Log and debug](Log_and_Debug.md) (5 tips)
 - [API](Api.md) (1 tips)
 - [Other](Other.md) (50 tips)
