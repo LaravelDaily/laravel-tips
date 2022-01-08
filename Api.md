@@ -1,6 +1,6 @@
 ## API
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Log and debug)](Log-and-Debug.md) ➡️ [Next (Other)](Other.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Log and debug)](Log_and_Debug.md) ➡️ [Next (Other)](Other.md)
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
