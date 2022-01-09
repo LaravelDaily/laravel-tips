@@ -36,7 +36,6 @@
 - [Reduce Memory](#reduce-memory)
 - [Force query without $fillable/$guarded](#force-query-without-fillableguarded)
 - [3-level structure of parent-children](#3-level-structure-of-parent-children)
-- [Use find to search multiple records](#use-find-to-search-multiple-records)
 - [Perform any action on failure](#perform-any-action-on-failure)
 - [Check if record exists or show 404](#check-if-record-exists-or-show-404)
 - [Abort if condition failed](#abort-if-condition-failed)
@@ -308,6 +307,11 @@ Eloquent method `find()` may accept multiple parameters, and then it returns a C
 $user = User::find(1);
 // Will return Eloquent Collection
 $users = User::find([1,2,3]);
+```
+```php
+return Product::whereIn('id', $this->productIDs)->get();
+// You can do this
+return Product::find($this->productIDs)
 ```
 
 Tip given by [@tahiriqbalnajam](https://twitter.com/tahiriqbalnajam/status/1436120403655671817)
@@ -624,17 +628,6 @@ class Category extends Model
         </li>
     @endforeach           
 </ul>
-```
-
-### Use find to search multiple records
-You can use Eloquent `find()` not only to search for one record but also to return a collection of multiple records by their IDs.
-Instead of
-```php
-return Product::whereIn('id', $this->productIDs)->get();
-```
-You can do this
-```php
-return Product::find($this->productIDs)
 ```
 
 ### Perform any action on failure
