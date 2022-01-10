@@ -98,8 +98,8 @@ For solve this issue, we can query multiple time by reusing this `$query` object
 So, We need to clone this `$query` before doing any `$query` modification action.
 
 ```php
-$active_products = (clone $query)->where('status', 1)->get(); // it will not modify the $query
-$inactive_products = (clone $query)->where('status', 0)->get(); // so we will get inactive products from $query
+$active_products = $query->clone()->where('status', 1)->get(); // it will not modify the $query
+$inactive_products = $query->clone()->where('status', 0)->get(); // so we will get inactive products from $query
 
 ```
 
