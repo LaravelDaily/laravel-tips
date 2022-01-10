@@ -117,8 +117,8 @@ $inactive_products = $query->where('status', 0)->get(); // 所以这里我们将
 为了解决这个问题,我们可以通过重用这个`$query`对象来查询多次。因此我们在做任何对`$query`修改操作的时候需要克隆这个`$query`。
 
 ```php
-$active_products = (clone $query)->where('status', 1)->get(); // it will not modify the $query
-$inactive_products = (clone $query)->where('status', 0)->get(); // so we will get inactive products from $query
+$active_products = $query->clone()->where('status', 1)->get(); // it will not modify the $query
+$inactive_products = $query->clone()->where('status', 0)->get(); // so we will get inactive products from $query
 
 ```
 
