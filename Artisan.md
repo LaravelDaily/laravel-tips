@@ -7,7 +7,7 @@
 - [Artisan command help](#artisan-command-help)
 - [Exact Laravel version](#exact-laravel-version)
 - [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
-
+- [Generate APP_KEY](#generate-new-app-key)
 
 ### Artisan command parameters
 
@@ -29,6 +29,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ### Maintenance Mode
 
 If you want to enable maintenance mode on your page, execute the down Artisan command:
+
 ```bash
 php artisan down
 ```
@@ -36,6 +37,7 @@ php artisan down
 Then people would see default 503 status page.
 
 You may also provide flags, in Laravel 8:
+
 - the path the user should be redirected to
 - the view that should be prerendered
 - secret phrase to bypass maintenance mode
@@ -47,6 +49,7 @@ php artisan down --redirect="/" --render="errors::503" --secret="1630542a-246b-4
 ```
 
 Before Laravel 8:
+
 - message that would be shown
 - retry page reload every X seconds
 - still allow the access to some IP address
@@ -56,6 +59,7 @@ php artisan down --message="Upgrading Database" --retry=60 --allow=127.0.0.1
 ```
 
 When you've done the maintenance work, just run:
+
 ```bash
 php artisan up
 ```
@@ -102,4 +106,12 @@ Route::get('/foo', function () {
 
     //
 });
+```
+
+### Generate new App Key
+
+You can generate new `APP_KEY` by running this artisan command
+
+```
+ php artisan key:generate
 ```
