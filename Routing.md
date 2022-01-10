@@ -24,6 +24,7 @@
 - [If you need public URL but you want them to be secured](#if-you-need-public-url-but-you-want-them-to-be-secured)
 - [Using Gate in middleware method](#using-gate-in-middleware-method)
 - [Simple route with arrow function](#simple-route-with-arrow-function)
+- [Return a view directly from a route](#route-view)
 
 ### Route group within a group
 
@@ -503,4 +504,13 @@ Route::get('/example', function () {
 
 // You can
 Route::get('/example', fn () => User::all());
+```
+
+### Route view 
+You can use `Route::view($uri , $bladePage)` to return a view directly, without having to use controller function.
+
+
+```php
+//this will return home.blade.php view
+Route::view('/home', 'home');
 ```
