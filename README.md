@@ -16,7 +16,7 @@ __Update 11 January 2022__: Currently there are __256 tips__ divided into 14 sec
 
 ## Table of Contents
 
-- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (70 tips)
+- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (71 tips)
 - [Models Relations](Models_Relations.md) (33 tips)
 - [Migrations](Migrations.md) (13 tips)
 - [Views](Views.md) (14 tips)
@@ -29,4 +29,4 @@ __Update 11 January 2022__: Currently there are __256 tips__ divided into 14 sec
 - [Factories](Factories.md) (6 tips)
 - [Log and debug](Log_and_Debug.md) (5 tips)
 - [API](Api.md) (3 tips)
-- [Other](Other.md) (51 tips)
+- [Other](Other.md) (50 tips)
