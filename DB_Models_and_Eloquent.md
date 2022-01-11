@@ -70,6 +70,7 @@
 - [Get single column's value from the first result](#get-single-columns-value-from-the-first-result)
 - [Check if altered value changed key](#check-if-altered-value-changed-key)
 - [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
+- [Another way to do accessors and mutators](#another-way-to-do-accessors-and-mutators)
 
 ### Reuse or clone query()
 
@@ -1307,3 +1308,61 @@ protected function title(): Attribute
 ```
 
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1473697808456851466)
+
+### Another way to do accessors and mutators
+
+In case you are going to use the same accessors and mutators in many models , You can use custom casts instead.
+
+Just create a `class` that implements `CastsAttributes` interface. The class should have two methods, the first is `get` to specify how models should be retrieved from the database and the second is `set` to specify how the the value will be stored in the database.
+
+```php
+<?php
+
+namespace App\Casts;
+
+use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+
+class TimestampsCast implements CastsAttributes
+{
+    public function get($model, string $key, $value, array $attributes)
+    {
+        return Carbon::parse($value)->diffForHumans();
+    }
+
+    public function set($model, string $key, $value, array $attributes)
+    {
+        return Carbon::parse($value)->format('Y-m-d h:i:s');
+    }
+}
+
+```
+
+Then you can implement the cast in the model class.
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Casts\TimestampsCast;
+use Carbon\Carbon;
+
+
+class User extends Authenticatable
+{
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'updated_at' => TimestampsCast::class,
+        'created_at' => TimestampsCast::class,
+    ];
+}
+
+```
+Tip given by [@AhmedRezk](https://github.com/AhmedRezk59)
