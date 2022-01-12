@@ -8,7 +8,7 @@
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
 - [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
 - [Higher order collection methods](#higher-order-collection-methods)
-- 
+- [Higher order collection message](#higher-order-collection-message)
 
 ### Don’t Filter by NULL in Collections
 
@@ -102,4 +102,25 @@ $offer = [
 ];
                 
 $totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
+```
+
+### Higher order collection message
+
+Collections also provide support for "higher order messages", which are short-cuts for performing common actions on collections.
+This example calculates the price per group of products on an offer.
+
+```php
+$offer = [
+        'name'  => 'offer1',
+        'lines' => [
+            ['group' => 1, 'price' => 10],
+            ['group' => 1, 'price' => 20],
+            ['group' => 2, 'price' => 30],
+            ['group' => 2, 'price' => 40],
+            ['group' => 3, 'price' => 50],
+            ['group' => 3, 'price' => 60]
+        ]
+];
+                
+$totalPerGroup = collect($offer['lines'])->groupBy->group->map->sum('price');
 ```
