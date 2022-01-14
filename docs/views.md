@@ -1,29 +1,12 @@
-## Views
+# Views
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Migrations)](Migrations.md) ➡️ [Next (Routing)](Routing.md)
+[[TOC]]
 
-- [$loop variable in foreach](#loop-variable-in-foreach)
-- [Does view file exist?](#does-view-file-exist)
-- [Error code Blade pages](#error-code-blade-pages)
-- [View without controllers](#view-without-controllers)
-- [Blade @auth](#blade-auth)
-- [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
-- [Create Your Own Blade Directive](#create-your-own-blade-directive)
-- [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)
-- [Use Laravel Blade-X variable binding to save even more space](#use-laravel-blade-x-variable-binding-to-save-even-more-space)
-- [Blade components props](#blade-components-props)
-- [Blade Autocomplete typehint](#blade-autocomplete-typehint)
-- [Component Syntax Tip](#component-syntax-tip)
-- [Automatically highlight nav links](#automatically-highlight-nav-links)
-- [Cleanup loops](#cleanup-loops)
-- [Simple way to tidy up your Blade views](#simple-way-to-tidy-up-your-blade-views)
-- [x-flash Blade Component](#x-flash-blade-component)
-
-### $loop variable in foreach
+## $loop variable in foreach
 
 Inside of foreach loop, check if current entry is first/last by just using `$loop` variable.
 
-```blade
+```php
 @foreach ($users as $user)
      @if ($loop->first)
         This is the first iteration.
@@ -40,7 +23,7 @@ Inside of foreach loop, check if current entry is first/last by just using `$loo
 There are also other properties like `$loop->iteration` or `$loop->count`.
 Learn more on the [official documentation](https://laravel.com/docs/master/blade#the-loop-variable).
 
-### Does view file exist?
+## Does view file exist?
 
 You can check if View file exists before actually loading it.
 
@@ -56,11 +39,11 @@ You can even load an array of views and only the first existing will be actually
 return view()->first(['custom.dashboard', 'dashboard'], $data);
 ```
 
-### Error code Blade pages
+## Error code Blade pages
 
 If you want to create a specific error page for some HTTP code, like 500 - just create a blade file with this code as filename, in `resources/views/errors/500.blade.php`, or `403.blade.php` etc, and it will automatically be loaded in case of that error code.
 
-### View without controllers
+## View without controllers
 
 If you want route to just show a certain view, don't create a Controller method, just use `Route::view()` function.
 
@@ -79,36 +62,36 @@ class TextsController extends Controller
 Route::view('about', 'texts.about');
 ```
 
-### Blade @auth
+## Blade @auth
 
 Instead of if-statement to check logged in user, use `@auth` directive.
 
 Typical way:
-```blade
+```php
 @if(auth()->user())
     // The user is authenticated.
 @endif
 ```
 
 Shorter:
-```blade
+```php
 @auth
     // The user is authenticated.
 @endauth
 ```
 
 The opposite is `@guest` directive:
-```blade
+```php
 @guest
     // The user is not authenticated.
 @endguest
 ```
 
-### Two-level $loop variable in Blade
+## Two-level $loop variable in Blade
 
 In Blade's foreach you can use $loop variable even in two-level loop to reach parent variable.
 
-```blade
+```php
 @foreach ($users as $user)
     @foreach ($user->posts as $post)
         @if ($loop->parent->first)
@@ -118,11 +101,11 @@ In Blade's foreach you can use $loop variable even in two-level loop to reach pa
 @endforeach
 ```
 
-### Create Your Own Blade Directive
+## Create Your Own Blade Directive
 
 It’s very easy - just add your own method in `app/Providers/AppServiceProvider.php`. For example, if you want to have this for replace `<br>` tags with new lines:
 
-```blade
+```php
 <textarea>@br2nl($post->post_text)</textarea>
 ```
 
@@ -136,26 +119,26 @@ public function boot()
 }
 ```
 
-### Blade Directives: IncludeIf, IncludeWhen, IncludeFirst
+## Blade Directives: IncludeIf, IncludeWhen, IncludeFirst
 
 If you are not sure whether your Blade partial file actually would exist, you may use these condition commands:
 
 This will load header only if Blade file exists
-```blade
+```php
 @includeIf('partials.header')
 ```
 
 This will load header only for user with role_id 1
-```blade
+```php
 @includeWhen(auth()->user()->role_id == 1, 'partials.header')
 ```
 
 This will try to load adminlte.header, if missing - will load default.header
-```blade
+```php
 @includeFirst('adminlte.header', 'default.header')
 ```
 
-### Use Laravel Blade-X variable binding to save even more space
+## Use Laravel Blade-X variable binding to save even more space
 ```php
 // Using include, the old way
 @include("components.post", ["title" => $post->title])
@@ -169,7 +152,7 @@ This will try to load adminlte.header, if missing - will load default.header
 
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787795970)
 
-### Blade components props
+## Blade components props
 ```php
 // button.blade.php
 @props(['rounded' => false])
@@ -191,7 +174,7 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787
 
 Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)
 
-### Blade Autocomplete typehint
+## Blade Autocomplete typehint
 ```php
 @php
     /* @var App\Models\User $user */
@@ -205,7 +188,7 @@ Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825
 
 Tip given by [@freekmurze](https://twitter.com/freekmurze/status/1455466663927746560)
 
-### Component Syntax Tip
+## Component Syntax Tip
 Did you know that if you pass colon (:) before the component parameter, you can directly pass variables without print statement `{{ }}`?
 ```php
 <x-navbar title="{{ $title }}"/>
@@ -217,7 +200,7 @@ Did you know that if you pass colon (:) before the component parameter, you can 
 
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1457056634363072520)
 
-### Automatically highlight nav links
+## Automatically highlight nav links
 Automatically highlight nav links when exact URL matches, or pass a path or route name pattern.<br>
 A Blade component with request and CSS classes helpers makes it ridiculously simple to show active/inactive state.
 
@@ -258,13 +241,13 @@ class NavLink extends Component
 }
 ```
 
-```blade
+```php
 <a href="{{ $href }}" {{ $attributes->class($class) }}>
     {{ $slot }}
 </a>
 ```
 
-```blade
+```php
 <x-nav-link :href="route('projects.index')">Projects</x-nav-link>
 <x-nav-link :href="route('projects.index')" active="projects.*">Projects</x-nav-link>
 <x-nav-link :href="route('projects.index')" active="projects/*">Projects</x-nav-link>
@@ -273,9 +256,9 @@ class NavLink extends Component
 
 Tip given by [@mpskovvang](https://twitter.com/mpskovvang/status/1459646197635944455)
 
-### Cleanup loops
+## Cleanup loops
 Did you know the Blade `@each` directive can help cleanup loops in your templates?
-```blade
+```php
 // good
 @foreach($item in $items)
     <div>
@@ -290,10 +273,10 @@ Did you know the Blade `@each` directive can help cleanup loops in your template
 
 Tip given by [@kirschbaum_dev](https://twitter.com/kirschbaum_dev/status/1463205294914297861)
 
-### Simple way to tidy up your Blade views
+## Simple way to tidy up your Blade views
 A simple way to tidy up your Blade views!<br>
 Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
-```blade
+```php
 <!-- if/loop combination -->
 @if ($orders->count())
     @foreach($orders as $order)
@@ -317,7 +300,7 @@ Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
 
 Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1465674086022107137)
 
-### x-flash Blade Component
+## x-flash Blade Component
 
 ```php
 views\components\flash.blade.php

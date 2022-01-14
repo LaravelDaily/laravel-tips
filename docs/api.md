@@ -1,12 +1,8 @@
-## API
+# API
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Log and debug)](Log_and_Debug.md) ➡️ [Next (Other)](Other.md)
+[[TOC]]
 
-- [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
-- [API Return "Everything went ok"](#api-return-everything-went-ok)
-- [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
-
-### API Resources: With or Without "data"?
+## API Resources: With or Without "data"?
 
 If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
 
@@ -22,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
 
 Tip given by [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230637544321029)
 
-### API Return "Everything went ok"
+## API Return "Everything went ok"
 
 If you have API endpoint which performs some operations but has no response, so you wanna return just "everything went ok", you may return 204 status code "No
 content". In Laravel, it's easy: `return response()->noContent();`.
@@ -38,10 +34,12 @@ public function reorder(Request $request)
 }
 ```
 
-### Avoid N+1 queries in API resources
+## Avoid N+1 queries in API resources
+
 You can avoid N+1 queries in API resources by using the `whenLoaded()` method.<br>
 This will only append the department if it’s already loaded in the Employee model.<br>
 Without `whenLoaded()` there is always a query for the department
+
 ```php
 class EmplyeeResource extends JsonResource
 {

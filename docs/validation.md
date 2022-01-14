@@ -1,26 +1,8 @@
-## Validation
+# Validation
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Routing)](Routing.md) ➡️ [Next (Collections)](Collections.md)
+[[TOC]]
 
-- [Image validation](#image-validation)
-- [Custom validation error messages](#custom-validation-error-messages)
-- [Validate dates with "now" or "yesterday" words](#validate-dates-with-now-or-yesterday-words)
-- [Validation Rule with Some Conditions](#validation-rule-with-some-conditions)
-- [Change Default Validation Messages](#change-default-validation-messages)
-- [Prepare for Validation](#prepare-for-validation)
-- [Stop on First Validation Error](#stop-on-first-validation-error)
-- [Throw 422 status code without using validate() or Form Request](#throw-422-status-code-without-using-validate-or-form-request)
-- [Rules depending on some other conditions](#rules-depending-on-some-other-conditions)
-- [With Rule::when() we can conditionally apply validation rules](#with-rulewhen-we-can-conditionally-apply-validation-rules)
-- [Use this property in the request classes to stop the validation of the whole request attributes](#use-this-property-in-the-request-classes-to-stop-the-validation-of-the-whole-request-attributes)
-- [Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model](#ruleunique-doesnt-take-into-the-softdeletes-global-scope-applied-on-the-model)
-- [Validator::sometimes() method allows us to define when a validation rule should be applied](#validatorsometimes-method-allows-us-to-define-when-a-validation-rule-should-be-applied)
-- [Array elements validation](#array-elements-validation)
-- [Password::defaults method](#passworddefaults-method)
-- [Form Requests for validation redirection](#form-requests-for-validation-redirection)
-- [Mac validation rule](#mac-validation-rule)
-
-### Image validation
+## Image validation
 
 While validating uploaded images, you can specify the dimensions you require.
 
@@ -28,7 +10,7 @@ While validating uploaded images, you can specify the dimensions you require.
 ['photo' => 'dimensions:max_width=4096,max_height=4096']
 ```
 
-### Custom validation error messages
+## Custom validation error messages
 
 You can customize validation error messages per **field**, **rule** and **language** - just create a specific language file `resources/lang/xx/validation.php` with appropriate array structure.
 
@@ -40,7 +22,7 @@ You can customize validation error messages per **field**, **rule** and **langua
 ],
 ```
 
-### Validate dates with "now" or "yesterday" words
+## Validate dates with "now" or "yesterday" words
 
 You can validate dates by rules before/after and passing various strings as a parameter, like: `tomorrow`, `now`, `yesterday`. Example: `'start_date' => 'after:now'`. It's using strtotime() under the hood.
 
@@ -51,7 +33,7 @@ $rules = [
 ];
 ```
 
-### Validation Rule with Some Conditions
+## Validation Rule with Some Conditions
 
 If your validation rules depend on some condition, you can modify the rules by adding `withValidator()` to your `FormRequest` class, and specify your custom logic there. Like, if you want to add validation rule only for some user role.
 
@@ -66,7 +48,7 @@ class StoreBlogCategoryRequest extends FormRequest {
 }
 ```
 
-### Change Default Validation Messages
+## Change Default Validation Messages
 
 If you want to change default validation error message for specific field and specific validation rule, just add a `messages()` method into your `FormRequest` class.
 
@@ -85,7 +67,7 @@ class StoreUserRequest extends FormRequest
 }
 ```
 
-### Prepare for Validation
+## Prepare for Validation
 
 If you want to modify some field before default Laravel validation, or, in other words, "prepare" that field, guess what - there's a method `prepareForValidation()` in `FormRequest` class:
 
@@ -98,21 +80,25 @@ protected function prepareForValidation()
 }
 ``` 
 
-### Stop on First Validation Error
+## Stop on First Validation Error
 
 By default, Laravel validation errors will be returned in a list, checking all validation rules. But if you want the process to stop after the first error, use validation rule called `bail`:
+
 ```php
 $request->validate([
     'title' => 'bail|required|unique:posts|max:255',
     'body' => 'required',
 ]);
 ```
+
 If you need to stop validation on the first error in `FormRequest` class, you can set `stopOnFirstFailure` property to `true`:
+
 ```php
 protected $stopOnFirstFailure = true;
 ```
 
-### Throw 422 status code without using validate() or Form Request
+## Throw 422 status code without using validate() or Form Request
+
 If you don't use validate() or Form Request, but still need to throw errors with the same 422 status code and error structure, you can do it manually `throw ValidationException::withMessages()`
 
 ```php
@@ -123,8 +109,10 @@ if (! $user || ! Hash::check($request->password, $user->password)) {
 }
 ```
 
-### Rules depending on some other conditions
+## Rules depending on some other conditions
+
 If your rules are dynamic and depend on some other condition, you can create that array of rules on the fly
+
 ```php
     public function store(Request $request)
     {
@@ -149,9 +137,12 @@ If your rules are dynamic and depend on some other condition, you can create tha
     }
 ```
 
-### With Rule::when() we can conditionally apply validation rules
+## With Rule::when() we can conditionally apply validation rules
+
 Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
+
 In this example we validate the value of the vote only if the user can actually vote the post.
+
 ```php
 use Illuminate\Validation\Rule;
 
@@ -165,7 +156,7 @@ public function rules()
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
-### Use this property in the request classes to stop the validation of the whole request attributes
+## Use this property in the request classes to stop the validation of the whole request attributes
 Use this property in the request classes to stop the validation of the whole request attributes.<br><br>
 
 Hint Direct<br>
@@ -181,7 +172,7 @@ protected $stopOnFirstFailure = true;
 
 Tip given by [@Sala7JR](https://twitter.com/Sala7JR/status/1436172331198603270)
 
-### Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model
+## Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model
 Strange that `Rule::unique` doesn't take into the SoftDeletes Global Scope applied on the Model, by default.<br>
 But `withoutTrashed()` method is available
 ```php
@@ -190,7 +181,7 @@ Rule::unique('users', 'email')->withoutTrashed();
 
 Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1438490197956702209)
 
-### Validator::sometimes() method allows us to define when a validation rule should be applied
+## Validator::sometimes() method allows us to define when a validation rule should be applied
 The laravel `Validator::sometimes()` method allows us to define when a validation rule should be applied, based on the input provided.<br>
 The snippet shows how to prohibit the use of a coupon if the quantity of the purchased items is not enough.
 ```php
@@ -225,7 +216,7 @@ $validator->validate();
 
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
 
-### Array elements validation
+## Array elements validation
 If you want to validate elements of an array that you submited use dot notation in rules with '*'
 ```php
 // say you have this array
@@ -250,7 +241,7 @@ $rules = [
 
 Tip given by [HydroMoon](https://github.com/HydroMoon)
 
-### Password::defaults method
+## Password::defaults method
 You can enforce specific rules when validating user-supplied passwords by using the Password::defaults method. It includes options for requiring letters, numbers, symbols, and more.
 ```php
 class AppServiceProvider
@@ -275,7 +266,7 @@ request()->validate([
 
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1463190613260603395)
 
-### Form Requests for validation redirection
+## Form Requests for validation redirection
 when using Form Requests for validation, by default the validation error will redirect back to the previous page, but you can override it.<br>
 Just define the property of `$redirect` or `$redirectRoute`.<br>
 [Link to docs](https://laravel.com/docs/8.x/validation#customizing-the-redirect-location)
@@ -288,7 +279,7 @@ protected $redirect = '/dashboard';
 protected $redirectRoute = 'dashboard';
 ```
 
-### Mac validation rule
+## Mac validation rule
 New mac_address validation rule added in Laravel 8.77
 
 ```php

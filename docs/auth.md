@@ -1,18 +1,12 @@
-## Auth
+# Auth
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Collections)](Collections.md) ➡️ [Next (Mail)](Mail.md)
+[[TOC]]
 
-- [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
-- [More Events on User Registration](#more-events-on-user-registration)
-- [Did you know about Auth::once()?](#did-you-know-about-authonce)
-- [Change API Token on users password update](#change-api-token-on-users-password-update)
-- [Override Permissions for Super Admin](#override-permissions-for-super-admin)
-
-### Check Multiple Permissions at Once
+## Check Multiple Permissions at Once
 
 In addition to `@can` Blade directive, did you know you can check multiple permissions at once with `@canany` directive?
 
-```blade
+```php
 @canany(['update', 'view', 'delete'], $post)
     // The current user can update, view, or delete the post
 @elsecanany(['create'], \App\Post::class)
@@ -20,7 +14,7 @@ In addition to `@can` Blade directive, did you know you can check multiple permi
 @endcanany
 ```
 
-### More Events on User Registration
+## More Events on User Registration
 
 Want to perform some actions after new user registration? Head to `app/Providers/EventServiceProvider.php` and add more Listeners classes, and then in those classes implement `handle()` method with `$event->user` object
 
@@ -37,7 +31,7 @@ class EventServiceProvider extends ServiceProvider
     ];
 ```
 
-### Did you know about Auth::once()?
+## Did you know about Auth::once()?
 
 You can login with user only for ONE REQUEST, using method `Auth::once()`.  
 No sessions or cookies will be utilized, which means this method may be helpful when building a stateless API.
@@ -48,7 +42,7 @@ if (Auth::once($credentials)) {
 }
 ```
 
-### Change API Token on users password update
+## Change API Token on users password update
 
 It's convenient to change the user's API Token when its password changes.
 
@@ -61,7 +55,7 @@ public function setPasswordAttribute($value)
 }
 ```
 
-### Override Permissions for Super Admin
+## Override Permissions for Super Admin
 
 If you've defined your Gates but want to override all permissions for SUPER ADMIN user, to give that superadmin ALL permissions, you can intercept gates with `Gate::before()` statement, in `AuthServiceProvider.php` file.
 

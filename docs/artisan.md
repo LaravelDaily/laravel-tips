@@ -1,15 +1,8 @@
-## Artisan
+# Artisan
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Mail)](Mail.md) ➡️ [Next (Factories)](Factories.md)
+[[TOC]]
 
-- [Artisan command parameters](#artisan-command-parameters)
-- [Maintenance Mode](#maintenance-mode)
-- [Artisan command help](#artisan-command-help)
-- [Exact Laravel version](#exact-laravel-version)
-- [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
-
-
-### Artisan command parameters
+## Artisan command parameters
 
 When creating Artisan command, you can ask the input in variety of ways: `$this->confirm()`, `$this->anticipate()`, `$this->choice()`.
 
@@ -26,7 +19,7 @@ $name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
 $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ```
 
-### Maintenance Mode
+## Maintenance Mode
 
 If you want to enable maintenance mode on your page, execute the down Artisan command:
 ```bash
@@ -60,11 +53,11 @@ When you've done the maintenance work, just run:
 php artisan up
 ```
 
-### Artisan command help
+## Artisan command help
 
 To check the options of artisan command, Run artisan commands with `--help` flag. For example, `php artisan make:model --help` and see how many options you have:
 
-```
+```bash
 Options:
   -a, --all             Generate a migration, seeder, factory, and resource controller for the model
   -c, --controller      Create a new controller for the model
@@ -85,12 +78,12 @@ Options:
   -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 ```
 
-### Exact Laravel version
+## Exact Laravel version
 
 Find out exactly what Laravel version you have in your app, by running command
 `php artisan --version`
 
-### Launch Artisan command from anywhere
+## Launch Artisan command from anywhere
 
 If you have an Artisan command, you can launch it not only from Terminal, but also from anywhere in your code, with parameters. Use Artisan::call() method:
 

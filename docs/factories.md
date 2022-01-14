@@ -1,15 +1,8 @@
-## Factories
+# Factories
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Artisan)](Artisan.md) ➡️ [Next (Log and debug)](Log_and_Debug.md)
+[[TOC]]
 
-- [Factory callbacks](#factory-callbacks)
-- [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
-- [Override values and apply custom login to them](#override-values-and-apply-custom-login-to-them)
-- [Using factories with relationships](#using-factories-with-relationships)
-- [Create models without dispatching any events](#create-models-without-dispatching-any-events)
-- [Useful for() method](#useful-for-method)
-
-### Factory callbacks
+## Factory callbacks
 
 While using factories for seeding data, you can provide Factory Callback functions to perform some action after record is inserted.
 
@@ -19,7 +12,7 @@ $factory->afterCreating(App\User::class, function ($user, $faker) {
 });
 ```
 
-### Generate Images with Seeds/Factories
+## Generate Images with Seeds/Factories
 
 Did you know that Faker can generate not only text values but also IMAGES? See `avatar` field here - it will generate 50x50 image:
 
@@ -36,20 +29,24 @@ $factory->define(User::class, function (Faker $faker) {
 });
 ```
 
-### Override values and apply custom login to them
+## Override values and apply custom login to them
+
 When creating records with Factories, you can use Sequence class to override some values and apply custom logic to them.
+
 ```php
 $users = User::factory()
-                ->count(10)
-                ->state(new Sequence(
-                    ['admin' => 'Y'],
-                    ['admin' => 'N'],
-                ))
-                ->create();
+			->count(10)
+			->state(new Sequence(
+				['admin' => 'Y'],
+				['admin' => 'N'],
+			))
+			->create();
 ```
 
-### Using factories with relationships
+## Using factories with relationships
+
 When using factories with relationships, Laravel also provides magic methods.
+
 ```php
 // magic factory relationship methods
 User::factory()->hasPosts(3)->create();
@@ -60,8 +57,10 @@ User::factory()->has(Post::factory()->count(3))->create();
 
 Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)
 
-### Create models without dispatching any events
+## Create models without dispatching any events
+
 Sometimes you may wish to `update` a given model without dispatching any events. You may accomplish this using the `updateQuietly` method
+
 ```php
 Post::factory()->createOneQuietly();
 
@@ -73,8 +72,10 @@ Post::factory()->createManyQuietly([
 ]);
 ```
 
-### Useful for() method
+## Useful for() method
+
 The Laravel factory has a very useful `for()` method. You can use it to create `belongsTo()` relationships.
+
 ```php
 public function run()
 {

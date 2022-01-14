@@ -1,0 +1,25 @@
+{
+  "name": "laravel-tips",
+  "version": "1.0.0",
+  "description": "Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  \r An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MimisK13/laravel-tips.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MimisK13/laravel-tips/issues"
+  },
+  "homepage": "https://github.com/MimisK13/laravel-tips#readme",
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.9.5",
+    "@vuepress/plugin-medium-zoom": "^1.9.5",
+    "vuepress": "^1.9.5"
+  }
+}

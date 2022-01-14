@@ -1,32 +1,8 @@
-## Routing
+# Routing
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Views)](Views.md) ➡️ [Next (Validation)](Validation.md)
+[[TOC]]
 
-- [Route group within a group](#route-group-within-a-group)
-- [Wildcard subdomains](#wildcard-subdomains)
-- [What's behind the routes?](#whats-behind-the-routes)
-- [Route Model Binding: You can define a key](#route-model-binding-you-can-define-a-key)
-- [Quickly Navigate from Routes file to Controller](#quickly-navigate-from-routes-file-to-controller)
-- [Route Fallback: When no Other Route is Matched](#route-fallback-when-no-other-route-is-matched)
-- [Route Parameters Validation with RegExp](#route-parameters-validation-with-regexp)
-- [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
-- [Query string parameters to Routes](#query-string-parameters-to-routes)
-- [Separate Routes by Files](#separate-routes-by-files)
-- [Translate Resource Verbs](#translate-resource-verbs)
-- [Custom Resource Route Names](#custom-resource-route-names)
-- [More Readable Route List](#more-readable-route-list)
-- [Eager load relationship](#eager-load-relationship)
-- [Localizing Resource URIs](#localizing-resource-uris)
-- [Resource Controllers naming](#resource-controllers-naming)
-- [Easily highlight your navbar menus](#easily-highlight-your-navbar-menus)
-- [Generate absolute path using route() helper](#generate-absolute-path-using-route-helper)
-- [Override the route binding resolver for each of your models](#override-the-route-binding-resolver-for-each-of-your-models)
-- [If you need public URL but you want them to be secured](#if-you-need-public-url-but-you-want-them-to-be-secured)
-- [Using Gate in middleware method](#using-gate-in-middleware-method)
-- [Simple route with arrow function](#simple-route-with-arrow-function)
-- [Return a view directly from a route](#route-view)
-
-### Route group within a group
+## Route group within a group
 
 In Routes, you can create a group within a group, assigning a certain middleware only to some URLs in the "parent" group.
 
@@ -41,7 +17,7 @@ Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
 });
 ```
 
-### Wildcard subdomains
+## Wildcard subdomains
 
 You can create route group by dynamic subdomain name, and pass its value to every route.
 
@@ -53,7 +29,7 @@ Route::domain('{username}.workspace.com')->group(function () {
 });
 ```
 
-### What's behind the routes?
+## What's behind the routes?
 
 If you use [Laravel UI package](https://github.com/laravel/ui), you likely want to know what routes are actually behind `Auth::routes()`?
 
@@ -109,7 +85,7 @@ Auth::routes([
 
 Tip is based on [suggestion](https://github.com/LaravelDaily/laravel-tips/pull/57) by [MimisK13](https://github.com/MimisK13)
 
-### Route Model Binding: You can define a key
+## Route Model Binding: You can define a key
 
 You can do Route model binding like `Route::get('api/users/{user}', function (App\User $user) { … }` - but not only by ID field. If you want `{user}` to be a `username`
 field, put this in the model:
@@ -120,7 +96,7 @@ public function getRouteKeyName() {
 }
 ```
 
-### Quickly Navigate from Routes file to Controller
+## Quickly Navigate from Routes file to Controller
 
 This thing was optional before Laravel 8, and became a standard main syntax of routing in Laravel 8.
 
@@ -145,7 +121,7 @@ use App\Http\Controllers\PageController;
 Route::get('page', [PageController::class, 'action']);
 ```
 
-### Route Fallback: When no Other Route is Matched
+## Route Fallback: When no Other Route is Matched
 
 If you want to specify additional logic for not-found routes, instead of just throwing default 404 page, you may create a special Route for that, at the very end of your Routes file.
 
@@ -161,7 +137,7 @@ Route::fallback(function() {
 });
 ```
 
-### Route Parameters Validation with RegExp
+## Route Parameters Validation with RegExp
 
 We can validate parameters directly in the route, with “where” parameter. A pretty typical case is to prefix your routes by language locale, like `fr/blog` and `en/article/333`. How do we ensure that those two first letters are not used for some other than language?
 
@@ -176,7 +152,7 @@ Route::group([
 });
 ```
 
-### Rate Limiting: Global and for Guests/Users
+## Rate Limiting: Global and for Guests/Users
 
 You can limit some URL to be called a maximum of 60 times per minute, with `throttle:60,1`:
 ```php
@@ -204,7 +180,7 @@ Route::middleware('auth:api', 'throttle:rate_limit,1')->group(function () {
 });
 ```
 
-### Query string parameters to Routes
+## Query string parameters to Routes
 
 If you pass additional parameters to the route, in the array, those key / value pairs will automatically be added to the generated URL's query string.
 
@@ -216,7 +192,7 @@ Route::get('user/{id}/profile', function ($id) {
 $url = route('profile', ['id' => 1, 'photos' => 'yes']); // Result: /user/1/profile?photos=yes
 ```
 
-### Separate Routes by Files
+## Separate Routes by Files
 
 If you have a set of routes related to a certain "section", you may separate them in a special `routes/XXXXX.php` file, and just include it in `routes/web.php`
 
@@ -276,7 +252,7 @@ public function boot()
 }
 ```
 
-### Translate Resource Verbs
+## Translate Resource Verbs
 
 If you use resource controllers, but want to change URL verbs to non-English for SEO purposes, so instead of `/create` you want Spanish `/crear`, you can configure it by using `Route::resourceVerbs()` method in `App\Providers\RouteServiceProvider`:
 
@@ -292,7 +268,7 @@ public function boot()
 }
 ```
 
-### Custom Resource Route Names
+## Custom Resource Route Names
 
 When using Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix in the browser and the route name prefix you use all over Laravel project may be different.
 
@@ -303,7 +279,7 @@ Route::resource('p', ProductController::class)->names('products');
 So this code above will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit`, etc.
 But you would call them in the code by `route('products.index')`, `route('products.create')`, etc.
 
-### More Readable Route List
+## More Readable Route List
 
 Have you ever run "php artisan route:list" and then realized that the list takes too much space and hard to read?
 
@@ -364,7 +340,7 @@ You can also specify the exact columns you want:
 +----------+---------------------------------+---------------------+
 ```
 
-### Eager load relationship
+## Eager load relationship
 If you use Route Model Binding and think you can't use Eager Loading for relationships, think again.<br>
 So you use Route Model Binding
 ```php
@@ -381,7 +357,7 @@ public function show(Product $product) {
 }
 ```
 
-### Localizing Resource URIs
+## Localizing Resource URIs
 If you use resource controllers, but want to change URL verbs to non-English, so instead of `/create` you want Spanish `/crear`, you can configure it with `Route::resourceVerbs()` method.
 ```php
 public function boot()
@@ -394,7 +370,7 @@ public function boot()
 }
 ```
 
-### Resource Controllers naming
+## Resource Controllers naming
 In Resource Controllers, in `routes/web.php` you can specify `->names()` parameter, so the URL prefix and the route name prefix may be different.<br>
 This will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit` etc. But you would call them:
 - route('products.index)
@@ -404,7 +380,7 @@ This will generate URLs like `/p`, `/p/{id}`, `/p/{id}/edit` etc. But you would 
 Route::resource('p', \App\Http\Controllers\ProductController::class)->names('products');
 ```
 
-### Easily highlight your navbar menus
+## Easily highlight your navbar menus
 Use `Route::is('route-name')` to easily highlight your navbar menus
 ```html
 <ul>
@@ -419,7 +395,7 @@ Use `Route::is('route-name')` to easily highlight your navbar menus
 
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1443893957507747849)
 
-### Generate absolute path using route() helper
+## Generate absolute path using route() helper
 ```php
 route('page.show', $page->id);
 // http://laravel.test/pages/1
@@ -430,7 +406,7 @@ route('page.show', $page->id, false);
 
 Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1445796035742240770)
 
-### Override the route binding resolver for each of your models
+## Override the route binding resolver for each of your models
 You can override the route binding resolver for each of your models. In this example, I have no control over the @ sign in the URL, so using the `resolveRouteBinding` method, I'm able to remove the @ sign and resolve the model.
 ```php
 // Route
@@ -450,7 +426,7 @@ public function resolveRouteBinding($value, $field = null)
 
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1447539300397195269)
 
-### If you need public URL but you want them to be secured
+## If you need public URL but you want them to be secured
 If you need public URL but you want them to be secured, use Laravel signed URL
 ```php
 class AccountController extends Controller
@@ -480,7 +456,7 @@ class AccountController extends Controller
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448239591467589633)
 
 
-### Using Gate in middleware method
+## Using Gate in middleware method
 You can use the gates you specified in `App\Providers\AuthServiceProvider` in middleware method.
 
 To do this, you just need to put inside the `can:` and the names of the necessary gates.
@@ -491,7 +467,7 @@ Route::put('/post/{post}', function (Post $post) {
 })->middleware('can:update,post');
 ```
 
-### Simple route with arrow function 
+## Simple route with arrow function 
 You can use php arrow function in routing, without having to use anonymous function.
 
 To do this, you can use `fn() =>`, it looks easier.
@@ -506,7 +482,7 @@ Route::get('/example', function () {
 Route::get('/example', fn () => User::all());
 ```
 
-### Route view 
+## Route view 
 You can use `Route::view($uri , $bladePage)` to return a view directly, without having to use controller function.
 
 

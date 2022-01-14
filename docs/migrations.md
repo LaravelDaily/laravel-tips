@@ -1,23 +1,8 @@
-## Migrations
+# Migrations
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Models Relations)](Models_Relations.md) ➡️ [Next (Views)](Views.md)
+[[TOC]]
 
-- [Unsigned Integer](#unsigned-integer)
-- [Order of Migrations](#order-of-migrations)
-- [Migration fields with timezones](#migration-fields-with-timezones)
-- [Database migrations column types](#database-migrations-column-types)
-- [Default Timestamp](#default-timestamp)
-- [Migration Status](#migration-status)
-- [Create Migration with Spaces](#create-migration-with-spaces)
-- [Create Column after Another Column](#create-column-after-another-column)
-- [Make migration for existing table](#make-migration-for-existing-table)
-- [Output SQL before running migrations](#output-sql-before-running-migrations)
-- [Anonymous Migrations](#anonymous-migrations)
-- [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
-- [Checking For Table / Column Existence](#checking-for-table--column-existence)
-
-
-### Unsigned Integer
+## Unsigned Integer
 
 For foreign key migrations instead of `integer()` use `unsignedInteger()` type or `integer()->unsigned()`, otherwise you may get SQL errors.
 
@@ -37,13 +22,13 @@ Schema::create('employees', function (Blueprint $table) {
 });
 ```
 
-### Order of Migrations
+## Order of Migrations
 
 If you want to change the order of DB migrations, just rename the file's timestamp, like from `2018_08_04_070443_create_posts_table.php` to`2018_07_04_070443_create_posts_table.php` (changed from `2018_08_04` to `2018_07_04`).
 
 They run in alphabetical order.
 
-### Migration fields with timezones
+## Migration fields with timezones
 
 Did you know that in migrations there's not only `timestamps()` but also `timestampsTz()`, for the timezone?
 
@@ -58,7 +43,7 @@ Schema::create('employees', function (Blueprint $table) {
 
 Also, there are columns `dateTimeTz()`, `timeTz()`, `timestampTz()`, `softDeletesTz()`.
 
-### Database migrations column types
+## Database migrations column types
 
 There are interesting column types for migrations, here are a few examples.
 
@@ -72,7 +57,7 @@ $table->uuid('id');
 
 See all column types on the [official documentation](https://laravel.com/docs/master/migrations#creating-columns).
 
-### Default Timestamp
+## Default Timestamp
 
 While creating migrations, you can use `timestamp()` column type with option
 `useCurrent()` and `useCurrentOnUpdate()`, it will set `CURRENT_TIMESTAMP` as default value.
@@ -82,7 +67,7 @@ $table->timestamp('created_at')->useCurrent();
 $table->timestamp('updated_at')->useCurrentOnUpdate();
 ```
 
-### Migration Status
+## Migration Status
 
 If you want to check what migrations are executed or not yet, no need to look at the database "migrations" table, you can launch `php artisan migrate:status` command.
 
@@ -98,7 +83,7 @@ Example result:
 +------+------------------------------------------------+-------+
 ```
 
-### Create Migration with Spaces
+## Create Migration with Spaces
 
 When typing `make:migration` command, you don't necessarily have to use underscore `_` symbol between parts, like `create_transactions_table`. You can put the name into quotes and then use spaces instead of underscores.
 
@@ -112,7 +97,7 @@ php artisan make:migration "create transactions table"
 
 Source: [Steve O on Twitter](https://twitter.com/stephenoldham/status/1353647972991578120)
 
-### Create Column after Another Column
+## Create Column after Another Column
 
 _Notice: Only MySQL_
 
@@ -150,9 +135,11 @@ Schema::table('users', function (Blueprint $table) {
 });
 ```
 
-### Make migration for existing table
+## Make migration for existing table
+
 If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "_in_xxxxx_table" or "_to_xxxxx_table" at the end, or specify "--table" parameter.
 `php artisan change_fields_products_table` generates empty class
+
 ```php
 class ChangeFieldsProductsTable extends Migration
 {
@@ -187,7 +174,7 @@ class WhateverYouWant extends Migration
 }
 ```
 
-### Output SQL before running migrations
+## Output SQL before running migrations
 
 When typing `migrate --pretend` command, you get the SQL query that will be executed in the terminal. It's an interesting way to debug SQL if necessary.
 
@@ -196,7 +183,8 @@ When typing `migrate --pretend` command, you get the SQL query that will be exec
 php artisan migrate --pretend
 ```
 
-### Anonymous Migrations
+## Anonymous Migrations
+
 The Laravel team released Laravel 8.37 with anonymous migration support, which solves a GitHub issue with migration class name collisions. The core of the problem is that if multiple migrations have the same class name, it'll cause issues when trying to recreate the database from scratch.
 Here's an example from the [pull request](https://github.com/laravel/framework/pull/36906) tests:
 
@@ -224,7 +212,8 @@ return new class extends Migration {
 
 Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)
 
-### You can add "comment" about a column inside your migrations
+## You can add "comment" about a column inside your migrations
+
 You can add "comment" about a column inside your migrations and provide useful information.<br>
 If database is managed by someone other than developers, they can look at comments in Table structure before performing any operations.
 ```php
@@ -235,7 +224,8 @@ $table->unsignedInteger('interval')
 
 Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)
 
-### Checking For Table / Column Existence
+## Checking For Table / Column Existence
+
 You may check for the existence of a table or column using the hasTable and hasColumn methods:
 ```php
 if (Schema::hasTable('users')) {
