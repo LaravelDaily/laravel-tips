@@ -17,6 +17,7 @@
 - [Automatically highlight nav links](#automatically-highlight-nav-links)
 - [Cleanup loops](#cleanup-loops)
 - [Simple way to tidy up your Blade views](#simple-way-to-tidy-up-your-blade-views)
+- [x-flash Blade Component](#x-flash-blade-component)
 
 ### $loop variable in foreach
 
@@ -315,3 +316,59 @@ Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
 ```
 
 Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1465674086022107137)
+
+### x-flash Blade Component
+
+```php
+views\components\flash.blade.php
+
+@props([
+    'type' => 'success',
+    'colors' => [
+        'info' => 'alert-info',
+        'success' => 'alert-success',
+        'error' => 'alert-danger',
+        'warning' => 'alert-warning'
+    ]
+])
+
+@if (session('message'))
+<div {{ $attributes->merge(['class' => "{$colors[$type]} alert alert-success d-flex align-items-center alert-dismissible"]) }} role="alert">
+    <div class="flex-shrink-0">
+        <i class="fa fa-fw fa-check"></i>
+    </div>
+    <div class="flex-grow-1 ms-3">
+        <p class="mb-0">
+            {{ $slot }}
+        </p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+@endif
+```
+
+Method example:
+
+```php
+public function destroy(Product $product)
+{
+     $product->delete();
+
+     return redirect()
+       ->route('products.index')
+       ->with([
+          'type' => 'success', 
+          'message' => 'Product successfully deleted!'
+       ]);
+}
+```
+
+Usage:
+
+```php
+<x-flash type="{{ session('type') }}">
+    {{ session('message') }}
+</x-flash>
+```
+
+Tip given by [MimisK13](https://github.com/MimisK13)
