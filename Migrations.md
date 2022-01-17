@@ -196,6 +196,8 @@ When typing `migrate --pretend` command, you get the SQL query that will be exec
 php artisan migrate --pretend
 ```
 
+Tip given by [@zarpelon](https://github.com/zarpelon)
+
 ### Anonymous Migrations
 The Laravel team released Laravel 8.37 with anonymous migration support, which solves a GitHub issue with migration class name collisions. The core of the problem is that if multiple migrations have the same class name, it'll cause issues when trying to recreate the database from scratch.
 Here's an example from the [pull request](https://github.com/laravel/framework/pull/36906) tests:
