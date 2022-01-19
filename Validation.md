@@ -19,6 +19,7 @@
 - [Password::defaults method](#passworddefaults-method)
 - [Form Requests for validation redirection](#form-requests-for-validation-redirection)
 - [Mac validation rule](#mac-validation-rule)
+- [Validate email with TLD domain required](#validate-email-with-tld-domain-required)
 
 ### Image validation
 
@@ -298,3 +299,18 @@ $this->assertTrue($validator->passes());
 ```
 
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1475500006673027072)
+
+### Validate email with TLD domain required
+
+By default, the `email` validation rule will accept an email without tld domain (ie: `taylor@laravel`, `povilas@ldaily`)
+
+But if you want to make sure the email must have a tld domain (ie: `taylor@laravel.com`, `povilas@ldaily.com`), use `email:filter` rule.
+
+```php
+[
+    'email' => 'required|email', // before
+    'email' => 'required|email:filter', // after
+],
+```
+
+Tip given by [@Chris1904](https://laracasts.com/discuss/channels/general-discussion/laravel-58-override-email-validation-use-57-rules?replyId=645613)
