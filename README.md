@@ -12,7 +12,7 @@ Or if you want the Chinese version:
 
 ---
 
-__Update 20 January 2022__: Currently there are __258 tips__ divided into 14 sections.
+__Update 22 January 2022__: Currently there are __259 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ __Update 20 January 2022__: Currently there are __258 tips__ divided into 14 sec
 - [Models Relations](Models_Relations.md) (33 tips)
 - [Migrations](Migrations.md) (13 tips)
 - [Views](Views.md) (14 tips)
-- [Routing](Routing.md) (23 tips)
+- [Routing](Routing.md) (24 tips)
 - [Validation](Validation.md) (18 tips)
 - [Collections](Collections.md) (7 tips)
 - [Auth](Auth.md) (5 tips)
