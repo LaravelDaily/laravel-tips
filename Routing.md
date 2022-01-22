@@ -25,6 +25,7 @@
 - [Using Gate in middleware method](#using-gate-in-middleware-method)
 - [Simple route with arrow function](#simple-route-with-arrow-function)
 - [Return a view directly from a route](#route-view)
+- [Route directory instead of route file](#route-directory-instead-of-route-file)
 
 ### Route group within a group
 
@@ -514,3 +515,15 @@ You can use `Route::view($uri , $bladePage)` to return a view directly, without 
 //this will return home.blade.php view
 Route::view('/home', 'home');
 ```
+
+### Route directory instead of route file
+
+You can create a */routes/web/* directory and only fill */routes/web.php* with:
+
+```php
+foreach(glob(dirname(__FILE__).'/web/*', GLOB_NOSORT) as $route_file){
+    include $route_file;
+}
+```
+
+Now every file inside */routes/web/* act as a web router file and you can organize your routes into diferent files.
