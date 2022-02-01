@@ -194,7 +194,6 @@ If you want to load relationship data, you can specify some limitations or order
 ```php
 $countries = Country::with(['cities' => function($query) {
     $query->orderBy('population', 'desc');
-    $query->take(3);
 }])->get();
 ```
 
