@@ -5,6 +5,7 @@
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
 - [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
+- [Get Bearer Token from Authorization header](#get-bearer-token-from-authorization-header)
 
 ### API Resources: With or Without "data"?
 
@@ -59,3 +60,16 @@ class EmplyeeResource extends JsonResource
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501071362)
+
+### Get Bearer Token from Authorization header
+The `bearerToken()` function is very handy when you are working with apis & want to access the token from Authorization header.
+```php
+// Don't parse API headers manually like this:
+$tokenWithBearer = $request->header('Authorization');
+$token = substr($tokenWithBearer, 7);
+
+//Do this instead:
+$token = $request->bearerToken();
+```
+
+Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1488413755826327553)
