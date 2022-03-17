@@ -1,3 +1,13 @@
+# IMPORTANT: March 2022
+
+It's horrible to see what is happening now in Ukraine, as Russian army is [bombarding houses, hospitals and kindergartens](https://twitter.com/DavidCornDC/status/1501620037785997316). 
+
+Please [check out supportukrainenow.org](https://supportukrainenow.org/) for the ways how you can help people there. Spread the word.
+
+And if you are from Russia and you are against this war, please express your protest in some way. I know you can get punished for this, but you are one of the hopes of those innocent people.
+
+---
+
 # Laravel Tips
 
 Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
