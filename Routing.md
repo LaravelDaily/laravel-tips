@@ -26,6 +26,8 @@
 - [Simple route with arrow function](#simple-route-with-arrow-function)
 - [Return a view directly from a route](#route-view)
 - [Route directory instead of route file](#route-directory-instead-of-route-file)
+- [Route resources grouping](#route-resources-grouping)
+- [Custom route bindings](#custom-route-bindings)
 
 ### Route group within a group
 
@@ -527,3 +529,45 @@ foreach(glob(dirname(__FILE__).'/web/*', GLOB_NOSORT) as $route_file){
 ```
 
 Now every file inside */routes/web/* act as a web router file and you can organize your routes into diferent files.
+
+### Route resources grouping
+If your routes have a lot of resource controllers, you can group them and call one Route::resources() instead of many single Route::resource() statements.
+```php
+Route::resources([
+    'photos' => PhotoController::class,
+    'posts' => PostController::class,
+]);
+```
+
+### Custom route bindings
+Did you know you can define custom route bindings in Laravel?<br>
+
+In this example, I need to resolve a portfolio by slug. But the slug is not unique, because multiple users can have a portfolio named 'Foo'<br>
+
+So I define how Laravel should resolve them from a route parameter
+```php
+class RouteServiceProvider extends ServiceProvider
+{
+    public const HOME = '/dashboard';
+    
+    public function boot()
+    {
+        Route::bind('portfolio', function (string $slug) {
+            return Portfolio::query()
+                ->whereBelongsto(request()->user())
+                ->whereSlug($slug)
+                ->firstOrFail();
+        });
+    }
+}
+```
+
+```php
+Route::get('portfolios/{portfolio}', function (Portfolio $portfolio) {
+    /*
+     * The $portfolio will be the result of the query defined in the RouteServiceProvider
+     */
+})
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1496871240346509312)

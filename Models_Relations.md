@@ -34,6 +34,8 @@
 - [`whereHas()` multiple connections](#wherehas-multiple-connections)
 - [Update an existing pivot record](#update-an-existing-pivot-record)
 - [Relation that will get the newest (or oldest) item](#relation-that-will-get-the-newest-or-oldest-item)
+- [Replace your custom queries with `->ofMany`](#replace-your-custom-queries-with-ofmany)
+- [Avoid data leakage when using orWhere on a relationship](#avoid-data-leakage-when-using-orwhere-on-a-relationship)
 
 ### OrderBy on Eloquent relationships
 
@@ -560,3 +562,46 @@ public function latestHistoryItem(): HasOne
         ->latestOfMany();
 }
 ```
+
+### Replace your custom queries with ofMany
+```php
+class User extends Authenticable {
+    // Get most popular post of user
+    public function mostPopularPost() {
+        return $this->hasOne(Post::class)->ofMany('like_count', 'max');
+    }
+}
+```
+
+Tip given by [@LaravelEloquent](https://twitter.com/LaravelEloquent/status/1493324310328578054)
+
+### Avoid data leakage when using orWhere on a relationship
+```php
+$user->posts()
+    ->where('active', 1)
+    ->orWhere('votes', '>=', 100)
+    ->get();
+```
+
+Returns: ALL posts where votes are greater than or equal to 100 are returned
+```sql
+select * from posts where user_id = ? and active = 1 or votes >= 100
+```
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+
+$users->posts()
+    ->where(function (Builder $query) {
+        return $query->where('active', 1)
+                    ->orWhere('votes', '>=', 100);
+    })
+    ->get();
+```
+
+Returns: Users posts where votes are greater than or equal to 100 are returned
+```sql
+select * from posts where user_id = ? and (active = 1 or votes >= 100)
+```
+
+Tip given by [@BonnickJosh](https://twitter.com/BonnickJosh/status/1494779780562096139)

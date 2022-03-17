@@ -9,6 +9,7 @@
 - [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
 - [Higher order collection methods](#higher-order-collection-methods)
 - [Higher order collection message](#higher-order-collection-message)
+- [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
 
 ### Don’t Filter by NULL in Collections
 
@@ -124,3 +125,23 @@ $offer = [
                 
 $totalPerGroup = collect($offer['lines'])->groupBy->group->map->sum('price');
 ```
+
+### Get an existing key or insert a value if it doesn't exist and return the value
+In Laravel 8.81 `getOrPut` method to Collections that simplifies the use-case where you want to either get an existing key or insert a value if it doesn't exist and return the value.
+```php
+$key = 'name';
+// Still valid
+if ($this->collection->has($key) === false) {
+    $this->collection->put($key, ...);
+}
+
+return $this->collection->get($key);
+
+// Using the `getOrPut()` method with closure
+return $this->collection->getOrPut($key, fn() => ...);
+
+// Or pass a fixed value
+return $this->collection->getOrPut($key, $value='teacoders');
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1488338815592718336)

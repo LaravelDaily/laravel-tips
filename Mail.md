@@ -7,6 +7,7 @@
 - [Preview Mail without Mailables](#preview-mail-without-mailables)
 - [Default Email Subject in Laravel Notifications](#default-email-subject-in-laravel-notifications)
 - [Send Notifications to Anyone](#send-notifications-to-anyone)
+- [Set conditional object properties](#set-conditional-object-properties)
 
 ### Testing email into laravel.log
 
@@ -63,3 +64,25 @@ Notification::route('mail', 'taylor@example.com')
         ->route('slack', 'https://hooks.slack.com/services/...')
         ->notify(new InvoicePaid($invoice));
 ```
+
+### Set conditional object properties
+ou can use the `when()` or `unless()` methods in your MailMessage notifications to set conditional object properties like a call to action.
+```php
+class InvoicePaid extends Notification
+{
+    public function toMail(User $user)
+    {
+        return (new MailMessage)
+            ->success()
+            ->line('We've received your payment)
+            ->when($user->isOnMonthlyPaymentPlan(), function (MailMessage $message) {
+                $message->action('Save 20% by paying yearly', route('account.billing'));
+            })
+            ->line('Thank you for using Unlock.sh');
+    }
+}
+```
+
+Use the `when` or `unless` methods in you own classes by using the `Illuminate\Support\Traits\Conditionable` trait<br>
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1503302749525528582)

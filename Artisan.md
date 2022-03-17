@@ -7,6 +7,8 @@
 - [Artisan command help](#artisan-command-help)
 - [Exact Laravel version](#exact-laravel-version)
 - [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
+- [Hide your custom command](#hide-your-custom-command)
+- [Skip method](#skip-method)
 
 
 ### Artisan command parameters
@@ -103,3 +105,29 @@ Route::get('/foo', function () {
     //
 });
 ```
+
+### Hide your custom command
+If you don't want to show a specific command on the artisan command list, set `hidden` property to `true`
+```php
+class SendMail extends Command
+{
+    protected $signature = 'send:mail';
+    protected $hidden = true;
+}
+```
+
+You won't see `send:mail` on the available commands if you typed `php artisan`
+
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1487921500023832579)
+
+### Skip method
+Laravel the skip method in scheduler<br>
+
+You can use `skip` in your commands to skip an execution
+```php
+$shedule->command('emails:send')->daily()->skip(function () {
+    return Calendar::isHoliday();
+});
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1494503181438492675)

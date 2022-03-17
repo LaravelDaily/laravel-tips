@@ -71,6 +71,14 @@
 - [Check if altered value changed key](#check-if-altered-value-changed-key)
 - [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
 - [Another way to do accessors and mutators](#another-way-to-do-accessors-and-mutators)
+- [When searching for the first record, you can perform some actions](#when-searching-for-the-first-record-you-can-perform-some-actions)
+- [Directly convert created_at date to human readable format](#directly-convert-created_at-date-to-human-readable-format)
+- [Ordering by an Eloquent Accessor](#ordering-by-an-eloquent-accessor)
+- [Check for specific model was created or found](#check-for-specific-model-was-created-or-found)
+- [Laravel Scout with database driver](#laravel-scout-with-database-driver)
+- [Make use of the value method on the query builder](#make-use-of-the-value-method-on-the-query-builder)
+- [Pass array to where method](#pass-array-to-where-method)
+- [Return the primary keys from models collection](#return-the-primary-keys-from-models-collection)
 
 ### Reuse or clone query()
 
@@ -1366,3 +1374,135 @@ class User extends Authenticatable
 
 ```
 Tip given by [@AhmedRezk](https://github.com/AhmedRezk59)
+
+### When searching for the first record, you can perform some actions
+When searching for the first record, you want to perform some actions, when you don't find it. `firstOrFail()` throws a 404 Exception. <br>
+You can use `firstOr(function() {})` instead. Laravel got your covered
+```php
+$book = Book::whereCount('authors')
+            ->orderBy('authors_count', 'DESC')
+            ->having('modules_count', '>', 10)
+            ->firstOr(function() {
+                // THe Sky is the Limit ...
+                
+                // You can perform any action here
+            });
+```
+
+Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1487757487566639113/)
+
+### Directly convert created_at date to human readable format
+Did you know you can directly convert created_at date to human readble format like 1 miniute ago, 1 month ago using diffForHumans() function. Laravel eloquent by default enables Carbon instance on created_at field.
+```php
+$post = Post::whereId($id)->first();
+$result = $post->created_at->diffForHumans();
+
+/* OUTPUT */
+// 1 Minutes ago, 2 Week ago etc..as per created time
+```
+
+Tip given by [@vishal__2931](https://twitter.com/vishal__2931/status/1488369014980038662)
+
+### Ordering by an Eloquent Accessor
+Ordering by an Eloquent Accessor! Yes, that's doable. Instead of ordering by the accessor on the DB level, we order by the accessor on the returned Collection.
+```php
+class User extends Model
+{
+    // ...
+    protected $appends = ['full_name'];
+    
+    public function getFullNameAttribute()
+    {
+        return $this->attribute['first_name'] . ' ' . $this->attributes['last_name'];
+    }
+    // ..
+}
+```
+
+```php
+class UserController extends Controller
+{
+    // ..
+    public function index()
+    {
+        $users = User::all();
+        
+        // order by full_name desc
+        $users->sortByDesc('full_name');
+        
+        // or
+        
+        // order by full_name asc
+        $users->sortBy('full_name');
+        
+        // ..
+    }
+    // ..
+}
+```
+
+`sortByDesc` and `sortBy` are methods on the Collection
+
+Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1490671693618053123)
+
+### Check for specific model was created or found
+If you want to check for specific model was created or found, use `wasRecentlyCreated` model attribute.
+```php
+$user = User::create([
+    'name' => 'Oussama',
+]);
+
+// return boolean
+return $user->wasRecentlyCreated;
+
+// true for recently created
+// false for found (already on you db)
+```
+
+Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1491141790015320064)
+
+### Laravel Scout with database driver
+With laravel v9 you can use Laravel Scout (Search) with database driver. No more where likes!
+```php
+$companies = Company::search(request()->get('search'))->paginate(15);
+```
+
+Tip given by [@magarrent](https://twitter.com/magarrent/status/1493221422675767302)
+
+### Make use of the value method on the query builder
+Make use of the `value` method on the query builder to execute a more efficient query when you only need to retrieve a single column.
+```php
+// Before (fetches all columns on the row)
+Statistic::where('user_id', 4)->first()->post_count;
+
+// After (fetches only `post_count`)
+Statistic::where('user_id', 4)->value('post_count');
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1493583444244410375)
+
+### Pass array to where method
+Laravel you can pass an array to the where method.
+```php
+// Instead of this
+JobPost::where('company', 'laravel')
+        ->where('job_type', 'full time')
+        ->get();
+
+// You can pass an array
+JobPost::where(['company' => 'laravel',
+                'job_type' => 'full time'])
+        ->get();
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1495626752282234881)
+
+### Return the primary keys from models collection
+Did you know `modelsKeys()` eloquent collection method? It returns the primary keys from models collection.
+```php
+$users = User::active()->limit(3)->get();
+
+$users->modelsKeys(); // [1, 2, 3]
+```
+
+Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1495816807910891520)

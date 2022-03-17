@@ -52,6 +52,11 @@
 - [Get value from session and forget](#get-value-from-session-and-forget)
 - [$request->date() method](#request-date-method)
 - [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
+- [Quickly add a bearer token to HTTP request](#quickly-add-a-bearer-token-to-HTTP-request)
+- [Copy file or all files from a folder](#copy-file-or-all-files-from a-folder)
+- [Sessions has() vs exists() vs missing()](#sessions-has-vs-exists-vs-missing)
+- [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
+- [Use Redis to track page views](#use-redis-to-track-page-views)
 
 ### Localhost in .env
 
@@ -852,3 +857,127 @@ $employees = Employee::paginate(10)->through(fn ($employee) => [
 ```
 
 Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1475073910383120399)
+
+### Quickly add a bearer token to HTTP request
+There’s a `withToken` method to attach the `Authorization` header to a request.
+```php
+// Booo!
+Http::withHreader([
+    'Authorization' => 'Bearer dQw4w9WgXcq'
+])
+
+// YES!
+Http::withToken('dQw4w9WgXcq');
+```
+
+Tip given by [@p3ym4n](https://twitter.com/p3ym4n/status/1487809735663489024)
+
+### Copy file or all files from a folder
+You can use the `readStream` and `writeStream` to copy a file (or all files from a folder) from one disk to another keeping the memory usage low.
+```php
+// List all the files from a folder
+$files = Storage::disk('origin')->allFiles('/from-folder-name');
+
+// Using normal get and put (the whole file string at once)
+foreach($files as $file) {
+    Storage::disk('destination')->put(
+        "optional-folder-name" . basename($file),
+        Storage::disk('origin')->get($file)
+    );
+}
+
+// Best: using Streams to keep memory usage low (good for large files)
+foreach ($files as $file) {
+    Storage::disk('destination')->writeStream(
+        "optional-folder-name" . basename($file),
+        Storage::disk('origin')->readStream($file)
+    );
+}
+```
+
+Tip given by [@alanrezende](https://twitter.com/alanrezende/status/1488194257567498243)
+
+### Sessions has() vs exists() vs missing()
+Do you know about `has`, `exists` and `missing` methods in Laravel session?
+
+```php
+// The has method returns true if the item is present & not null.
+$request->session()->has('key');
+
+// THe exists method returns true if the item ir present, event if its value is null
+$request->session()->exists('key');
+
+// THe missing method returns true if the item is not present or if the item is null
+$request->session()->missing('key');
+```
+
+Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1489086240729145344)
+
+### Test that you are passing the correct data to a view
+Need to test that you are passing the correct data to a view? You can use the viewData method on your response. Here are some examples:
+```php
+/** @test */
+public function it_has_the_correct_value()
+{
+    // ...
+    $response = $this->get('/some-route');
+    $this->assertEquals('John Doe', $response->viewData('name'));
+}
+
+/** @test */
+public function it_contains_a_given_record()
+{
+    // ...
+    $response = $this->get('/some-route');
+    $this->assertTrue($response->viewData('users')->contains($userA));
+}
+
+/** @test */
+public function it_returns_the_correct_amount_of_records()
+{
+    // ...
+    $response = $this->get('/some-route');
+    $this->assertCount(10, $response->viewData('users'));
+}
+```
+
+Tip given by [@JuanRangelTX](https://twitter.com/JuanRangelTX/status/1489944361580351490)
+
+### Use Redis to track page views
+Tracking something like page views with MySQL can be quite a performance hit when dealing with high traffic. Redis is much better at this. You can use Redis and a scheduled command to keep MySQL in sync on a fixed interval.
+```php
+Route::get('{project:slug', function (Project $project) {
+    // Instead of $project->increment('views') we use Redis
+    // We group the views by the project id
+    Redis::hincrby('project-views', $project->id, 1);
+})
+```
+
+```php
+// Console/Kernel.php
+$shedule->command(UpdateProjectViews::class)->daily();
+
+// Console/Commands/UpdateProjectViews.php
+// Get all views from our Redis instance
+$views = Redis::hgetall('project-views');
+
+/*
+[
+    (id) => (views)
+    1 => 213,
+    2 => 100,
+    3 => 341
+]
+ */
+
+// Loop through all project views
+foreach ($views as $projectId => $projectViews) {
+    // Increment the project views on our MySQL table
+    Project::find($projectId)->increment('views', $projectViews);
+}
+
+// Delete all the views from our Redis instance
+Redis::del('project-views');
+```
+
+Tip given by [@Philo01](https://twitter.com/JackEllis/status/1491909483496411140)
