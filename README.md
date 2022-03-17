@@ -22,7 +22,7 @@ Or if you want the Chinese version:
 
 ---
 
-__Update 05 February 2022__: Currently there are __260 tips__ divided into 14 sections.
+__Update 17 March 2022__: Currently there are __261 tips__ divided into 14 sections.
 
 ## Table of Contents
 
@@ -38,5 +38,5 @@ __Update 05 February 2022__: Currently there are __260 tips__ divided into 14 se
 - [Artisan](Artisan.md) (5 tips)
 - [Factories](Factories.md) (6 tips)
 - [Log and debug](Log_and_Debug.md) (5 tips)
-- [API](Api.md) (4 tips)
+- [API](Api.md) (5 tips)
 - [Other](Other.md) (50 tips)
