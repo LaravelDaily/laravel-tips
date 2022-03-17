@@ -6,6 +6,7 @@
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
 - [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
 - [Get Bearer Token from Authorization header](#get-bearer-token-from-authorization-header)
+- [Sorting Your API Results](#sorting-your-api-results)
 
 ### API Resources: With or Without "data"?
 
@@ -73,3 +74,47 @@ $token = $request->bearerToken();
 ```
 
 Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1488413755826327553)
+
+### Sorting Your API Results
+
+Single-column API sorting, with direction control
+
+```php
+// Handles /dogs?sort=name and /dogs?sort=-name
+Route::get('dogs', function (Request $request) {
+    // Get the sort query parameter (or fall back to default sort "name")
+    $sortColumn = $request->input('sort', 'name');
+
+    // Set the sort direction based on whether the key starts with -
+    // using Laravel's Str::startsWith() helper function
+    $sortDirection = Str::startsWith($sortColumn, '-') ? 'desc' : 'asc';
+    $sortColumn = ltrim($sortColumn, '-');
+
+    return Dog::orderBy($sortColumn, $sortDirection)
+        ->paginate(20);
+});
+```
+
+we do the same for multiple columns (e.g., ?sort=name,-weight)
+
+```php
+// Handles ?sort=name,-weight
+Route::get('dogs', function (Request $request) {
+    // Grab the query parameter and turn it into an array exploded by ,
+    $sorts = explode(',', $request->input('sort', ''));
+
+    // Create a query
+    $query = Dog::query();
+
+    // Add the sorts one by one
+    foreach ($sorts as $sortColumn) {
+        $sortDirection = Str::startsWith($sortColumn, '-') ? 'desc' : 'asc';
+        $sortColumn = ltrim($sortColumn, '-');
+
+        $query->orderBy($sortColumn, $sortDirection);
+    }
+
+    // Return
+    return $query->paginate(20);
+});
+```
