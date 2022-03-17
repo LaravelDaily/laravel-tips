@@ -86,7 +86,7 @@ Route::get('dogs', function (Request $request) {
     $sortColumn = $request->input('sort', 'name');
 
     // Set the sort direction based on whether the key starts with -
-    // using Laravel's starts_with() helper function
+    // using Laravel's Str::startsWith() helper function
     $sortDirection = Str::startsWith($sortColumn, '-') ? 'desc' : 'asc';
     $sortColumn = ltrim($sortColumn, '-');
 
