@@ -6,6 +6,7 @@
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
 - [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
 - [Get Bearer Token from Authorization header](#get-bearer-token-from-authorization-header)
+- [Sorting Your API Results](#sorting-your-api-results)
 
 ### API Resources: With or Without "data"?
 
