@@ -955,7 +955,7 @@ Route::get('{project:slug', function (Project $project) {
 
 ```php
 // Console/Kernel.php
-$shedule->command(UpdateProjectViews::class)->daily();
+$schedule->command(UpdateProjectViews::class)->daily();
 
 // Console/Commands/UpdateProjectViews.php
 // Get all views from our Redis instance
