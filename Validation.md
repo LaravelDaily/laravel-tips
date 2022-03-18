@@ -20,6 +20,8 @@
 - [Form Requests for validation redirection](#form-requests-for-validation-redirection)
 - [Mac validation rule](#mac-validation-rule)
 - [Validate email with TLD domain required](#validate-email-with-tld-domain-required)
+- [New array validation rule required_array_keys](#new-array-validation-rule-required_array_keys)
+- [Position placeholder in validation messages](#position-placeholder-in-validation-messages)
 
 ### Image validation
 
@@ -314,3 +316,76 @@ But if you want to make sure the email must have a tld domain (ie: `taylor@larav
 ```
 
 Tip given by [@Chris1904](https://laracasts.com/discuss/channels/general-discussion/laravel-58-override-email-validation-use-57-rules?replyId=645613)
+
+### New array validation rule required_array_keys
+Laravel 8.82 adds a `required_array_keys` validation rule. The rule checks that all of the specified keys exist in an array.
+
+Valid data that would pass the validation:
+```php
+$data = [
+    'baz' => [
+        'foo' => 'bar',
+        'fee' => 'faa',
+        'laa' => 'lee'
+    ],
+];
+
+$rules = [
+    'baz' => [
+        'array',
+        'required_array_keys:foo,fee,laa',
+    ],
+];
+
+$validator = Validator::make($data, $rules);
+$validator->passes(); // true
+```
+
+Invalid data that would fail the validation:
+```php
+$data = [
+    'baz' => [
+        'foo' => 'bar',
+        'fee' => 'faa',
+    ],
+];
+
+$rules = [
+    'baz' => [
+        'array',
+        'required_array_keys:foo,fee,laa',
+    ],
+];
+
+$validator = Validator::make($data, $rules);
+$validator->passes(); // false
+```
+
+Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1488853052765478914)
+
+### Position placeholder in validation messages
+In Laravel 9 you can use the :position placeholder in validation messages if you're working with arrays.<br>
+
+This will output: "Please provide an amount for price #2"
+```php
+class CreateProductRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return  [
+            'title' => ['required', 'string'];
+            'description' => ['nullable', 'sometimes', 'string'],
+            'prices' => ['required', 'array'],
+            'prices.*.amount' => ['required', 'numeric'],
+            'prices.*.expired_at' => ['required', 'date'],
+        ];
+    }
+    
+    public function messages(): array
+    {
+        'prices.*.amount.required' => 'Please provide an amount for price #:position'
+    }
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1502299053635235842)

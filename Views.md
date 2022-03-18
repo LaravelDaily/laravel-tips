@@ -17,6 +17,7 @@
 - [Automatically highlight nav links](#automatically-highlight-nav-links)
 - [Cleanup loops](#cleanup-loops)
 - [Simple way to tidy up your Blade views](#simple-way-to-tidy-up-your-blade-views)
+- [Checked blade directive](@checked-blade-directive)
 
 ### $loop variable in foreach
 
@@ -315,3 +316,19 @@ Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
 ```
 
 Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1465674086022107137)
+
+### Checked blade directive
+In Laravel 9, you'll be able to use the cool new "checked" Blade directive.<br>
+
+This is going to be a nice addition that we can use to clean up our Blade views a little bit
+```php
+// Before Laravel 9:
+<input type="radio" name="active" value="1" {{ old('active', $user->active) ? 'checked' : '' }}/>
+<input type="radio" name="active" value="0" {{ old('active', $user->active) ? '' : 'checked' }}/>
+
+// Laravel 9
+<input type="radio" name="active" value="1" @checked(old('active', $user->active))/>
+<input type="radio" name="active" value="0" @checked(!old('active', $user->active))/>
+```
+
+Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1489567000812736513)
