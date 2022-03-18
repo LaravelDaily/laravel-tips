@@ -66,7 +66,7 @@ Notification::route('mail', 'taylor@example.com')
 ```
 
 ### Set conditional object properties
-ou can use the `when()` or `unless()` methods in your MailMessage notifications to set conditional object properties like a call to action.
+You can use the `when()` or `unless()` methods in your MailMessage notifications to set conditional object properties like a call to action.
 ```php
 class InvoicePaid extends Notification
 {
