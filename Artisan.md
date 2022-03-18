@@ -125,7 +125,7 @@ Laravel the skip method in scheduler<br>
 
 You can use `skip` in your commands to skip an execution
 ```php
-$shedule->command('emails:send')->daily()->skip(function () {
+$schedule->command('emails:send')->daily()->skip(function () {
     return Calendar::isHoliday();
 });
 ```
