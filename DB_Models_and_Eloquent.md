@@ -79,6 +79,7 @@
 - [Make use of the value method on the query builder](#make-use-of-the-value-method-on-the-query-builder)
 - [Pass array to where method](#pass-array-to-where-method)
 - [Return the primary keys from models collection](#return-the-primary-keys-from-models-collection)
+- [Force Laravel to use eager loading](#force-laravel-to-use-eager-loading)
 
 ### Reuse or clone query()
 
@@ -1506,3 +1507,16 @@ $users->modelsKeys(); // [1, 2, 3]
 ```
 
 Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1495816807910891520)
+
+### Force Laravel to use eager loading
+
+If you want to prevent a lazy loading in your app, you only need to add following line to the `boot()` method in your `AppServiceProvider`
+
+```php
+Model::preventLazyLoading();
+```
+But, if you want to enable this feature only on your local development you can change above code on that:
+```php
+Model::preventLazyLoading(!app()->isProduction());
+```
+Tip given by [@CatS0up](https://github.com/CatS0up)
