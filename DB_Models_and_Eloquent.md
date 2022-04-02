@@ -80,6 +80,7 @@
 - [Pass array to where method](#pass-array-to-where-method)
 - [Return the primary keys from models collection](#return-the-primary-keys-from-models-collection)
 - [Force Laravel to use eager loading](#force-laravel-to-use-eager-loading)
+- [Make all your models mass assignable](#make-all-your-models-mass-assignable)
 
 ### Reuse or clone query()
 
@@ -1519,4 +1520,24 @@ But, if you want to enable this feature only on your local development you can c
 ```php
 Model::preventLazyLoading(!app()->isProduction());
 ```
+Tip given by [@CatS0up](https://github.com/CatS0up)
+
+### Make all your models mass assignable
+
+It is not a recommended approach for security reasons, but it is possible.
+
+When you want do this, you don't need to set an empty `$guarded` array for every model, like this:
+
+```php
+protected $guarded = [];
+```
+
+You can do it from a single place, just add following line to the `boot()` method in your `AppServiceProvider`:
+
+```php
+Model::unguard();
+```
+
+Now, all your models are mass assignable.
+
 Tip given by [@CatS0up](https://github.com/CatS0up)
