@@ -81,6 +81,7 @@
 - [Return the primary keys from models collection](#return-the-primary-keys-from-models-collection)
 - [Force Laravel to use eager loading](#force-laravel-to-use-eager-loading)
 - [Make all your models mass assignable](#make-all-your-models-mass-assignable)
+- [Hiding columns in select all statements](#hiding-columns-in-select-all-statements)
 
 ### Reuse or clone query()
 
@@ -1539,5 +1540,23 @@ Model::unguard();
 ```
 
 Now, all your models are mass assignable.
+
+Tip given by [@CatS0up](https://github.com/CatS0up)
+
+### Hiding columns in select all statements
+
+If you use Laravel v8.78 and MySQL 8.0.23 and onwards, you can define choosen columns as "invisible". Columns which are define as `invisible` will be hidden from the `select *` statements.
+
+However, to do so, we must use a `invisible()` method in the migration, something like that:
+```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('table', function (Blueprint $table) {
+    $table->string('secret')->nullable()->invisible();
+});
+```
+
+That's it! This will make chosen column hidden from `select *` statement.
 
 Tip given by [@CatS0up](https://github.com/CatS0up)
