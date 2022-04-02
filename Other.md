@@ -53,7 +53,7 @@
 - [$request->date() method](#request-date-method)
 - [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
 - [Quickly add a bearer token to HTTP request](#quickly-add-a-bearer-token-to-HTTP-request)
-- [Copy file or all files from a folder](#copy-file-or-all-files-from a-folder)
+- [Copy file or all files from a folder](#copy-file-or-all-files-from-a-folder)
 - [Sessions has() vs exists() vs missing()](#sessions-has-vs-exists-vs-missing)
 - [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
 - [Use Redis to track page views](#use-redis-to-track-page-views)
