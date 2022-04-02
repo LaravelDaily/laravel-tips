@@ -39,4 +39,4 @@ __Update 29 March 2022__: Currently there are __286 tips__ divided into 14 secti
 - [Factories](Factories.md) (6 tips)
 - [Log and debug](Log_and_Debug.md) (5 tips)
 - [API](Api.md) (5 tips)
-- [Other](Other.md) (55 tips)
+- [Other](Other.md) (56 tips)
