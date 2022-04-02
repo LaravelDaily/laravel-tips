@@ -999,7 +999,7 @@ Route::get('redirectRoute', function() {
 
 ```
 
-This helper wrk the same way as `redirect()->route('home')`, but it is more concise than a old way.
+This helper work in the same way as `redirect()->route('home')`, but it is more concise than a old way.
 
 Tip given by [@CatS0up](https://github.com/CatS0up)
 
