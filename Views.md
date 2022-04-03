@@ -36,9 +36,19 @@ Inside of foreach loop, check if current entry is first/last by just using `$loo
      <p>This is user {{ $user->id }}</p>
 @endforeach
 ```
-
 There are also other properties like `$loop->iteration` or `$loop->count`.
 Learn more on the [official documentation](https://laravel.com/docs/master/blade#the-loop-variable).
+
+### @forelse provides convinient way to iterate through collection
+
+```blade
+     @forelse ($users as $user)
+          <li>{{ $user->name }}</li>
+     @empty
+         <p>No users</p>
+     @endforelse
+```
+Looping over all elements and for example rendering a row of a user table but putting an empty notice when you do not have any data.
 
 ### Does view file exist?
 
