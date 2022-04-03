@@ -53,10 +53,11 @@
 - [$request->date() method](#request-date-method)
 - [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
 - [Quickly add a bearer token to HTTP request](#quickly-add-a-bearer-token-to-HTTP-request)
-- [Copy file or all files from a folder](#copy-file-or-all-files-from a-folder)
+- [Copy file or all files from a folder](#copy-file-or-all-files-from-a-folder)
 - [Sessions has() vs exists() vs missing()](#sessions-has-vs-exists-vs-missing)
 - [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
 - [Use Redis to track page views](#use-redis-to-track-page-views)
+- [to_route() helper function](#to\_route-helper-function)
 
 ### Localhost in .env
 
@@ -981,3 +982,24 @@ Redis::del('project-views');
 ```
 
 Tip given by [@Philo01](https://twitter.com/JackEllis/status/1491909483496411140)
+
+### to_route() helper function
+
+Laravel 9 provides shorter version of `response()->route()`, take a look on the following code:
+```php
+// Old way
+Route::get('redirectRoute', function() {
+    return redirect()->route('home');
+});
+
+// Post Laravel 9
+Route::get('redirectRoute', function() {
+    return to_route('home');
+});
+
+```
+
+This helper work in the same way as `redirect()->route('home')`, but it is more concise than a old way.
+
+Tip given by [@CatS0up](https://github.com/CatS0up)
+

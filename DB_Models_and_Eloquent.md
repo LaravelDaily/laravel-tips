@@ -80,6 +80,8 @@
 - [Pass array to where method](#pass-array-to-where-method)
 - [Return the primary keys from models collection](#return-the-primary-keys-from-models-collection)
 - [Force Laravel to use eager loading](#force-laravel-to-use-eager-loading)
+- [Make all your models mass assignable](#make-all-your-models-mass-assignable)
+- [Hiding columns in select all statements](#hiding-columns-in-select-all-statements)
 
 ### Reuse or clone query()
 
@@ -1519,4 +1521,42 @@ But, if you want to enable this feature only on your local development you can c
 ```php
 Model::preventLazyLoading(!app()->isProduction());
 ```
+Tip given by [@CatS0up](https://github.com/CatS0up)
+
+### Make all your models mass assignable
+
+It is not a recommended approach for security reasons, but it is possible.
+
+When you want do this, you don't need to set an empty `$guarded` array for every model, like this:
+
+```php
+protected $guarded = [];
+```
+
+You can do it from a single place, just add following line to the `boot()` method in your `AppServiceProvider`:
+
+```php
+Model::unguard();
+```
+
+Now, all your models are mass assignable.
+
+Tip given by [@CatS0up](https://github.com/CatS0up)
+
+### Hiding columns in select all statements
+
+If you use Laravel v8.78 and MySQL 8.0.23 and onwards, you can define choosen columns as "invisible". Columns which are define as `invisible` will be hidden from the `select *` statements.
+
+However, to do so, we must use a `invisible()` method in the migration, something like that:
+```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('table', function (Blueprint $table) {
+    $table->string('secret')->nullable()->invisible();
+});
+```
+
+That's it! This will make chosen column hidden from `select *` statement.
+
 Tip given by [@CatS0up](https://github.com/CatS0up)

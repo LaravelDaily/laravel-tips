@@ -26,7 +26,7 @@ __Update 29 March 2022__: Currently there are __286 tips__ divided into 14 secti
 
 ## Table of Contents
 
-- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (80 tips)
+- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (82 tips)
 - [Models Relations](Models_Relations.md) (35 tips)
 - [Migrations](Migrations.md) (13 tips)
 - [Views](Views.md) (15 tips)
@@ -39,4 +39,4 @@ __Update 29 March 2022__: Currently there are __286 tips__ divided into 14 secti
 - [Factories](Factories.md) (6 tips)
 - [Log and debug](Log_and_Debug.md) (5 tips)
 - [API](Api.md) (5 tips)
-- [Other](Other.md) (55 tips)
+- [Other](Other.md) (56 tips)
