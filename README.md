@@ -1,6 +1,6 @@
 # IMPORTANT: March 2022
 
-It's horrible to see what is happening now in Ukraine, as Russian army is [bombarding houses, hospitals and kindergartens](https://twitter.com/DavidCornDC/status/1501620037785997316). 
+It's horrible to see what is happening now in Ukraine, as Russian army is [bombarding houses, hospitals and kindergartens](https://twitter.com/DavidCornDC/status/1501620037785997316).
 
 Please [check out supportukrainenow.org](https://supportukrainenow.org/) for the ways how you can help people there. Spread the word.
 
@@ -22,13 +22,13 @@ Or if you want the Chinese version:
 
 ---
 
-__Update 03 April 2022__: Currently there are __289 tips__ divided into 14 sections.
+**Update 03 April 2022**: Currently there are **289 tips** divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](DB_Models_and_Eloquent.md) (82 tips)
 - [Models Relations](Models_Relations.md) (35 tips)
-- [Migrations](Migrations.md) (13 tips)
+- [Migrations](Migrations.md) (14 tips)
 - [Views](Views.md) (15 tips)
 - [Routing](Routing.md) (26 tips)
 - [Validation](Validation.md) (20 tips)

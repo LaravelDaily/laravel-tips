@@ -15,7 +15,7 @@
 - [Anonymous Migrations](#anonymous-migrations)
 - [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
 - [Checking For Table / Column Existence](#checking-for-table--column-existence)
-
+- [Group Columns within an After Method](#group-columns-within-an-after-method)
 
 ### Unsigned Integer
 
@@ -141,6 +141,7 @@ Schema::table('users', function (Blueprint $table) {
 ```
 
 Also the `after()` method can now be used to add multiple fields.
+
 ```php
 Schema::table('users', function (Blueprint $table) {
     $table->after('remember_token', function ($table){
@@ -151,8 +152,10 @@ Schema::table('users', function (Blueprint $table) {
 ```
 
 ### Make migration for existing table
-If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "_in_xxxxx_table" or "_to_xxxxx_table" at the end, or specify "--table" parameter.
+
+If you make a migration for existing table, and you want Laravel to generate the Schema::table() for you, then add "\_in_xxxxx_table" or "\_to_xxxxx_table" at the end, or specify "--table" parameter.
 `php artisan change_fields_products_table` generates empty class
+
 ```php
 class ChangeFieldsProductsTable extends Migration
 {
@@ -162,7 +165,9 @@ class ChangeFieldsProductsTable extends Migration
     }
 }
 ```
+
 But add `in_xxxxx_table` `php artisan make:migration change_fields_in_products_table` and it generates class with `Schemma::table()` pre-fileed
+
 ```php
 class ChangeFieldsProductsTable extends Migration
 {
@@ -174,7 +179,9 @@ class ChangeFieldsProductsTable extends Migration
     };
 }
 ```
+
 Also you can specify `--table` parameter `php artisan make:migration whatever_you_want --table=products`
+
 ```php
 class WhateverYouWant extends Migration
 {
@@ -199,6 +206,7 @@ php artisan migrate --pretend
 Tip given by [@zarpelon](https://github.com/zarpelon)
 
 ### Anonymous Migrations
+
 The Laravel team released Laravel 8.37 with anonymous migration support, which solves a GitHub issue with migration class name collisions. The core of the problem is that if multiple migrations have the same class name, it'll cause issues when trying to recreate the database from scratch.
 Here's an example from the [pull request](https://github.com/laravel/framework/pull/36906) tests:
 
@@ -227,18 +235,22 @@ return new class extends Migration {
 Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)
 
 ### You can add "comment" about a column inside your migrations
+
 You can add "comment" about a column inside your migrations and provide useful information.<br>
 If database is managed by someone other than developers, they can look at comments in Table structure before performing any operations.
+
 ```php
 $table->unsignedInteger('interval')
     ->index()
-    ->comment('This column is used for indexing.')   
+    ->comment('This column is used for indexing.')
 ```
 
 Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978)
 
 ### Checking For Table / Column Existence
+
 You may check for the existence of a table or column using the hasTable and hasColumn methods:
+
 ```php
 if (Schema::hasTable('users')) {
     // The "users" table exists...
@@ -250,3 +262,19 @@ if (Schema::hasColumn('users', 'email')) {
 ```
 
 Tip given by [@dipeshsukhia](https://github.com/dipeshsukhia)
+
+### Group Columns within an After Method
+
+In your migrations, you can add multiple columns after another column using the after method:
+
+```php
+Schema::table('uers', function (Blueprint $table) {
+    $table->after('password', function ($table) {
+        $table->string('address_line1');
+        $table->string('address_line2');
+        $table->string('city');
+    });
+});
+```
+
+Tip given by [@ncosmeescobedo](https://twitter.com/cosmeescobedo/status/1512233993176973314)
