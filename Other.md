@@ -58,6 +58,7 @@
 - [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
 - [Use Redis to track page views](#use-redis-to-track-page-views)
 - [to_route() helper function](#to\_route-helper-function)
+- [Pause a long running job when queue worker shuts down](#pause-a-long-running-job-when-queue-worker-shuts-down)
 
 ### Localhost in .env
 
@@ -1003,3 +1004,69 @@ This helper work in the same way as `redirect()->route('home')`, but it is more 
 
 Tip given by [@CatS0up](https://github.com/CatS0up)
 
+### Pause a long running job when queue worker shuts down
+
+When running a long job, if your queue worker gets shutdown by
+- Stopping the worker.
+- Sending signal **SIGTERM** (**SIGINT** for Horizon).
+- Pressing `CTRL + C` (Linux/Windows).
+
+Then the job process may get corrupted while it is doing something.
+
+By checking with `app('queue.worker')->shouldQuit`, we can determine if the worker is shutting down. This way, we can save the current process and requeue the job so that when the queue worker runs again, it can resume from where it left.
+
+This is very useful in the Containerized world (Kubernetes, Docker etc.) where the container gets destroyed and re-created anytime.
+
+```php
+<?php
+
+namespace App\Jobs;
+
+use App\Models\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+
+class MyLongJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $timeout = 3600;
+
+    private const CACHE_KEY = 'user.last-process-id';
+
+    public function handle()
+    {
+        $processedUserId = Cache::get(self::CACHE_KEY, 0); // Get last processed item id
+        $maxId = Users::max('id');
+
+        if ($processedUserId >= $maxId) {
+            Log::info("All users have already been processed!");
+            return;
+        }
+
+        while ($user = User::where('id', '>', $processedUserId)->first()) {
+            Log::info("Processing User ID: {$user->id}");
+
+            // Your long work here to process user
+            // Ex. Calling Billing API, Preparing Invoice for User etc.
+
+            $processedUserId = $user->id;
+            Cache::put(self::CACHE_KEY, $processedUserId, now()->addSeconds(3600)); // Updating last processed item id
+
+            if (app('queue.worker')->shouldQuit) {
+                $this->job->release(60); // Requeue the job with delay of 60 seconds
+                break;
+            }
+        }
+
+        Log::info("All users have processed successfully!");
+    }
+}
+```
+
+Tip given by [@a-h-abid](https://github.com/a-h-abid)
