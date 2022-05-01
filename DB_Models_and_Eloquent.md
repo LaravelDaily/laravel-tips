@@ -328,6 +328,16 @@ return Product::find($this->productIDs)
 
 Tip given by [@tahiriqbalnajam](https://twitter.com/tahiriqbalnajam/status/1436120403655671817)
 
+Incase of integer, use `whereIn` with limited data range only instead use `whereIntegerInRaw` which is faster then `whereIn`.
+
+```php
+Product::whereIn('id', range(1, 50))->get();
+// You can do this
+Product::whereIntegerInRaw('id', range(1, 50))->get();
+```
+
+Tip given by [@sachinkiranti](https://raisachin.com.np)
+
 ### Find Many and return specific columns
 
 Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specificied columns, not all columns of model:
