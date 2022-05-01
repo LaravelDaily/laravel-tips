@@ -571,3 +571,34 @@ Route::get('portfolios/{portfolio}', function (Portfolio $portfolio) {
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1496871240346509312)
+
+### Route Parameters 
+
+You can define route parameters to accept only the given strings using the `where` condition.
+
+```php
+Route::get('/register/{social}', 'SocialLoginController@login')->where('social', 'facebook|twitter|google');
+```
+
+You can define [optional parameter](https://laravel.com/docs/9.x/routing#parameters-optional-parameters) in route.
+
+```php
+Route::get('/user/{name?}', function ($name = 'John') {
+    return $name;
+});
+```
+
+You have a model `User` and you have a route described below :
+
+```php
+Route::resource('admin', 'AdminController');
+```
+
+The route model binding will not work as the parameter will be defined as `{admin}`. To make it work, we can do is :
+
+```php
+Route::resource('admin', 'AdminController')
+    ->parameters([ 'admin' => 'user' ]);
+```
+
+Tip given by [@sachinkiranti](https://github.com/sachinkiranti)
