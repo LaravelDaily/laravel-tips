@@ -8,6 +8,8 @@
 - [Using factories with relationships](#using-factories-with-relationships)
 - [Create models without dispatching any events](#create-models-without-dispatching-any-events)
 - [Useful for() method](#useful-for-method)
+- [Run factories without dispatching events](#run-factories-without-dispatching-events)
+- [Specify dependencies in the run() method](#specify-dependencies-in-the-run-method)
 
 ### Factory callbacks
 
@@ -86,3 +88,46 @@ public function run()
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1461002439629361158)
+
+ ### Run factories without dispatching events
+If you want to create multiple records using Factory without firing any Events, you can wrap your code inside a withoutEvents closure.
+
+```php
+$posts = Post::withoutEvents(function () {
+    return Post::factory()->count(50)->create();
+});
+```
+
+Tip given by [@TheLaravelDev](https://twitter.com/TheLaravelDev/status/1510965402666676227)
+
+### Specify dependencies in the run() method
+You can specify dependencies in the `run()` method of your seeder.
+
+```php
+class DatabaseSeeder extends Seeder
+{
+    public function run()
+    {
+        $user = User::factory()->create();
+        
+        $this->callWith(EventSeeder::class, [
+            'user' => $user
+        ]);
+    }
+}
+```
+
+```php
+class EventSeeder extends Seeder
+{
+    public function run(User $user)
+    {
+        Event::factory()
+            ->when($user, fn($f) => $f->for('user'))
+            ->for(Program::factory())
+            ->create();
+    }
+}
+```
+
+Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1514428294418079746)

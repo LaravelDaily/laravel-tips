@@ -16,6 +16,8 @@
 - [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
 - [Checking For Table / Column Existence](#checking-for-table--column-existence)
 - [Group Columns within an After Method](#group-columns-within-an-after-method)
+- [Add the column in the database table only if it's not present & can drop it if, its present](#add-the-column-in-the-database-table-only-if-its-not-present--can-drop-it-if-its-present)
+- [Method to set the default value for current timestamp](#method-to-set-the-default-value-for-current-timestamp)
 
 ### Unsigned Integer
 
@@ -278,3 +280,45 @@ Schema::table('uers', function (Blueprint $table) {
 ```
 
 Tip given by [@ncosmeescobedo](https://twitter.com/cosmeescobedo/status/1512233993176973314)
+
+### Add the column in the database table only if it's not present & can drop it if, its present
+Now you can add the column in the database table only if its not present & can drop it if, its present. For that following methods are introduced: <br>
+
+👉 whenTableDoesntHaveColumn<br>
+👉 whenTableHasColumn<br>
+
+Available from Laravel 9.6.0
+
+```php
+return new class extends Migration {
+    public function up()
+    {
+        Schema::whenTableDoesntHaveColumn('users', 'name'), function (Blueprint $table) {
+            $table->string('name', 30);
+        });
+    }
+    
+    public function down()
+    {
+        Schema::whenTableHasColumn('users', 'name'), function (Blueprint $table) {
+            $table->dropColumn('name');
+        });
+    }
+}
+```
+
+Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1510579415163432961)
+
+### Method to set the default value for current timestamp
+You can use `useCurrent()` method for your custom timestamp column to store the current timestamp as a default value.
+
+```php
+Schema::create('posts', function (Blueprint $table) {
+    $table->id();
+    $table->string('title');
+    $table->timestamp('added_at')->useCurrent();
+    $table->timespamps();
+});
+```
+
+Tip given by [@iamgurmandeep](https://twitter.com/iamgurmandeep/status/1517152425748148225)

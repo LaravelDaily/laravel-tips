@@ -22,21 +22,21 @@ Or if you want the Chinese version:
 
 ---
 
-**Update 09 April 2022**: Currently there are **291 tips** divided into 14 sections.
+**Update 09 May 2022**: Currently there are **314 tips** divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](DB_Models_and_Eloquent.md) (82 tips)
-- [Models Relations](Models_Relations.md) (35 tips)
-- [Migrations](Migrations.md) (14 tips)
+- [Models Relations](Models_Relations.md) (42 tips)
+- [Migrations](Migrations.md) (16 tips)
 - [Views](Views.md) (15 tips)
-- [Routing](Routing.md) (26 tips)
-- [Validation](Validation.md) (20 tips)
-- [Collections](Collections.md) (8 tips)
+- [Routing](Routing.md) (32 tips)
+- [Validation](Validation.md) (21 tips)
+- [Collections](Collections.md) (9 tips)
 - [Auth](Auth.md) (5 tips)
 - [Mail](Mail.md) (6 tips)
 - [Artisan](Artisan.md) (7 tips)
-- [Factories](Factories.md) (6 tips)
+- [Factories](Factories.md) (8 tips)
 - [Log and debug](Log_and_Debug.md) (5 tips)
 - [API](Api.md) (5 tips)
-- [Other](Other.md) (57 tips)
+- [Other](Other.md) (61 tips)
