@@ -20,6 +20,7 @@
 - [Form Requests for validation redirection](#form-requests-for-validation-redirection)
 - [Mac validation rule](#mac-validation-rule)
 - [Validate email with TLD domain required](#validate-email-with-tld-domain-required)
+- [Exclude validated value](#exclude-validated-value)
 
 ### Image validation
 
@@ -314,3 +315,36 @@ But if you want to make sure the email must have a tld domain (ie: `taylor@larav
 ```
 
 Tip given by [@Chris1904](https://laracasts.com/discuss/channels/general-discussion/laravel-58-override-email-validation-use-57-rules?replyId=645613)
+
+### Exclude validated value
+When you need to validate a field, but don't actually require it for anything e.g. 'accept terms and conditions', make use of the `exclude` rule. That way, the `validated` method won't return it...
+
+```php
+class StoreRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'email_address' => 'required|email',
+            'terms_and_conditions' => 'required|accepted|exclude',
+        ];
+    }
+```
+
+```php
+class RegistrationController extends Controller
+{
+    public function store(StoreRequest $request)
+    {
+        $payload = $request->validated(); // only name and email
+        
+        $user = User::create($payload);
+        
+        Auth::login($user);
+        
+        return redirect()->route('dashboard');
+    }
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1518590652682063873)
