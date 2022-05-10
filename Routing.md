@@ -601,7 +601,7 @@ Here are two ways to check the route name in Laravel.
 Tip given by [@AndrewSavetchuk](https://twitter.com/AndrewSavetchuk/status/1510197418909999109)
 
 ### Route model binding soft-deleted models
-By default, when using route model binding will not retrieve models that have been soft-deleted.<br>
+By default, when using route model binding will not retrieve models that have been soft-deleted.
 You can change that behavior by using `withTrashed` in your route.
 
 ```php

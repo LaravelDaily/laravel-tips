@@ -22,7 +22,7 @@
 - [Validate email with TLD domain required](#validate-email-with-tld-domain-required)
 - [New array validation rule required_array_keys](#new-array-validation-rule-required_array_keys)
 - [Position placeholder in validation messages](#position-placeholder-in-validation-messages)
-- [Exclude validated value](#exclude-validated-value)
+- [Exclude validation value](#exclude-validation-value)
 
 ### Image validation
 
@@ -391,7 +391,7 @@ class CreateProductRequest extends FormRequest
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1502299053635235842)
 
-### Exclude validated value
+### Exclude validation value
 When you need to validate a field, but don't actually require it for anything e.g. 'accept terms and conditions', make use of the `exclude` rule. That way, the `validated` method won't return it...
 
 ```php

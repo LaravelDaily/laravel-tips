@@ -282,10 +282,11 @@ Schema::table('uers', function (Blueprint $table) {
 Tip given by [@ncosmeescobedo](https://twitter.com/cosmeescobedo/status/1512233993176973314)
 
 ### Add the column in the database table only if it's not present & can drop it if, its present
-Now you can add the column in the database table only if its not present & can drop it if, its present. For that following methods are introduced: <br>
+Now you can add the column in the database table only if its not present & can drop it if, its present. For that following methods are introduced:
 
-👉 whenTableDoesntHaveColumn<br>
-👉 whenTableHasColumn<br>
+👉 whenTableDoesntHaveColumn
+
+👉 whenTableHasColumn
 
 Available from Laravel 9.6.0
 

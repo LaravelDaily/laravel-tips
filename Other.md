@@ -1076,7 +1076,7 @@ class MyLongJob implements ShouldQueue
 Tip given by [@a-h-abid](https://github.com/a-h-abid)
 
 ### Freezing Time in Laravel Tests
-In your Laravel tests, you might sometimes need to freeze the time.<br>
+In your Laravel tests, you might sometimes need to freeze the time.
 
 This is particularly useful if you're trying to make assertions based on timestamps or need to make queries based on dates and/or times.
 

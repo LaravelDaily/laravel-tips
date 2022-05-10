@@ -1671,11 +1671,11 @@ $employees = Employee::get(['name', 'title', 'email']);
 Tip given by [@ecrmnn](https://twitter.com/ecrmnn/status/1516087672351203332)
 
 ### Chain conditional clauses to the query without writing if-else statements
-The "when" helper in the query builder is🔥<br>
+The "when" helper in the query builder is🔥
 
-You can chain conditional clauses to the query without writing if-else statements.<br>
+You can chain conditional clauses to the query without writing if-else statements.
 
-Makes your query very clear:<br>
+Makes your query very clear:
 
 ```php
 class RatingSorter extends Sorter
