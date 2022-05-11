@@ -10,6 +10,7 @@
 - [Higher order collection methods](#higher-order-collection-methods)
 - [Higher order collection message](#higher-order-collection-message)
 - [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
+- [Static times method](#static-times-method)
 
 ### Don’t Filter by NULL in Collections
 
@@ -145,3 +146,15 @@ return $this->collection->getOrPut($key, $value='teacoders');
 ```
 
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1488338815592718336)
+
+### Static times method
+The static times method creates a new collection by invoking the given closure a specified number of times.
+
+```php
+Collectable::times(7, function ($number) {
+    return now()->addDays($number)->format('d-m-Y');
+});
+// Output: [01-04-2022, 02-04-2022, ..., 07-04-2022]
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1509447909602906116)

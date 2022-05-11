@@ -82,6 +82,13 @@
 - [Force Laravel to use eager loading](#force-laravel-to-use-eager-loading)
 - [Make all your models mass assignable](#make-all-your-models-mass-assignable)
 - [Hiding columns in select all statements](#hiding-columns-in-select-all-statements)
+- [JSON Where Clauses](#json-where-clauses)
+- [Get all the column names for a table](#get-all-the-column-names-for-a-table)
+- [Compare the values of two columns](#compare-the-values-of-two-columns)
+- [Accessor Caching](#accessor-caching)
+- [New scalar() method](#new-scalar-method)
+- [Select specific columns](#select-specific-columns)
+- [Chain conditional clauses to the query without writing if-else statements](#chain-conditional-clauses-to-the-query-without-writing-if-else-statements)
 
 ### Reuse or clone query()
 
@@ -1570,3 +1577,124 @@ Schema::table('table', function (Blueprint $table) {
 That's it! This will make chosen column hidden from `select *` statement.
 
 Tip given by [@CatS0up](https://github.com/CatS0up)
+
+### JSON Where Clauses
+Laravel offers helpers to query JSON columns for databases that support them. <br>
+
+Currently, MySQL 5.7+, PostgreSQL, SQL Server 2016, and SQLite 3.9.0 (using the JSON1 extension)
+
+```php
+// To query a json column you can use the -> operator
+$users = User::query()
+            ->where('preferences->dining->meal', 'salad')
+            ->get();
+// You can check if a JSON array contains a set of values
+$users = User::query()
+            ->whereJsonContains('options->languages', [
+                'en', 'de'
+               ])
+            ->get();
+// You can also query by the length a JSON array
+$users = User::query()
+            ->whereJsonLength('options->languages', '>', 1)
+            ->get();
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1509663119311663124)
+
+### Get all the column names for a table
+```php
+DB::getSchemaBuilder()->getColumnListing('users');
+/*
+returns [
+    'id',
+    'name',
+    'email',
+    'email_verified_at',
+    'password',
+    'remember_token',
+    'created_at',
+    'updated_at',
+]; 
+*/
+```
+
+Tip given by [@aaronlumsden](https://twitter.com/aaronlumsden/status/1511014229737881605)
+
+### Compare the values of two columns
+You can use `whereColumn` method to compare the values of two columns.
+
+```php
+return Task::whereColumn('created_at', 'updated_at')->get();
+// pass a comparison operator
+return Task::whereColumn('created_at', '>', 'updated_at')->get();
+```
+
+Tip given by [@iamgurmandeep](https://twitter.com/iamgurmandeep/status/1511673260353548294)
+
+### Accessor Caching
+As of Laravel 9.6, if you have a computationally intensive accessor, you can use the shouldCache method.
+
+```php
+public function hash(): Attribute
+{
+    return Attribute::make(
+        get: fn($value) => bcrypt(gzuncompress($value)),
+    )->shouldCache();
+}
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1514304409563402244)
+
+### New scalar() method
+In Laravel 9.8.0, the `scalar()` method was added that allows you to retrieve the first column of the first row from the query result.
+
+```php
+// Before
+DB::selectOne("SELECT COUNT(CASE WHEN food = 'burger' THEN 1 END) AS burgers FROM menu_items;")->burgers
+// Now
+DB::scalar("SELECT COUNT(CASE WHEN food = 'burger' THEN 1 END) FROM menu_items;")
+```
+
+Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1514550185837408265)
+
+### Select specific columns
+To select specific columns on a model you can use the select method -- or you can pass an array directly to the get method!
+
+```php
+// Select specified columns from all employees
+$employees = Employee::select(['name', 'title', 'email'])->get();
+// Select specified columns from all employees
+$employees = Employee::get(['name', 'title', 'email']);
+```
+
+Tip given by [@ecrmnn](https://twitter.com/ecrmnn/status/1516087672351203332)
+
+### Chain conditional clauses to the query without writing if-else statements
+The "when" helper in the query builder is🔥
+
+You can chain conditional clauses to the query without writing if-else statements.
+
+Makes your query very clear:
+
+```php
+class RatingSorter extends Sorter
+{
+    function execute(Builder $query)
+    {
+        $query
+            ->selectRaw('AVG(product_ratings.rating) AS avg_rating')
+            ->join('product_ratings', 'products.id', '=', 'product_ratings.product_id')
+            ->groupBy('products.id');
+            ->when(
+                $this->direction === SortDirections::Desc,
+                fn () => $query->orderByDesc('avg_rating')
+                fn () => $query->orderBy('avg_rating'),
+            );
+        
+        return $query;
+    }
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1521461317940350976)

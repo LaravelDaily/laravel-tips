@@ -28,6 +28,12 @@
 - [Route directory instead of route file](#route-directory-instead-of-route-file)
 - [Route resources grouping](#route-resources-grouping)
 - [Custom route bindings](#custom-route-bindings)
+- [Two ways to check the route name](#two-ways-to-check-the-route-name)
+- [Route model binding soft-deleted models](#route-model-binding-soft-deleted-models)
+- [Retrieve the URL without query parameters](#retrieve-the-url-without-query-parameters)
+- [Customizing Missing Model Behavior in route model bindings](#customizing-missing-model-behavior-in-route-model-bindings)
+- [Exclude middleware from a route](#exclude-middleware-from-a-route)
+- [Controller groups](#controller-groups)
 
 ### Route group within a group
 
@@ -571,3 +577,94 @@ Route::get('portfolios/{portfolio}', function (Portfolio $portfolio) {
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1496871240346509312)
+
+### Two ways to check the route name
+Here are two ways to check the route name in Laravel.
+
+```php
+// #1
+<a
+    href="{{ route('home') }}"
+    @class="['navbar-link', 'active' => Route::current()->getName() === 'home']"
+>
+    Home
+</a>
+// #2
+<a
+    href="{{ route('home') }}"
+    @class="['navbar-link', 'active' => request()->RouteIs('home)]"
+>
+    Home
+</a>
+```
+
+Tip given by [@AndrewSavetchuk](https://twitter.com/AndrewSavetchuk/status/1510197418909999109)
+
+### Route model binding soft-deleted models
+By default, when using route model binding will not retrieve models that have been soft-deleted.
+You can change that behavior by using `withTrashed` in your route.
+
+```php
+Route::get('/posts/{post}', function (Post $post) {
+    return $post;
+})->withTrashed();
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1511154599255703553)
+
+### Retrieve the URL without query parameters
+If for some reason, your URL is having query parameters, you can retrieve the URL without query parameters using the `fullUrlWithoutQuery` method of request like so.
+
+```php
+// Original URL: https://www.amitmerchant.com?search=laravel&lang=en&sort=desc
+$urlWithQUeryString = $request->fullUrlWithoutQuery([
+    'lang',
+    'sort'
+]);
+echo $urlWithQUeryString;
+// Outputs: https://www.amitmerchant.com?search=laravel
+```
+
+Tip given by [@amit_merchant](https://twitter.com/amit_merchant/status/1510867527962066944)
+
+### Customizing Missing Model Behavior in route model bindings
+By default, Laravel throws a 404 error when it can't bind the model, but you can change that behavior by passing a closure to the missing method.
+
+```php
+Route::get('/users/{user}', [UsersController::class, 'show'])
+    ->missing(function ($parameters) {
+        return Redirect::route('users.index');
+    });
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1511322007576608769)
+
+### Exclude middleware from a route
+You can exclude middleware at the route level in Laravel using the withoutMiddleware method.
+
+```php
+Route::post('/some/route', SomeController::class)
+    ->withoutMiddleware([VerifyCsrfToken::class]);
+```
+
+Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1512529798790320129)
+
+### Controller groups
+Instead of using the controller in each route, consider using a route controller group. Added to Laravel since v8.80
+
+```php
+// Before
+Route::get('users', [UserController::class, 'index']);
+Route::post('users', [UserController::class, 'store']);
+Route::get('users/{user}', [UserController::class, 'show']);
+Route::get('users/{user}/ban', [UserController::class, 'ban']);
+// After
+Route::controller(UsersController::class)->group(function () {
+    Route::get('users', 'index');
+    Route::post('users', 'store');
+    Route::get('users/{user}', 'show');
+    Route::get('users/{user}/ban', 'ban');
+});
+```
+
+Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1514943541612527616)

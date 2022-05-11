@@ -59,6 +59,10 @@
 - [Use Redis to track page views](#use-redis-to-track-page-views)
 - [to_route() helper function](#to\_route-helper-function)
 - [Pause a long running job when queue worker shuts down](#pause-a-long-running-job-when-queue-worker-shuts-down)
+- [Freezing Time in Laravel Tests](#freezing-time-in-laravel-tests)
+- [New squish helper](#new-squish-helper)
+- [Specify what to do if a scheduled task fails or succeeds](#specify-what-to-do-if-a-scheduled-task-fails-or-succeeds)
+- [Scheduled command on specific environments](#scheduled-command-on-specific-environments)
 
 ### Localhost in .env
 
@@ -1070,3 +1074,62 @@ class MyLongJob implements ShouldQueue
 ```
 
 Tip given by [@a-h-abid](https://github.com/a-h-abid)
+
+### Freezing Time in Laravel Tests
+In your Laravel tests, you might sometimes need to freeze the time.
+
+This is particularly useful if you're trying to make assertions based on timestamps or need to make queries based on dates and/or times.
+
+```php
+// To freeze the time, you used to be able to write this at the time top of your tests:
+Carbon::setTestNow(Carbon::now());
+// You could also use the "travelTo" method:
+$this->travelTo(Carbon::now());
+// You can now use the new "freezeTime" method to keep your code readable and obvious:
+$this->freezeTime();
+```
+
+Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1509115721183158272)
+
+### New squish helper
+New in Laravel from 9.7 `squish` helper.
+
+```php
+$result = Str::squish(' Hello   John,         how   are   you?    ');
+// Hello John, how are you?
+```
+
+Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1511718052752150534)
+
+### Specify what to do if a scheduled task fails or succeeds
+You can specify what to do if a scheduled task fails or succeeds.
+
+```php
+$schedule->command('emails:send')
+        ->daily()
+        ->onSuccess(function () {
+            // The task succeeded
+        })
+        ->onFailure(function () {
+            // The task failed
+        });
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1513221529072414720)
+
+### Scheduled command on specific environments
+Running Laravel scheduled command on specific environments.
+
+```php
+// Not good
+if (app()->environment('production', 'staging')) {
+    $schedule->command('emails:send')
+        ->daily();
+}
+// Better
+$schedule->command('emails:send')
+        ->daily()
+        ->onEnvironment(['production', 'staging']);
+```
+
+Tip given by [@nguyenduy4994](https://twitter.com/nguyenduy4994/status/1516960273000587265)
