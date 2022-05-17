@@ -592,7 +592,7 @@ Here are two ways to check the route name in Laravel.
 // #2
 <a
     href="{{ route('home') }}"
-    @class="['navbar-link', 'active' => request()->RouteIs('home)]"
+    @class="['navbar-link', 'active' => request()->routeIs('home)]"
 >
     Home
 </a>
