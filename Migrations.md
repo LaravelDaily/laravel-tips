@@ -294,14 +294,14 @@ Available from Laravel 9.6.0
 return new class extends Migration {
     public function up()
     {
-        Schema::whenTableDoesntHaveColumn('users', 'name'), function (Blueprint $table) {
+        Schema::whenTableDoesntHaveColumn('users', 'name', function (Blueprint $table) {
             $table->string('name', 30);
         });
     }
     
     public function down()
     {
-        Schema::whenTableHasColumn('users', 'name'), function (Blueprint $table) {
+        Schema::whenTableHasColumn('users', 'name', function (Blueprint $table) {
             $table->dropColumn('name');
         });
     }
