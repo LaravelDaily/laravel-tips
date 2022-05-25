@@ -270,7 +270,7 @@ Tip given by [@dipeshsukhia](https://github.com/dipeshsukhia)
 In your migrations, you can add multiple columns after another column using the after method:
 
 ```php
-Schema::table('uers', function (Blueprint $table) {
+Schema::table('users', function (Blueprint $table) {
     $table->after('password', function ($table) {
         $table->string('address_line1');
         $table->string('address_line2');
