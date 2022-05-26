@@ -103,7 +103,7 @@ $offer = [
         ]
 ];
                 
-$totalPerGroup = collect($offer->lines)->groupBy('group')->map(fn($group) => $group->sum('price')); 
+$totalPerGroup = collect($offer['lines'])->groupBy('group')->map(fn($group) => $group->sum('price')); 
 ```
 
 ### Higher order collection message
