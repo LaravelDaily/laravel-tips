@@ -168,7 +168,7 @@ class ChangeFieldsProductsTable extends Migration
 }
 ```
 
-But add `in_xxxxx_table` `php artisan make:migration change_fields_in_products_table` and it generates class with `Schemma::table()` pre-fileed
+But add `in_xxxxx_table` `php artisan make:migration change_fields_in_products_table` and it generates class with `Schemma::table()` pre-filled
 
 ```php
 class ChangeFieldsProductsTable extends Migration
