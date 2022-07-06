@@ -14,7 +14,6 @@
 - [Repeatable Callback Functions](#repeatable-callback-functions)
 - [Request: has any](#request-has-any)
 - [Simple Pagination](#simple-pagination)
-- [Data Get Function](#data-get-function)
 - [Blade directive to add true/false conditions](#blade-directive-to-add-truefalse-conditions)
 - [Jobs can be used without queues](#jobs-can-be-used-without-queues)
 - [Use faker outside factories or seeders](#use-faker-outside-factories-or-seeders)
@@ -221,27 +220,6 @@ $users = User::paginate(10);
 
 // You can do this
 $users = User::simplePaginate(10);
-```
-
-### Data Get Function
-
-If you have an array complex data structure, for example a nested array with objects. You can use `data_get()` helper function retrieves a value from a nested array or object using "dot" notation and wildcard:
-
-```php
-// We have an array
-[ 
-  0 => 
-	['user_id' =>'some user id', 'created_at' => 'some timestamp', 'product' => {object Product}, etc], 
-  1 =>  
-  	['user_id' =>'some user id', 'created_at' => 'some timestamp', 'product' => {object Product}, etc],  
-  2 =>  etc
-]
-
-// Now we want to get all products ids. We can do like this:
-
-data_get($yourArray,  '*.product.id');
-
-// Now we have all products ids [1, 2, 3, 4, 5, etc...]
 ```
 
 ### Blade directive to add true/false conditions
@@ -595,22 +573,29 @@ public function download(File $file)
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
 
 ### Dealing with deeply-nested arrays
-Dealing with deeply-nested arrays can result in missing key / value exceptions. Fortunately, Laravel's data_get() helper makes this easy to avoid. It also supports deeply-nested objects.<br><br>
+If you have an complex array, you can use `data_get()` helper function to retrieve a value from a nested array using "dot" notation and wildcard.
 
-Deeply-nested arrays are a nightmare when they may be missing properties that you need.<br>
+```php
+$data = [ 
+  0 => ['user_id' => 1, 'created_at' => 'timestamp', 'product' => {object Product}],
+  1 => ['user_id' => 2, 'created_at' => 'timestamp', 'product' => {object Product}],
+  2 => etc
+];
+
+// Now we want to get all products ids. We can do like this:
+
+data_get($data, '*.product.id');
+
+// Now we have all products ids [1, 2, 3, 4, 5, etc...]
+```
+
 In the example below, if either `request`, `user` or `name` are missing then you'll get errors.
 ```php
-$value = $payload['request']['user']['name']
-```
+$value = $payload['request']['user']['name'];
 
-Instead, use the `data_get()` helper to access a deeply-nested array item using dot notation.
-```php
-$value = data_get($payload, 'request.user.name');
-```
+// The data_get function accepts a default value, which will be returned if the specified key is not found.
 
-We can also avoid any errors caused by missing properties by supplying a default value.
-```php
-$value = data_get($payload, 'request.user.name', 'John');
+$value = data_get($payload, 'request.user.name', 'John')
 ```
 
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1460970984568094722)
