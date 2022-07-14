@@ -62,6 +62,7 @@
 - [New squish helper](#new-squish-helper)
 - [Specify what to do if a scheduled task fails or succeeds](#specify-what-to-do-if-a-scheduled-task-fails-or-succeeds)
 - [Scheduled command on specific environments](#scheduled-command-on-specific-environments)
+- [Add conditionable behavior to your own classes](#add-conditionable-behavior-to-your-own-classes)
 
 ### Localhost in .env
 
@@ -133,7 +134,7 @@ Route::get('user/{id}', 'ShowProfile');
 Artisan:
 ```bash
 php artisan make:controller ShowProfile --invokable
-``` 
+```
 
 Controller:
 ```php
@@ -200,7 +201,7 @@ $articles = Article::with(['comments' => $userCondition])
 You can check not only one parameter with `$request->has()` method, but also check for multiple parameters present, with `$request->hasAny()﻿`:
 
 ```php
-public function store(Request $request) 
+public function store(Request $request)
 {
     if ($request->hasAny(['api_key', 'token'])) {
         echo 'We have API key passed';
@@ -215,7 +216,7 @@ public function store(Request $request)
 In pagination, if you want to have just "Previous/next" links instead of all the page numbers (and have fewer DB queries because of that), just change `paginate()` to `simplePaginate()`:
 
 ```php
-// Instead of 
+// Instead of
 $users = User::paginate(10);
 
 // You can do this
@@ -417,7 +418,7 @@ Tip given by [@oliverds_](https://twitter.com/oliverds_/status/14399978202288906
 ```php
 // https://example.com?popular
 $request->exists('popular') // true
-$request->has('popular') // false 
+$request->has('popular') // false
 
 // https://example.com?popular=foo
 $request->exists('popular') // true
@@ -485,7 +486,7 @@ return Http::withOptions([
 
 Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
 
-### Test that doesn't assert anything 
+### Test that doesn't assert anything
 Test that doesn't assert anything, just launch something which may or may not throw an exception
 
 ```php
@@ -495,8 +496,8 @@ class MigrationsTest extends TestCase
     {
         // We just test if the migrations succeeds or throws an exception
         $this->expectNotToPerformAssertions();
-        
-        
+
+
        Artisan::call('migrate:fresh', ['--path' => '/databse/migrations/task1']);
     }
 }
@@ -511,12 +512,12 @@ class PasswordResetLinkController extends Controller
     public function sendResetLinkResponse(Request $request)
     {
         $userEmail = User::where('email', $request->email)->value('email'); // username@domain.com
-        
+
         $maskedEmail = Str::mask($userEmail, '*', 4); // user***************
-        
+
         // If needed, you provide a negative number as the third argument to the mask method,
         // which will instruct the method to begin masking at the given distance from the end of the string
-        
+
         $maskedEmail = Str::mask($userEmail, '*', -16, 6); // use******domain.com
     }
 }
@@ -576,7 +577,7 @@ Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
 If you have an complex array, you can use `data_get()` helper function to retrieve a value from a nested array using "dot" notation and wildcard.
 
 ```php
-$data = [ 
+$data = [
   0 => ['user_id' => 1, 'created_at' => 'timestamp', 'product' => {object Product}],
   1 => ['user_id' => 2, 'created_at' => 'timestamp', 'product' => {object Product}],
   2 => etc
@@ -618,7 +619,7 @@ abstract class BaseException extends Exception
                 ],
             ], $this->getCode());
         }
-        
+
         return response()->view('errors.' . $this->getCode(), ['exception' => $this], $this->getCode());
     }
 }
@@ -708,15 +709,15 @@ class RouteServiceProvider extends ServiceProvider
                 ->middleware('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
-                
+
             Route::prefix('webhooks')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/webhooks.php'));
-    
+
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
-                
+
             if ($this->app->environment('local')) {
                 Route::middleware('web')
                     ->namespace($this->namespace)
@@ -801,7 +802,7 @@ class VerifyLicense
             'bearer' => $request->bearerToken(),
             default  => $request->get('key')
         };
-        
+
         // Verify license and return response based on the authentication type
     }
 }
@@ -1118,3 +1119,57 @@ $schedule->command('emails:send')
 ```
 
 Tip given by [@nguyenduy4994](https://twitter.com/nguyenduy4994/status/1516960273000587265)
+
+### Add conditionable behavior to your own classes
+You can use the [Conditionable Trait](https://laravel.com/api/9.x/Illuminate/Support/Traits/Conditionable.html) to avoid using `if/else` and promote method chaining.
+
+```php
+<?php
+
+namespace App\Services;
+
+use Illuminate\Support\Traits\Conditionable;
+
+class MyService
+{
+    use Conditionable;
+
+    // ...
+}
+```
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\MyRequest;
+use App\Services\MyService;
+
+class MyController extends Controller
+{
+    public function __invoke(MyRequest $request, MyService $service)
+    {
+        // Not good
+        $service->addParam($request->param);
+
+        if ($request->has('something')) {
+            $service->methodToBeCalled();
+        }
+
+        $service->execute();
+        // ---
+
+        // Better
+        $service->addParam($request->param)
+            ->when($request->has('something'), fn ($service) => $service->methodToBeCalled())
+            ->execute();
+        // ---
+
+        // ...
+    }
+}
+```
+
+Tip given by [@pauloimon](https://github.com/pauloimon)
