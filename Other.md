@@ -63,7 +63,7 @@
 - [Specify what to do if a scheduled task fails or succeeds](#specify-what-to-do-if-a-scheduled-task-fails-or-succeeds)
 - [Scheduled command on specific environments](#scheduled-command-on-specific-environments)
 - [Add conditionable behavior to your own classes](#add-conditionable-behavior-to-your-own-classes)
-- [Perform Action when Job is failed](#perform-action-when-job-is-failed)
+- [Perform Action when Job has failed](#perform-action-when-job-has-failed)
 
 ### Localhost in .env
 
@@ -1173,15 +1173,13 @@ class MyController extends Controller
 }
 ```
 
-### perform-action-when-job-is-failed
+### Perform Action when Job has failed
 
-In some cases we want to perform some action when job is failed. For Eample send and Email or a Notification
+In some cases, we want to perform some action when job has failed. For example, send an email or a notification.
 
-for this purpose we need to use failed method in job just like handle function
+For this purpose, we can use `failed()` method in the job class, just like the `handle()` method:
 
 ```php
-
-
 namespace App\Jobs\Invoice;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -1190,27 +1188,15 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-
 class CalculateSingleConsignment implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public function __construct()
-    {
-
-
-    }
-
-
-    public function handle()
-    {
-
-    }
+    
+    // ... __construct() method, handle() method, etc.
 
     public function failed()
     {
-
-        // Perfomen any Action here when job is failed
+        // Perfome any action here when job has failed
      }
 }
 
