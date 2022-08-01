@@ -56,14 +56,13 @@
 - [Sessions has() vs exists() vs missing()](#sessions-has-vs-exists-vs-missing)
 - [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
 - [Use Redis to track page views](#use-redis-to-track-page-views)
-- [to_route() helper function](#to_route-helper-function)
+- [to_route() helper function](#to\_route-helper-function)
 - [Pause a long running job when queue worker shuts down](#pause-a-long-running-job-when-queue-worker-shuts-down)
 - [Freezing Time in Laravel Tests](#freezing-time-in-laravel-tests)
 - [New squish helper](#new-squish-helper)
 - [Specify what to do if a scheduled task fails or succeeds](#specify-what-to-do-if-a-scheduled-task-fails-or-succeeds)
 - [Scheduled command on specific environments](#scheduled-command-on-specific-environments)
 - [Add conditionable behavior to your own classes](#add-conditionable-behavior-to-your-own-classes)
-- [Run Jobs in sequence](#run-jobs-in-sequence)
 - [Perform Action when Job is failed](#perform-action-when-job-is-failed)
 
 ### Localhost in .env
@@ -129,19 +128,16 @@ echo now()->startOfHour();
 If you want to create a controller with just one action, you can use `__invoke()` method and even create "invokable" controller.
 
 Route:
-
 ```php
 Route::get('user/{id}', 'ShowProfile');
 ```
 
 Artisan:
-
 ```bash
 php artisan make:controller ShowProfile --invokable
 ```
 
 Controller:
-
 ```php
 class ShowProfile extends Controller
 {
@@ -170,7 +166,7 @@ If you want to use OLDER version instead of the newest Laravel, use this command
 composer create-project --prefer-dist laravel/laravel project "7.*"
 ```
 
-Change 7.\* to whichever version you want.
+Change 7.* to whichever version you want.
 
 ### Add Parameters to Pagination Links
 
@@ -186,7 +182,7 @@ In default Pagination links, you can pass additional parameters, preserve the or
 
 ### Repeatable Callback Functions
 
-If you have a callback function that you need to re-use multiple times, you can assign it to a variable, and then re-use.
+If you have a callback function that you need to re-use multiple times, you can assign it to a variable, and then re-use.﻿
 
 ```php
 $userCondition = function ($query) {
@@ -200,9 +196,10 @@ $articles = Article::with(['comments' => $userCondition])
     ->get();
 ```
 
+
 ### Request: has any
 
-You can check not only one parameter with `$request->has()` method, but also check for multiple parameters present, with `$request->hasAny() `:
+You can check not only one parameter with `$request->has()` method, but also check for multiple parameters present, with `$request->hasAny()﻿`:
 
 ```php
 public function store(Request $request)
@@ -228,20 +225,15 @@ $users = User::simplePaginate(10);
 ```
 
 ### Blade directive to add true/false conditions
-
 New in Laravel 8.51: `@class` Blade directive to add true/false conditions on whether some CSS class should be added. Read more in [docs](https://laravel.com/docs/8.x/blade#conditional-classes) <br>
 Before:
-
 ```php
 <div class="@if ($active) underline @endif">`
 ```
-
 Now:
-
 ```php
 <div @class(['underline' => $active])>
 ```
-
 ```php
 @php
     $isActive = false;
@@ -261,10 +253,8 @@ Now:
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1445417511546023938)
 
 ### Jobs can be used without queues
-
 Jobs are discussed in the "Queues" section of the docs, but you can use Jobs without queues, just as classes to delegate tasks to.
 Just call `$this->dispatchNow()` from Controllers
-
 ```php
 public function approve(Article $article)
 {
@@ -275,10 +265,8 @@ public function approve(Article $article)
 ```
 
 ### Use faker outside factories or seeders
-
 If you want to generate some fake data, you can use Faker even outside factories or seeds, in any class.<br>
-_Keep in mind: to use it in **production**, you need to move faker from `"require-dev"` to `"require"` in `composer.json`_
-
+_Keep in mind: to use it in __production__, you need to move faker from `"require-dev"` to `"require"` in `composer.json`_
 ```php
 use Faker;
 
@@ -293,20 +281,16 @@ class WhateverController extends Controller
 ```
 
 ### Schedule things
-
 You can schedule things to run daily/hourly in a lot of different structures.<br>
 You can schedule an artisan command, a Job class, an invokable class, a callback function, and even execute a shell script.
-
 ```php
 use App\Jobs\Heartbeat;
 
 $schedule->job(new Heartbeat)->everyFiveMinutes();
 ```
-
 ```php
 $schedule->exec('node /home/forge/script.js')->daily();
 ```
-
 ```php
 use App\Console\Commands\SendEmailsCommand;
 
@@ -314,7 +298,6 @@ $schedule->command('emails:send Taylor --force')->daily();
 
 $schedule->command(SendEmailsCommand::class, ['Taylor', '--force'])->daily();
 ```
-
 ```php
 protected function schedule(Schedule $schedule)
 {
@@ -325,25 +308,20 @@ protected function schedule(Schedule $schedule)
 ```
 
 ### Search Laravel docs
-
 If you want to search Laravel Docs for some keyword, by default it gives you only the TOP 5 results. Maybe there are more?<br>
 If you want to see ALL results, you may go to the Github Laravel docs repository and search there directly. https://github.com/laravel/docs
 
 ### Filter route:list
-
 New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619)
 
 ### Blade directive for not repeating yourself
-
 If you keep doing the same formatting of the data in multiple Blade files, you may create your own Blade directive.<br>
 Here's an example of money amount formatting using the method from Laravel Cashier.
-
 ```php
 "require": {
         "laravel/cashier": "^12.9",
 }
 ```
-
 ```php
 public function boot()
 {
@@ -352,7 +330,6 @@ public function boot()
     });
 }
 ```
-
 ```php
 <div>Price: @money($book->price)</div>
 @if($book->discount_price)
@@ -361,11 +338,9 @@ public function boot()
 ```
 
 ### Artisan commands help
-
 If you are not sure about the parameters of some Artisan command, or you want to know what parameters are available, just type `php artisan help [a command you want]`.
 
 ### Disable lazy loading when running your tests
-
 If you don't want to prevent lazy loading when running your tests you can disable it
 
 ```php
@@ -375,10 +350,8 @@ Model::preventLazyLoading(!$this->app->isProduction() && !$this->app->runningUni
 Tip given by [@djgeisi](https://twitter.com/djgeisi/status/1435538167290073090)
 
 ### Using two amazing helpers in Laravel will bring magic results
-
 Using two amazing helpers in Laravel will bring magic results...<br>
 In this case, the service will be called and retried (retry). If it stills failing, it will be reported, but the request won't fail (rescue)
-
 ```php
 rescue(function () {
     retry(5, function () {
@@ -390,9 +363,7 @@ rescue(function () {
 Tip given by [@JuanDMeGon](https://twitter.com/JuanDMeGon/status/1435466660467683328)
 
 ### Request parameter default value
-
 Here we are checking if there is a per_page (or any other parameter) value then we will use it, otherwise, we will use a default one.
-
 ```php
 // Isteand of this
 $perPage = request()->per_page ? request()->per_page : 20;
@@ -404,7 +375,6 @@ $perPage = request('per_page', 20);
 Tip given by [@devThaer](https://twitter.com/devThaer/status/1437521022631165957)
 
 ### Pass middleware directly into the route without register it
-
 ```php
 Route::get('posts', PostController::class)
     ->middleware(['auth', CustomMiddleware::class])
@@ -413,7 +383,6 @@ Route::get('posts', PostController::class)
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1438258486815690766)
 
 ### Transforming an array to CssClasses
-
 ```php
 use Illuminate\Support\Arr;
 
@@ -432,7 +401,6 @@ $classes = Arr::toCssClasses($array);
 Tip given by [@dietsedev](https://twitter.com/dietsedev/status/1438550428833271808)
 
 ### "upcomingInvoice" method in Laravel Cashier (Stripe)
-
 You can show how much a customer will pay in the next billing cycle.<br>
 There is a "upcomingInvoice" method in Laravel Cashier (Stripe) to get the upcoming invoice details.
 
@@ -445,10 +413,9 @@ Route::get('/profile/invoices', function (Request $request) {
 });
 ```
 
-Tip given by [@oliverds\_](https://twitter.com/oliverds_/status/1439997820228890626)
+Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1439997820228890626)
 
 ### Laravel Request exists() vs has()
-
 ```php
 // https://example.com?popular
 $request->exists('popular') // true
@@ -462,7 +429,6 @@ $request->has('popular') // true
 Tip given by [@coderahuljat](https://twitter.com/coderahuljat/status/1442191143244951552)
 
 ### There are multiple ways to return a view with variables
-
 ```php
 // First way ->with()
 return view('index')
@@ -487,7 +453,6 @@ return view('index', compact('projects', 'tasks'));
 ```
 
 ### Schedule regular shell commands
-
 We can schedule regular shell commands within Laravel scheduled command
 
 ```php
@@ -505,7 +470,6 @@ class Kernel extends ConsoleKernel
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1448985254794915845)
 
 ### HTTP client request without verifying
-
 Sometimes, you may want to send HTTP request without verifying SSL in your local environment, you can do like so:
 
 ```php
@@ -524,7 +488,6 @@ return Http::withOptions([
 Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
 
 ### Test that doesn't assert anything
-
 Test that doesn't assert anything, just launch something which may or may not throw an exception
 
 ```php
@@ -542,7 +505,6 @@ class MigrationsTest extends TestCase
 ```
 
 ### "Str::mask()" method
-
 Laravel 8.69 released with "Str::mask()" method which masks a portion of string with a repeated character
 
 ```php
@@ -565,7 +527,6 @@ class PasswordResetLinkController extends Controller
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1457029765634744322)
 
 ### Extending Laravel classes
-
 There is a method called macro on a lot of built-in Laravel classes. For example Collection, Str, Arr, Request, Cache, File, and so on.<br>
 You can define your own methods on these classes like this:
 
@@ -581,7 +542,6 @@ Str::lowerSnake('MyString');
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1457635252466298885)
 
 ### Can feature
-
 If you are running Laravel `v8.70`, you can chain `can()` method directly instead of `middleware('can:..')`
 
 ```php
@@ -601,7 +561,6 @@ Route::get('users/{user}/edit', function (User $user) {
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1458179766192853001)
 
 ### Temporary download URLs
-
 You can use temporary download URLs for your cloud storage resources to prevent unwanted access. For example, when a user wants to download a file, we redirect to an s3 resource but have the URL expire in 5 seconds.
 
 ```php
@@ -613,11 +572,9 @@ public function download(File $file)
     );
 }
 ```
-
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
 
 ### Dealing with deeply-nested arrays
-
 If you have an complex array, you can use `data_get()` helper function to retrieve a value from a nested array using "dot" notation and wildcard.
 
 ```php
@@ -635,7 +592,6 @@ data_get($data, '*.product.id');
 ```
 
 In the example below, if either `request`, `user` or `name` are missing then you'll get errors.
-
 ```php
 $value = $payload['request']['user']['name'];
 
@@ -647,7 +603,6 @@ $value = data_get($payload, 'request.user.name', 'John')
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1460970984568094722)
 
 ### Customize how your exceptions are rendered
-
 You can customize how your exceptions are rendered by adding a 'render' method to your exception.<br>
 For example, this allows you to return JSON instead of a Blade view when the request expects JSON.
 
@@ -683,9 +638,7 @@ class LicenseExpiredException extends BaseException
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1461331239240192003/)
 
 ### The tap helper
-
 The `tap` helper is a great way to remove a separate return statement after calling a method on an object. Makes things nice and clean
-
 ```php
 // without tap
 $user->update(['name' => 'John Doe']);
@@ -699,9 +652,7 @@ return tap($user)->update(['name' => 'John Doe']);
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1462058149314183171)
 
 ### Reset all of the remaining time units
-
 You can insert an exclamation into the `DateTime::createFromFormat` method to reset all of the remaining time units
-
 ```php
 // 2021-10-12 21:48:07.0
 DateTime::createFromFormat('Y-m-d', '2021-10-12');
@@ -716,9 +667,7 @@ DateTime::createFromFormat('!Y-m-d H', '2021-10-12');
 Tip given by [@SteveTheBauman](https://twitter.com/SteveTheBauman/status/1448045021006082054)
 
 ### Scheduled commands in the console kernel can automatically email their output if something goes wrong
-
 Did you know that any commands you schedule in the console kernel can automatically email their output if something goes wrong
-
 ```php
 $schedule
     ->command(PruneOrganizationsCOmmand::class)
@@ -729,7 +678,6 @@ $schedule
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1463160409905455104)
 
 ### Be careful when constructing your custom filtered queries using GET parameters
-
 ```php
 if (request()->has('since')) {
     // example.org/?since=
@@ -751,9 +699,7 @@ if (request()->filled('key')) {
 Tip given by [@mc0de](https://twitter.com/mc0de/status/1465209203472146434)
 
 ### Dust out your bloated route file
-
 Dust out your bloated route file and split it up to keep things organized
-
 ```php
 class RouteServiceProvider extends ServiceProvider
 {
@@ -786,7 +732,6 @@ class RouteServiceProvider extends ServiceProvider
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1466068376330153984)
 
 ### You can send e-mails to a custom log file
-
 In Laravel you can send e-mails to a custom log file.
 
 You can set your environment variables like this:
@@ -797,7 +742,6 @@ MAIL_LOG_CHANNEL=mail
 ```
 
 And also configure your log channel:
-
 ```php
 'mail' => [
     'driver' => 'single',
@@ -812,15 +756,12 @@ It's a good use case to quickly test your mails.
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1466362508571131904)
 
 ### Markdown made easy
-
 Laravel provides an interface to convert markdown in HTML out of the box, without the need to install new composer packages.
-
 ```php
 $html = Str::markdown('# Changelogfy')
 ```
 
 Output:
-
 ```
 <h1>Changelogfy</h1>
 ```
@@ -828,7 +769,6 @@ Output:
 Tip given by [@paulocastellano](https://twitter.com/paulocastellano/status/1467478502400315394)
 
 ### Simplify if on a request with whenFilled() helper
-
 We often write if statements to check if a value is present on a request or not.<br>
 You can simplify it with the `whenFilled()` helper.
 
@@ -846,9 +786,7 @@ public function store(Request $request)
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1467886802711293959)
 
 ### Pass arguments to middleware
-
 You can pass arguments to your middleware for specific routes by appending ':' followed by the value. For example, I'm enforcing different authentication methods based on the route using a single middleware.
-
 ```php
 Route::get('...')->middleware('auth.license');
 Route::get('...')->middleware('auth.license:bearer');
@@ -874,7 +812,6 @@ class VerifyLicense
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1471864630486179840)
 
 ### Get value from session and forget
-
 If you need to grab something from the Laravel session, then forget it immediately, consider using `session()->pull($value)`. It completes both steps for you.
 
 ```php
@@ -892,15 +829,12 @@ return redirect(session()->pull('before-github-redirect', '/components'))
 Tip given by [@jasonlbeggs](https://twitter.com/jasonlbeggs/status/1471905631619715077)
 
 ### $request->date() method
-
 New in this week's Laravel v8.77: `$request->date()` method.<br>
 Now you don't need to call Carbon manually, you can do something like: `$post->publish_at = $request->date('publish_at')->addHour()->startOfHour();`<br>
 [Link to full pr](https://github.com/laravel/framework/pull/39945) by [@DarkGhostHunter](https://twitter.com/DarkGhostHunter)
 
 ### Use through instead of map when using pagination
-
 When you want to map paginated data and return only a subset of the fields, use `through` rather than `map`. The `map` breaks the pagination object and changes it's identity. While, `through` works on the paginated data itself
-
 ```php
 // Don't: Mapping paginated data
 $employees = Employee::paginate(10)->map(fn ($employee) => [
@@ -918,9 +852,7 @@ $employees = Employee::paginate(10)->through(fn ($employee) => [
 Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1475073910383120399)
 
 ### Quickly add a bearer token to HTTP request
-
 There’s a `withToken` method to attach the `Authorization` header to a request.
-
 ```php
 // Booo!
 Http::withHreader([
@@ -934,9 +866,7 @@ Http::withToken('dQw4w9WgXcq');
 Tip given by [@p3ym4n](https://twitter.com/p3ym4n/status/1487809735663489024)
 
 ### Copy file or all files from a folder
-
 You can use the `readStream` and `writeStream` to copy a file (or all files from a folder) from one disk to another keeping the memory usage low.
-
 ```php
 // List all the files from a folder
 $files = Storage::disk('origin')->allFiles('/from-folder-name');
@@ -961,7 +891,6 @@ foreach ($files as $file) {
 Tip given by [@alanrezende](https://twitter.com/alanrezende/status/1488194257567498243)
 
 ### Sessions has() vs exists() vs missing()
-
 Do you know about `has`, `exists` and `missing` methods in Laravel session?
 
 ```php
@@ -978,9 +907,7 @@ $request->session()->missing('key');
 Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1489086240729145344)
 
 ### Test that you are passing the correct data to a view
-
 Need to test that you are passing the correct data to a view? You can use the viewData method on your response. Here are some examples:
-
 ```php
 /** @test */
 public function it_has_the_correct_value()
@@ -1010,9 +937,7 @@ public function it_returns_the_correct_amount_of_records()
 Tip given by [@JuanRangelTX](https://twitter.com/JuanRangelTX/status/1489944361580351490)
 
 ### Use Redis to track page views
-
 Tracking something like page views with MySQL can be quite a performance hit when dealing with high traffic. Redis is much better at this. You can use Redis and a scheduled command to keep MySQL in sync on a fixed interval.
-
 ```php
 Route::get('{project:slug', function (Project $project) {
     // Instead of $project->increment('views') we use Redis
@@ -1053,7 +978,6 @@ Tip given by [@Philo01](https://twitter.com/JackEllis/status/1491909483496411140
 ### to_route() helper function
 
 Laravel 9 provides shorter version of `response()->route()`, take a look on the following code:
-
 ```php
 // Old way
 Route::get('redirectRoute', function() {
@@ -1074,7 +998,6 @@ Tip given by [@CatS0up](https://github.com/CatS0up)
 ### Pause a long running job when queue worker shuts down
 
 When running a long job, if your queue worker gets shutdown by
-
 - Stopping the worker.
 - Sending signal **SIGTERM** (**SIGINT** for Horizon).
 - Pressing `CTRL + C` (Linux/Windows).
@@ -1140,7 +1063,6 @@ class MyLongJob implements ShouldQueue
 Tip given by [@a-h-abid](https://github.com/a-h-abid)
 
 ### Freezing Time in Laravel Tests
-
 In your Laravel tests, you might sometimes need to freeze the time.
 
 This is particularly useful if you're trying to make assertions based on timestamps or need to make queries based on dates and/or times.
@@ -1157,7 +1079,6 @@ $this->freezeTime();
 Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1509115721183158272)
 
 ### New squish helper
-
 New in Laravel from 9.7 `squish` helper.
 
 ```php
@@ -1168,7 +1089,6 @@ $result = Str::squish(' Hello   John,         how   are   you?    ');
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1511718052752150534)
 
 ### Specify what to do if a scheduled task fails or succeeds
-
 You can specify what to do if a scheduled task fails or succeeds.
 
 ```php
@@ -1185,7 +1105,6 @@ $schedule->command('emails:send')
 Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1513221529072414720)
 
 ### Scheduled command on specific environments
-
 Running Laravel scheduled command on specific environments.
 
 ```php
@@ -1203,7 +1122,6 @@ $schedule->command('emails:send')
 Tip given by [@nguyenduy4994](https://twitter.com/nguyenduy4994/status/1516960273000587265)
 
 ### Add conditionable behavior to your own classes
-
 You can use the [Conditionable Trait](https://laravel.com/api/9.x/Illuminate/Support/Traits/Conditionable.html) to avoid using `if/else` and promote method chaining.
 
 ```php
@@ -1255,85 +1173,6 @@ class MyController extends Controller
 }
 ```
 
-### run-jobs-in-sequence
-
-Sometimes we want to run jobs in a squence for this purpose we need to use `Illuminate\Bus\Batchable` in job ;
-
-```php
-<?php
-
-namespace App\Jobs\Invoice;
-
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-
-class CalculateSingleConsignment implements ShouldQueue
-{
-    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-
-    public function __construct()
-    {
-
-
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-
-
-    }
-
-}
-
-
-```
-
-There are two methods to do it
-
-Method #1
-You can add job one by one in batch with help of Loop
-
-```php
- $batch =  Bus::batch([])->dispatch();
- foreach ($consignments as  $consignment) {
-    $batch->add(new CalculateSingleConsignment($consignment));
- }
-```
-
-Method #2
-You can make an array and push it in batch
-
-```php
-$batch = Bus::batch([
-    new ImportCsv(1, 100),
-    new ImportCsv(101, 200),
-    new ImportCsv(201, 300),
-    new ImportCsv(301, 400),
-    new ImportCsv(401, 500),
-])->then(function(){
-    // After Job complete
-})->catch(function(){
-    //if errror happens
-})->finally(function(){
-    // After Bacth is complete
-})->dispatch();
-```
-
 ### perform-action-when-job-is-failed
 
 In some cases we want to perform some action when job is failed. For Eample send and Email or a Notification
@@ -1375,6 +1214,5 @@ class CalculateSingleConsignment implements ShouldQueue
      }
 }
 
-```
 
 Tip given by [@pauloimon](https://github.com/pauloimon)
