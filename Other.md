@@ -1196,7 +1196,7 @@ class CalculateSingleConsignment implements ShouldQueue
 
     public function failed()
     {
-        // Perfome any action here when job has failed
+        // Perfom any action here when job has failed
      }
 }
 
