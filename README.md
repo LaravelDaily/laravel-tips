@@ -22,14 +22,14 @@ Or if you want the Chinese version:
 
 ---
 
-**Update 1 August 2022**: Currently there are **315 tips** divided into 14 sections.
+**Update 13 August 2022**: Currently there are **316 tips** divided into 14 sections.
 
 ## Table of Contents
 
 - [DB Models and Eloquent](DB_Models_and_Eloquent.md) (82 tips)
 - [Models Relations](Models_Relations.md) (42 tips)
 - [Migrations](Migrations.md) (16 tips)
-- [Views](Views.md) (15 tips)
+- [Views](Views.md) (16 tips)
 - [Routing](Routing.md) (32 tips)
 - [Validation](Validation.md) (21 tips)
 - [Collections](Collections.md) (9 tips)
