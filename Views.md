@@ -17,7 +17,8 @@
 - [Automatically highlight nav links](#automatically-highlight-nav-links)
 - [Cleanup loops](#cleanup-loops)
 - [Simple way to tidy up your Blade views](#simple-way-to-tidy-up-your-blade-views)
-- [Checked blade directive](@checked-blade-directive)
+- [Checked blade directive](#checked-blade-directive)
+- [Selected blade directive](#selected-blade-directive)
 
 ### $loop variable in foreach
 
@@ -332,3 +333,23 @@ This is going to be a nice addition that we can use to clean up our Blade views 
 ```
 
 Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1489567000812736513)
+
+### Selected blade directive
+In Laravel 9, you'll be able to use the cool new "selected" Blade directive for HTML select elements.<br>
+
+This is going to be a nice addition that we can use to clean up our Blade views a little bit
+```php
+// Before Laravel 9:
+<select name="country">
+    <option value="India" {{ old('country') ?? $country == 'India' ? 'selected' : '' }}>India</option>
+    <option value="Pakistan" {{ old('country') ?? $country == 'Pakistan' ? 'selected' : '' }}>Pakistan</option>
+</select>
+
+// Laravel 9
+<select name="country">
+    <option value="India" @selected(old('country') ?? $country == 'India')>India</option>
+    <option value="Pakistan" @selected(old('country') ?? $country == 'Pakistan')>Pakistan</option>
+</select>
+```
+
+Tip given by [@VijayGoswami](https://vijaygoswami.in)
