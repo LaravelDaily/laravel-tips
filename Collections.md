@@ -151,7 +151,7 @@ Tip given by [@Teacoders](https://twitter.com/Teacoders/status/14883388155927183
 The static times method creates a new collection by invoking the given closure a specified number of times.
 
 ```php
-Collectable::times(7, function ($number) {
+Collection::times(7, function ($number) {
     return now()->addDays($number)->format('d-m-Y');
 });
 // Output: [01-04-2022, 02-04-2022, ..., 07-04-2022]
