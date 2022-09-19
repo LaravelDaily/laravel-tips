@@ -305,15 +305,15 @@ $users = User::all()->groupBy(function($item) {
 
 If you have DB column which you want to be set only once and never updated again, you can set that restriction on Eloquent Model, with a mutator:
 ```php
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 class User extends Model
 {
-    public function setEmailAttribute($value)
+    protected function email(): Attribute
     {
-        if ($this->email) {
-            return;
-        }
-
-        $this->attributes['email'] = $value;
+        return Attribute::make(
+            set: fn () => $this->email,
+        );
     }
 }
 ```
