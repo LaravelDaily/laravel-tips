@@ -2,7 +2,7 @@
 
 ⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Validation)](Validation.md) ➡️ [Next (Auth)](Auth.md)
 
-- [Filter by NULL in Collections](#dont-filter-by-null-in-collections)
+- [Filter by NULL in Collections](#filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
