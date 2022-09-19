@@ -22,7 +22,7 @@ Or if you want the Chinese version:
 
 ---
 
-**Update 13 August 2022**: Currently there are **316 tips** divided into 14 sections.
+**Update 13 August 2022**: Currently there are **315 tips** divided into 14 sections.
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ Or if you want the Chinese version:
 - [Views](Views.md) (16 tips)
 - [Routing](Routing.md) (32 tips)
 - [Validation](Validation.md) (21 tips)
-- [Collections](Collections.md) (9 tips)
+- [Collections](Collections.md) (8 tips)
 - [Auth](Auth.md) (5 tips)
 - [Mail](Mail.md) (6 tips)
 - [Artisan](Artisan.md) (7 tips)
