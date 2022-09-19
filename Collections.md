@@ -2,7 +2,6 @@
 
 ⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Validation)](Validation.md) ➡️ [Next (Auth)](Auth.md)
 
-- [Don’t Filter by NULL in Collections](#dont-filter-by-null-in-collections)
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
@@ -11,22 +10,6 @@
 - [Higher order collection message](#higher-order-collection-message)
 - [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
 - [Static times method](#static-times-method)
-
-### Don’t Filter by NULL in Collections
-
-You can filter by NULL in Eloquent, but if you're filtering the **collection** further - filter by empty string, there's no "null" in that field anymore.
-
-```php
-// This works
-$messages = Message::where('read_at is null')->get();
-
-// Won’t work - will return 0 messages
-$messages = Message::all();
-$unread_messages = $messages->where('read_at is null')->count();
-
-// Will work
-$unread_messages = $messages->where('read_at', '')->count();
-```
 
 ### Use groupBy on Collections with Custom Callback Function
 
