@@ -314,7 +314,7 @@ class User extends Model
     protected function email(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => $this->email ?? $value,
+            set: fn ($value, $attributes) => $attributes['email'] ?? $value,
         );
     }
 }
