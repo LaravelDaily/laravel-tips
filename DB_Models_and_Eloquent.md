@@ -319,7 +319,7 @@ class User extends Model
     }
 }
 ```
-- In older versions:
+- In version 9 and below:
 ```php
 class User extends Model
 {
