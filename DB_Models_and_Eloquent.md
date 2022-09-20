@@ -325,7 +325,7 @@ class User extends Model
 {
     public function setEmailAttribute($value)
     {
-        if ($this->email) {
+        if (isset($this->attributes['email']) && ! is_null($this->attributes['email'])) {
             return;
         }
         $this->attributes['email'] = $value;
