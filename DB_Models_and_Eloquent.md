@@ -405,8 +405,8 @@ class User extends Model
     {
         parent::boot();
 
-        User::creating(fn (User $model) => $model->attributes['id'] = Str::uuid());
-        User::saving(fn (User $model) => $model->attributes['id'] = Str::uuid());
+        self::creating(fn (User $model) => $model->attributes['id'] = Str::uuid());
+        self::saving(fn (User $model) => $model->attributes['id'] = Str::uuid());
     }
 }
 ```
