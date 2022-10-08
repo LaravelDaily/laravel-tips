@@ -392,7 +392,10 @@ Schema::create('users', function (Blueprint $table) {
 ```
 
 Model:
+* In PHP 7.4.0 and above:
 ```php
+use Illuminate\Support\Str;
+
 class User extends Model
 {
     public $incrementing = false;
@@ -402,14 +405,31 @@ class User extends Model
     {
         parent::boot();
 
-        User::creating(function ($model) {
-            $model->setId();
-        });
+        User::creating(fn (User $model) => $model->attributes['id'] = Str::uuid());
+        User::saving(fn (User $model) => $model->attributes['id'] = Str::uuid());
     }
+}
+```
 
-    public function setId()
+* In PHP older than 7.4.0:
+```php
+use Illuminate\Support\Str;
+
+class User extends Model
+{
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected static function boot()
     {
-        $this->attributes['id'] = Str::uuid();
+        parent::boot();
+
+        self::creating(function ($model) {
+             $model->attributes['id'] = Str::uuid();
+        });
+        self::saving(function ($model) {
+             $model->attributes['id'] = Str::uuid();
+        });
     }
 }
 ```
