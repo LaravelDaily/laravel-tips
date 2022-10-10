@@ -39,7 +39,6 @@
 - [Perform any action on failure](#perform-any-action-on-failure)
 - [Check if record exists or show 404](#check-if-record-exists-or-show-404)
 - [Abort if condition failed](#abort-if-condition-failed)
-- [Perform any extra steps before deleting model](#perform-any-extra-steps-before-deleting-model)
 - [Fill a column automatically while you persist data to the database](#fill-a-column-automatically-while-you-persist-data-to-the-database)
 - [Extra information about the query](#extra-information-about-the-query)
 - [Using the doesntExist() method in Laravel](#using-the-doesntexist-method-in-laravel)
@@ -750,23 +749,6 @@ Shorter way
 /* abort_if(CONDITION, ERROR_CODE) */
 $product = Product::findOrFail($id);
 abort_if ($product->user_id != auth()->user()->id, 403)
-```
-
-### Perform any extra steps before deleting model
-
-Tip given by [@back2Lobby](https://github.com/back2Lobby)
-
-We can use `Model::delete()` in the overridden delete method to perform additional steps.
-```php
-// App\Models\User.php
-
-public function delete(){
-
-	//extra steps here whatever you want
-	
-	//now perform the normal deletion
-	Model::delete();
-}
 ```
 
 ### Fill a column automatically while you persist data to the database
