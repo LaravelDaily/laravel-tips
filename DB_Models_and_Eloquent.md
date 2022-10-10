@@ -391,10 +391,28 @@ Schema::create('users', function (Blueprint $table) {
 });
 ```
 
+### Laravel 9 and above:
+```php
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+ 
+class Article extends Model
+{
+    use HasUuids;
+ 
+    // ...
+}
+ 
+$article = Article::create(['title' => 'Traveling to Europe']);
+ 
+$article->id; // "8f8e8478-9035-4d23-b9a7-62f4d2612ce5"
+```
+#### Laravel 8 and below:
 Model:
 * In PHP 7.4.0 and above:
 ```php
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
@@ -414,6 +432,7 @@ class User extends Model
 * In PHP older than 7.4.0:
 ```php
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
