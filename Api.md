@@ -7,6 +7,8 @@
 - [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
 - [Get Bearer Token from Authorization header](#get-bearer-token-from-authorization-header)
 - [Sorting Your API Results](#sorting-your-api-results)
+- [Customize Exception Handler](#customize-exception-handler-for-api)
+
 
 ### API Resources: With or Without "data"?
 
@@ -117,4 +119,65 @@ Route::get('dogs', function (Request $request) {
     // Return
     return $query->paginate(20);
 });
+```
+
+### Customize Exception Handler For API
+
+#### Laravel 8 and below:
+There's a method `render()` in `App\Exceptions` class:
+
+```php
+   public function render($request, Exception $exception)
+    {
+        if ($request->wantsJson() || $request->is('api/*')) {
+            if ($exception instanceof ModelNotFoundException) {
+                return response()->json(['message' => 'Item Not Found'], 404);
+            }
+
+            if ($exception instanceof AuthenticationException) {
+                return response()->json(['message' => 'unAuthenticated'], 401);
+            }
+
+            if ($exception instanceof ValidationException) {
+                return response()->json(['message' => 'UnprocessableEntity', 'errors' => []], 422);
+            }
+
+            if ($exception instanceof NotFoundHttpException) {
+                return response()->json(['message' => 'The requested link does not exist'], 400);
+            }
+        }
+
+        return parent::render($request, $exception);
+    }
+```
+
+#### Laravel 8 and above:
+There's a method `register()` in `App\Exceptions` class:
+
+```php
+    public function register()
+    {
+
+        $this->renderable(function (ModelNotFoundException $e, $request) {
+            if ($request->wantsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'Item Not Found'], 404);
+            }
+        });
+
+        $this->renderable(function (AuthenticationException $e, $request) {
+            if ($request->wantsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'unAuthenticated'], 401);
+            }
+        });
+        $this->renderable(function (ValidationException $e, $request) {
+            if ($request->wantsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'UnprocessableEntity', 'errors' => []], 422);
+            }
+        });
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if ($request->wantsJson() || $request->is('api/*')) {
+                return response()->json(['message' => 'The requested link does not exist'], 400);
+            }
+        });
+    }
 ```
