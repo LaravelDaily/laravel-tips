@@ -82,6 +82,7 @@
 - [Make all your models mass assignable](#make-all-your-models-mass-assignable)
 - [Hiding columns in select all statements](#hiding-columns-in-select-all-statements)
 - [JSON Where Clauses](#json-where-clauses)
+- [Get all the table names in database](#get-all-the-table-names-in-database)
 - [Get all the column names for a table](#get-all-the-column-names-for-a-table)
 - [Compare the values of two columns](#compare-the-values-of-two-columns)
 - [Accessor Caching](#accessor-caching)
@@ -1637,6 +1638,17 @@ $users = User::query()
 ```
 
 Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1509663119311663124)
+
+### Get all the table names in database
+```php
+$tables = DB::select('SHOW TABLES');
+
+$tableName = "Tables_in_" . DB::getDatabaseName();
+
+foreach ($tables as $table) {
+     Log::info($table->$tableName);
+}
+```
 
 ### Get all the column names for a table
 ```php
