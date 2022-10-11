@@ -1641,6 +1641,7 @@ Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/150966311
 
 ### Get all the table names in database
 ```php
+// note:it is for "mysql" databse connection 
 $tables = DB::select('SHOW TABLES');
 
 $tableName = "Tables_in_" . DB::getDatabaseName();
