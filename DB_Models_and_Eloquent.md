@@ -1641,7 +1641,7 @@ Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/150966311
 
 ### Get all the table names in database
 You can use `DB::select('SHOW TABLES')` to get all the tables in your database, it returns an array of stdObjects. <br/> 
-but this way in not work for SQLite databse, instead use `DB::select("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")`
+but this way is not work for SQLite databse, instead use `DB::select("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")`
 
 ```php
 use Illuminate\Support\Facades\DB;
