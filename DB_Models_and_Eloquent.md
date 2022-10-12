@@ -1640,8 +1640,12 @@ $users = User::query()
 Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1509663119311663124)
 
 ### Get all the table names in database
+You can use `DB::select('SHOW TABLES')` to get all the tables in your database, it returns an array of stdObjects. <br/> 
+but this way in not work for SQLite databse, instead use `DB::select("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")`
+
 ```php
-// note:it is for "mysql" databse connection 
+use Illuminate\Support\Facades\DB;
+
 $tables = DB::select('SHOW TABLES');
 
 $tableName = "Tables_in_" . DB::getDatabaseName();
