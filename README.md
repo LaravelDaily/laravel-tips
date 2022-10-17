@@ -23,7 +23,7 @@ Or if you want the Chinese version:
 
 ---
 
-**Update 11 October 2022**: Currently there are **315 tips** divided into 14 sections.
+**Update 17 October 2022**: Currently there are **314 tips** divided into 14 sections.
 
 ## Table of Contents
 
