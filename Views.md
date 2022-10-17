@@ -85,6 +85,7 @@ Route::view('about', 'texts.about');
 Instead of if-statement to check logged in user, use `@auth` directive.
 
 Typical way:
+
 ```blade
 @if(auth()->user())
     // The user is authenticated.
@@ -92,6 +93,7 @@ Typical way:
 ```
 
 Shorter:
+
 ```blade
 @auth
     // The user is authenticated.
@@ -99,6 +101,7 @@ Shorter:
 ```
 
 The opposite is `@guest` directive:
+
 ```blade
 @guest
     // The user is not authenticated.
@@ -128,6 +131,7 @@ It’s very easy - just add your own method in `app/Providers/AppServiceProvider
 ```
 
 Add this directive to AppServiceProvider’s `boot()` method:
+
 ```php
 public function boot()
 {
@@ -142,21 +146,25 @@ public function boot()
 If you are not sure whether your Blade partial file actually would exist, you may use these condition commands:
 
 This will load header only if Blade file exists
+
 ```blade
 @includeIf('partials.header')
 ```
 
 This will load header only for user with role_id 1
+
 ```blade
 @includeWhen(auth()->user()->role_id == 1, 'partials.header')
 ```
 
 This will try to load adminlte.header, if missing - will load default.header
+
 ```blade
 @includeFirst('adminlte.header', 'default.header')
 ```
 
 ### Use Laravel Blade-X variable binding to save even more space
+
 ```php
 // Using include, the old way
 @include("components.post", ["title" => $post->title])
@@ -171,6 +179,7 @@ This will try to load adminlte.header, if missing - will load default.header
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787795970)
 
 ### Blade components props
+
 ```php
 // button.blade.php
 @props(['rounded' => false])
@@ -193,13 +202,14 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787
 Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825909167931396)
 
 ### Blade Autocomplete typehint
+
 ```php
 @php
     /* @var App\Models\User $user */
 @endphp
 
 <div>
-    // your ide will typehint the property for you 
+    // your ide will typehint the property for you
     {{$user->email}}
 </div>
 ```
@@ -207,7 +217,9 @@ Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825
 Tip given by [@freekmurze](https://twitter.com/freekmurze/status/1455466663927746560)
 
 ### Component Syntax Tip
+
 Did you know that if you pass colon (:) before the component parameter, you can directly pass variables without print statement `{{ }}`?
+
 ```php
 <x-navbar title="{{ $title }}"/>
 
@@ -219,7 +231,9 @@ Did you know that if you pass colon (:) before the component parameter, you can 
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1457056634363072520)
 
 ### Automatically highlight nav links
-Automatically highlight nav links when exact URL matches, or pass a path or route name pattern.<br>
+
+Automatically highlight nav links when exact URL matches, or pass a path or route name pattern.
+
 A Blade component with request and CSS classes helpers makes it ridiculously simple to show active/inactive state.
 
 ```php
@@ -228,32 +242,32 @@ class NavLink extends Component
     public function __construct($href, $active = null)
     {
         $this->href = $href;
-        $this->active = $active ?? $href;        
+        $this->active = $active ?? $href;
     }
-    
+
     public function render(): View
     {
         $classes = ['font-medium', 'py-2', 'text-primary' => $this->isActive()];
-        
+
         return view('components.nav-link', [
             'class' => Arr::toCssClasses($classes);
         ]);
     }
-    
+
     protected function isActive(): bool
     {
         if (is_bool($this->active)) {
             return $this->active;
         }
-        
+
         if (request()->is($this->active)) {
             return true;
         }
-        
+
         if (request()->fullUrlIs($this->active)) {
             return true;
         }
-        
+
         return request()->routeIs($this->active);
     }
 }
@@ -275,7 +289,9 @@ class NavLink extends Component
 Tip given by [@mpskovvang](https://twitter.com/mpskovvang/status/1459646197635944455)
 
 ### Cleanup loops
+
 Did you know the Blade `@each` directive can help cleanup loops in your templates?
+
 ```blade
 // good
 @foreach($item in $items)
@@ -292,8 +308,11 @@ Did you know the Blade `@each` directive can help cleanup loops in your template
 Tip given by [@kirschbaum_dev](https://twitter.com/kirschbaum_dev/status/1463205294914297861)
 
 ### Simple way to tidy up your Blade views
-A simple way to tidy up your Blade views!<br>
+
+A simple way to tidy up your Blade views!
+
 Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
+
 ```blade
 <!-- if/loop combination -->
 @if ($orders->count())
@@ -319,9 +338,11 @@ Use the `forelse loop`, instead of a `foreach loop` nested in an if statement
 Tip given by [@alexjgarrett](https://twitter.com/alexjgarrett/status/1465674086022107137)
 
 ### Checked blade directive
-In Laravel 9, you'll be able to use the cool new "checked" Blade directive.<br>
+
+In Laravel 9, you'll be able to use the cool new "checked" Blade directive.
 
 This is going to be a nice addition that we can use to clean up our Blade views a little bit
+
 ```php
 // Before Laravel 9:
 <input type="radio" name="active" value="1" {{ old('active', $user->active) ? 'checked' : '' }}/>
@@ -335,9 +356,11 @@ This is going to be a nice addition that we can use to clean up our Blade views 
 Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1489567000812736513)
 
 ### Selected blade directive
-In Laravel 9, you'll be able to use the cool new "selected" Blade directive for HTML select elements.<br>
+
+In Laravel 9, you'll be able to use the cool new "selected" Blade directive for HTML select elements.
 
 This is going to be a nice addition that we can use to clean up our Blade views a little bit
+
 ```php
 // Before Laravel 9:
 <select name="country">

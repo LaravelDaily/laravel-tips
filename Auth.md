@@ -53,6 +53,7 @@ if (Auth::once($credentials)) {
 It's convenient to change the user's API Token when its password changes.
 
 Model:
+
 ```php
 public function setPasswordAttribute($value)
 {

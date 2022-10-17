@@ -81,7 +81,7 @@ class StoreUserRequest extends FormRequest
     {
         return ['name' => 'required'];
     }
-    
+
     public function messages()
     {
         return ['name.required' => 'User name should be real name'];
@@ -100,23 +100,27 @@ protected function prepareForValidation()
         'slug' => Illuminate\Support\Str::slug($this->slug),
     ]);
 }
-``` 
+```
 
 ### Stop on First Validation Error
 
 By default, Laravel validation errors will be returned in a list, checking all validation rules. But if you want the process to stop after the first error, use validation rule called `bail`:
+
 ```php
 $request->validate([
     'title' => 'bail|required|unique:posts|max:255',
     'body' => 'required',
 ]);
 ```
+
 If you need to stop validation on the first error in `FormRequest` class, you can set `stopOnFirstFailure` property to `true`:
+
 ```php
 protected $stopOnFirstFailure = true;
 ```
 
 ### Throw 422 status code without using validate() or Form Request
+
 If you don't use validate() or Form Request, but still need to throw errors with the same 422 status code and error structure, you can do it manually `throw ValidationException::withMessages()`
 
 ```php
@@ -128,7 +132,9 @@ if (! $user || ! Hash::check($request->password, $user->password)) {
 ```
 
 ### Rules depending on some other conditions
+
 If your rules are dynamic and depend on some other condition, you can create that array of rules on the fly
+
 ```php
     public function store(Request $request)
     {
@@ -154,8 +160,11 @@ If your rules are dynamic and depend on some other condition, you can create tha
 ```
 
 ### With Rule::when() we can conditionally apply validation rules
-Thanks to Rule::when() we can conditionally apply validation rules in laravel.<br>
+
+Thanks to Rule::when() we can conditionally apply validation rules in laravel.
+
 In this example we validate the value of the vote only if the user can actually vote the post.
+
 ```php
 use Illuminate\Validation\Rule;
 
@@ -170,10 +179,13 @@ public function rules()
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1434426076198014976)
 
 ### Use this property in the request classes to stop the validation of the whole request attributes
-Use this property in the request classes to stop the validation of the whole request attributes.<br><br>
 
-Hint Direct<br>
+Use this property in the request classes to stop the validation of the whole request attributes.
+
+Hint Direct
+
 This is different from `Bail` rule that stops the validation for just a single attribute if one of its rules doesn't validate.
+
 ```php
 /**
 * Indicated if the validator should stop
@@ -186,8 +198,11 @@ protected $stopOnFirstFailure = true;
 Tip given by [@Sala7JR](https://twitter.com/Sala7JR/status/1436172331198603270)
 
 ### Rule::unique doesn't take into the SoftDeletes Global Scope applied on the Model
-Strange that `Rule::unique` doesn't take into the SoftDeletes Global Scope applied on the Model, by default.<br>
+
+Strange that `Rule::unique` doesn't take into the SoftDeletes Global Scope applied on the Model, by default.
+
 But `withoutTrashed()` method is available
+
 ```php
 Rule::unique('users', 'email')->withoutTrashed();
 ```
@@ -195,8 +210,11 @@ Rule::unique('users', 'email')->withoutTrashed();
 Tip given by [@Zubairmohsin33](https://twitter.com/Zubairmohsin33/status/1438490197956702209)
 
 ### Validator::sometimes() method allows us to define when a validation rule should be applied
-The laravel `Validator::sometimes()` method allows us to define when a validation rule should be applied, based on the input provided.<br>
+
+The laravel `Validator::sometimes()` method allows us to define when a validation rule should be applied, based on the input provided.
+
 The snippet shows how to prohibit the use of a coupon if the quantity of the purchased items is not enough.
+
 ```php
 $data = [
     'coupon' => 'PIZZA_PARTY',
@@ -230,7 +248,9 @@ $validator->validate();
 Tip given by [@cerbero90](https://twitter.com/cerbero90/status/1440226037972013056)
 
 ### Array elements validation
-If you want to validate elements of an array that you submited use dot notation in rules with '*'
+
+If you want to validate elements of an array that you submited use dot notation in rules with '\*'
+
 ```php
 // say you have this array
 // array in request 'user_info'
@@ -255,7 +275,9 @@ $rules = [
 Tip given by [HydroMoon](https://github.com/HydroMoon)
 
 ### Password::defaults method
+
 You can enforce specific rules when validating user-supplied passwords by using the Password::defaults method. It includes options for requiring letters, numbers, symbols, and more.
+
 ```php
 class AppServiceProvider
 {
@@ -280,8 +302,10 @@ request()->validate([
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1463190613260603395)
 
 ### Form Requests for validation redirection
-when using Form Requests for validation, by default the validation error will redirect back to the previous page, but you can override it.<br>
-Just define the property of `$redirect` or `$redirectRoute`.<br>
+
+when using Form Requests for validation, by default the validation error will redirect back to the previous page, but you can override it.
+Just define the property of `$redirect` or `$redirectRoute`.
+
 [Link to docs](https://laravel.com/docs/8.x/validation#customizing-the-redirect-location)
 
 ```php
@@ -293,6 +317,7 @@ protected $redirectRoute = 'dashboard';
 ```
 
 ### Mac validation rule
+
 New mac_address validation rule added in Laravel 8.77
 
 ```php
@@ -319,9 +344,11 @@ But if you want to make sure the email must have a tld domain (ie: `taylor@larav
 Tip given by [@Chris1904](https://laracasts.com/discuss/channels/general-discussion/laravel-58-override-email-validation-use-57-rules?replyId=645613)
 
 ### New array validation rule required_array_keys
+
 Laravel 8.82 adds a `required_array_keys` validation rule. The rule checks that all of the specified keys exist in an array.
 
 Valid data that would pass the validation:
+
 ```php
 $data = [
     'baz' => [
@@ -343,6 +370,7 @@ $validator->passes(); // true
 ```
 
 Invalid data that would fail the validation:
+
 ```php
 $data = [
     'baz' => [
@@ -365,9 +393,11 @@ $validator->passes(); // false
 Tip given by [@AshAllenDesign](https://twitter.com/AshAllenDesign/status/1488853052765478914)
 
 ### Position placeholder in validation messages
-In Laravel 9 you can use the :position placeholder in validation messages if you're working with arrays.<br>
+
+In Laravel 9 you can use the :position placeholder in validation messages if you're working with arrays.
 
 This will output: "Please provide an amount for price #2"
+
 ```php
 class CreateProductRequest extends FormRequest
 {
@@ -381,7 +411,7 @@ class CreateProductRequest extends FormRequest
             'prices.*.expired_at' => ['required', 'date'],
         ];
     }
-    
+
     public function messages(): array
     {
         'prices.*.amount.required' => 'Please provide an amount for price #:position'
@@ -392,6 +422,7 @@ class CreateProductRequest extends FormRequest
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1502299053635235842)
 
 ### Exclude validation value
+
 When you need to validate a field, but don't actually require it for anything e.g. 'accept terms and conditions', make use of the `exclude` rule. That way, the `validated` method won't return it...
 
 ```php
@@ -413,11 +444,11 @@ class RegistrationController extends Controller
     public function store(StoreRequest $request)
     {
         $payload = $request->validated(); // only name and email
-        
+
         $user = User::create($payload);
-        
+
         Auth::login($user);
-        
+
         return redirect()->route('dashboard');
     }
 ```

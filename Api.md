@@ -9,7 +9,6 @@
 - [Sorting Your API Results](#sorting-your-api-results)
 - [Customize Exception Handler](#customize-exception-handler-for-api)
 
-
 ### API Resources: With or Without "data"?
 
 If you use Eloquent API Resources to return data, they will be automatically wrapped in 'data'. If you want to remove it, add `JsonResource::withoutWrapping();` in `app/Providers/AppServiceProvider.php`.
@@ -43,9 +42,13 @@ public function reorder(Request $request)
 ```
 
 ### Avoid N+1 queries in API resources
-You can avoid N+1 queries in API resources by using the `whenLoaded()` method.<br>
-This will only append the department if it’s already loaded in the Employee model.<br>
+
+You can avoid N+1 queries in API resources by using the `whenLoaded()` method.
+
+This will only append the department if it’s already loaded in the Employee model.
+
 Without `whenLoaded()` there is always a query for the department
+
 ```php
 class EmplyeeResource extends JsonResource
 {
@@ -65,7 +68,9 @@ class EmplyeeResource extends JsonResource
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473987501501071362)
 
 ### Get Bearer Token from Authorization header
+
 The `bearerToken()` function is very handy when you are working with apis & want to access the token from Authorization header.
+
 ```php
 // Don't parse API headers manually like this:
 $tokenWithBearer = $request->header('Authorization');
@@ -124,6 +129,7 @@ Route::get('dogs', function (Request $request) {
 ### Customize Exception Handler For API
 
 #### Laravel 8 and below:
+
 There's a method `render()` in `App\Exceptions` class:
 
 ```php
@@ -151,13 +157,13 @@ There's a method `render()` in `App\Exceptions` class:
     }
 ```
 
-#### Laravel 8 and above:
+#### Laravel 9 and above:
+
 There's a method `register()` in `App\Exceptions` class:
 
 ```php
     public function register()
     {
-
         $this->renderable(function (ModelNotFoundException $e, $request) {
             if ($request->wantsJson() || $request->is('api/*')) {
                 return response()->json(['message' => 'Item Not Found'], 404);

@@ -10,7 +10,8 @@ And if you are from Russia and you are against this war, please express your pro
 
 # Laravel Tips
 
-Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
+Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!
+
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
 Hey, like these tips? Also, check out my premium [Laravel courses](https://laraveldaily.com/courses?utm_source=github&utm_campaign=laravel-tips).
@@ -22,14 +23,14 @@ Or if you want the Chinese version:
 
 ---
 
-**Update 11 October 2022**: Currently there are **315 tips** divided into 14 sections.
+**Update 17 October 2022**: Currently there are **314 tips** divided into 14 sections.
 
 ## Table of Contents
 
-- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (81 tips)
-- [Models Relations](Models_Relations.md) (42 tips)
+- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (87 tips)
+- [Models Relations](Models_Relations.md) (34 tips)
 - [Migrations](Migrations.md) (16 tips)
-- [Views](Views.md) (16 tips)
+- [Views](Views.md) (17 tips)
 - [Routing](Routing.md) (32 tips)
 - [Validation](Validation.md) (21 tips)
 - [Collections](Collections.md) (8 tips)
