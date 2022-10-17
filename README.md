@@ -27,10 +27,10 @@ Or if you want the Chinese version:
 
 ## Table of Contents
 
-- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (81 tips)
-- [Models Relations](Models_Relations.md) (42 tips)
+- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (87 tips)
+- [Models Relations](Models_Relations.md) (34 tips)
 - [Migrations](Migrations.md) (16 tips)
-- [Views](Views.md) (16 tips)
+- [Views](Views.md) (17 tips)
 - [Routing](Routing.md) (32 tips)
 - [Validation](Validation.md) (21 tips)
 - [Collections](Collections.md) (8 tips)
