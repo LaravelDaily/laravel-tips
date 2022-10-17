@@ -10,7 +10,6 @@
 - [Hide your custom command](#hide-your-custom-command)
 - [Skip method](#skip-method)
 
-
 ### Artisan command parameters
 
 When creating Artisan command, you can ask the input in variety of ways: `$this->confirm()`, `$this->anticipate()`, `$this->choice()`.
@@ -31,6 +30,7 @@ $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ### Maintenance Mode
 
 If you want to enable maintenance mode on your page, execute the down Artisan command:
+
 ```bash
 php artisan down
 ```
@@ -38,6 +38,7 @@ php artisan down
 Then people would see default 503 status page.
 
 You may also provide flags, in Laravel 8:
+
 - the path the user should be redirected to
 - the view that should be prerendered
 - secret phrase to bypass maintenance mode
@@ -49,6 +50,7 @@ php artisan down --redirect="/" --render="errors::503" --secret="1630542a-246b-4
 ```
 
 Before Laravel 8:
+
 - message that would be shown
 - retry page reload every X seconds
 - still allow the access to some IP address
@@ -58,6 +60,7 @@ php artisan down --message="Upgrading Database" --retry=60 --allow=127.0.0.1
 ```
 
 When you've done the maintenance work, just run:
+
 ```bash
 php artisan up
 ```
@@ -107,7 +110,9 @@ Route::get('/foo', function () {
 ```
 
 ### Hide your custom command
+
 If you don't want to show a specific command on the artisan command list, set `hidden` property to `true`
+
 ```php
 class SendMail extends Command
 {
@@ -121,9 +126,11 @@ You won't see `send:mail` on the available commands if you typed `php artisan`
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1487921500023832579)
 
 ### Skip method
-Laravel the skip method in scheduler<br>
+
+Laravel the skip method in scheduler
 
 You can use `skip` in your commands to skip an execution
+
 ```php
 $schedule->command('emails:send')->daily()->skip(function () {
     return Calendar::isHoliday();

@@ -10,7 +10,8 @@ And if you are from Russia and you are against this war, please express your pro
 
 # Laravel Tips
 
-Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!  
+Awesome Laravel tips and tricks for all artisans. PR and ideas are welcome!
+
 An idea by [PovilasKorop](https://github.com/PovilasKorop) and [MarceauKa](https://github.com/MarceauKa).
 
 Hey, like these tips? Also, check out my premium [Laravel courses](https://laraveldaily.com/courses?utm_source=github&utm_campaign=laravel-tips).

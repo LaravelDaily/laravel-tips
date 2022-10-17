@@ -39,7 +39,9 @@ $factory->define(User::class, function (Faker $faker) {
 ```
 
 ### Override values and apply custom login to them
+
 When creating records with Factories, you can use Sequence class to override some values and apply custom logic to them.
+
 ```php
 $users = User::factory()
                 ->count(10)
@@ -51,7 +53,9 @@ $users = User::factory()
 ```
 
 ### Using factories with relationships
+
 When using factories with relationships, Laravel also provides magic methods.
+
 ```php
 // magic factory relationship methods
 User::factory()->hasPosts(3)->create();
@@ -60,10 +64,12 @@ User::factory()->hasPosts(3)->create();
 User::factory()->has(Post::factory()->count(3))->create();
 ```
 
-Tip given by [@oliverds_](https://twitter.com/oliverds_/status/1441447356323430402)
+Tip given by [@oliverds\_](https://twitter.com/oliverds_/status/1441447356323430402)
 
 ### Create models without dispatching any events
+
 Sometimes you may wish to `update` a given model without dispatching any events. You may accomplish this using the `updateQuietly` method
+
 ```php
 Post::factory()->createOneQuietly();
 
@@ -76,20 +82,23 @@ Post::factory()->createManyQuietly([
 ```
 
 ### Useful for() method
+
 The Laravel factory has a very useful `for()` method. You can use it to create `belongsTo()` relationships.
+
 ```php
 public function run()
 {
     Product::factory()
         ->count(3);
         ->for(Category::factory()->create())
-        ->create();    
+        ->create();
 }
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1461002439629361158)
 
- ### Run factories without dispatching events
+### Run factories without dispatching events
+
 If you want to create multiple records using Factory without firing any Events, you can wrap your code inside a withoutEvents closure.
 
 ```php
@@ -101,6 +110,7 @@ $posts = Post::withoutEvents(function () {
 Tip given by [@TheLaravelDev](https://twitter.com/TheLaravelDev/status/1510965402666676227)
 
 ### Specify dependencies in the run() method
+
 You can specify dependencies in the `run()` method of your seeder.
 
 ```php
@@ -109,7 +119,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $user = User::factory()->create();
-        
+
         $this->callWith(EventSeeder::class, [
             'user' => $user
         ]);

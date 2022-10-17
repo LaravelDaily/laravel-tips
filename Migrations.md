@@ -238,7 +238,8 @@ Tip given by [@nicksdot](https://twitter.com/nicksdot/status/1432340806275198978
 
 ### You can add "comment" about a column inside your migrations
 
-You can add "comment" about a column inside your migrations and provide useful information.<br>
+You can add "comment" about a column inside your migrations and provide useful information.
+
 If database is managed by someone other than developers, they can look at comments in Table structure before performing any operations.
 
 ```php
@@ -282,6 +283,7 @@ Schema::table('users', function (Blueprint $table) {
 Tip given by [@ncosmeescobedo](https://twitter.com/cosmeescobedo/status/1512233993176973314)
 
 ### Add the column in the database table only if it's not present & can drop it if, its present
+
 Now you can add the column in the database table only if its not present & can drop it if, its present. For that following methods are introduced:
 
 👉 whenTableDoesntHaveColumn
@@ -298,7 +300,7 @@ return new class extends Migration {
             $table->string('name', 30);
         });
     }
-    
+
     public function down()
     {
         Schema::whenTableHasColumn('users', 'name', function (Blueprint $table) {
@@ -311,6 +313,7 @@ return new class extends Migration {
 Tip given by [@iamharis010](https://twitter.com/iamharis010/status/1510579415163432961)
 
 ### Method to set the default value for current timestamp
+
 You can use `useCurrent()` method for your custom timestamp column to store the current timestamp as a default value.
 
 ```php

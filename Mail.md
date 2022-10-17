@@ -26,7 +26,7 @@ Route::get('/mailable', function () {
 
 ### Preview Mail without Mailables
 
-You can also preview your email without Mailables. For instance, when you are creating notification, you can specify the markdown that may be use for your mail notification. 
+You can also preview your email without Mailables. For instance, when you are creating notification, you can specify the markdown that may be use for your mail notification.
 
 ```php
 use Illuminate\Notifications\Messages\MailMessage;
@@ -36,16 +36,17 @@ Route::get('/mailable', function () {
     return (new MailMessage)->markdown('emails.invoice-paid', compact('invoice'));
 });
 ```
+
 You may also use other methods provided by `MailMessage` object such as `view` and others.
 
 Tip given by [@raditzfarhan](https://github.com/raditzfarhan)
-
 
 ### Default Email Subject in Laravel Notifications
 
 If you send Laravel Notification and don't specify subject in **toMail()**, default subject is your notification class name, CamelCased into Spaces.
 
 So, if you have:
+
 ```php
 class UserRegistrationEmail extends Notification {
     //
@@ -66,7 +67,9 @@ Notification::route('mail', 'taylor@example.com')
 ```
 
 ### Set conditional object properties
+
 You can use the `when()` or `unless()` methods in your MailMessage notifications to set conditional object properties like a call to action.
+
 ```php
 class InvoicePaid extends Notification
 {
@@ -83,6 +86,6 @@ class InvoicePaid extends Notification
 }
 ```
 
-Use the `when` or `unless` methods in you own classes by using the `Illuminate\Support\Traits\Conditionable` trait<br>
+Use the `when` or `unless` methods in you own classes by using the `Illuminate\Support\Traits\Conditionable` trait
 
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1503302749525528582)

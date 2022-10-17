@@ -16,6 +16,7 @@
 If you want to group result by some condition which isn’t a direct column in your database, you can do that by providing a closure function.
 
 For example, if you want to group users by day of registration, here’s the code:
+
 ```php
 $users = User::all()->groupBy(function($item) {
     return $item->created_at->format('Y-m-d');
@@ -27,6 +28,7 @@ $users = User::all()->groupBy(function($item) {
 ### Multiple Collection Methods in a Row
 
 If you query all results with `->all()` or `->get()`, you may then perform various Collection operations on the same result, it won’t query database every time.
+
 ```php
 $users = User::all();
 echo 'Max ID: ' . $users->max('id');
@@ -36,8 +38,7 @@ echo 'Total budget: ' . $users->sum('budget');
 
 ### Calculate Sum with Pagination
 
-How to calculate the sum of all records when you have only the PAGINATED collection? Do the calculation BEFORE the pagination, but from the same query.﻿
-
+How to calculate the sum of all records when you have only the PAGINATED collection? Do the calculation BEFORE the pagination, but from the same query.
 
 ```php
 // How to get sum of post_views with pagination?
@@ -54,6 +55,7 @@ $posts = $query->paginate(10);
 ```
 
 ### Serial no in foreach loop with pagination
+
 We can use foreach collection items index as serial no (SL) in pagination.
 
 ```php
@@ -66,11 +68,12 @@ We can use foreach collection items index as serial no (SL) in pagination.
         ...
     @endforeach
 ```
+
 it will solve the issue of next pages(?page=2&...) index count from continue.
 
 ### Higher order collection methods
 
-Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax.  This example calculates the
+Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax. This example calculates the
 price per group of products on an offer.
 
 ```php
@@ -85,8 +88,8 @@ $offer = [
             ['group' => 3, 'price' => 60]
         ]
 ];
-                
-$totalPerGroup = collect($offer['lines'])->groupBy('group')->map(fn($group) => $group->sum('price')); 
+
+$totalPerGroup = collect($offer['lines'])->groupBy('group')->map(fn($group) => $group->sum('price'));
 ```
 
 ### Higher order collection message
@@ -106,12 +109,14 @@ $offer = [
             ['group' => 3, 'price' => 60]
         ]
 ];
-                
+
 $totalPerGroup = collect($offer['lines'])->groupBy->group->map->sum('price');
 ```
 
 ### Get an existing key or insert a value if it doesn't exist and return the value
+
 In Laravel 8.81 `getOrPut` method to Collections that simplifies the use-case where you want to either get an existing key or insert a value if it doesn't exist and return the value.
+
 ```php
 $key = 'name';
 // Still valid
@@ -131,6 +136,7 @@ return $this->collection->getOrPut($key, $value='teacoders');
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1488338815592718336)
 
 ### Static times method
+
 The static times method creates a new collection by invoking the given closure a specified number of times.
 
 ```php

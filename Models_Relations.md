@@ -58,6 +58,7 @@ public function productsByName()
 If you notice that you use same relationship often with additional "where" condition, you can create a separate relationship method.
 
 Model:
+
 ```php
 public function comments()
 {
@@ -128,15 +129,16 @@ In Laravel you can Eager Load multiple levels in one statement, in this example 
 $users = App\Book::with('author.country')->get();
 ```
 
-
 ### Eager Loading with Exact Columns
 
 You can do Laravel Eager Loading and specify the exact columns you want to get from the relationship.
+
 ```php
 $users = App\Book::with('author:id,name')->get();
 ```
 
 You can do that even in deeper, second level relationships:
+
 ```php
 $users = App\Book::with('author.country:id,name')->get();
 ```
@@ -157,7 +159,7 @@ class Comment extends Model
 Never **ever** do `$model->relationship->field` without checking if relationship object still exists.
 
 It may be deleted for whatever reason, outside your code, by someone else's queued job etc.
-Do `if-else`, or `{{ $model->relationship->field ?? '' }}` in Blade, or `{{ optional($model->relationship)->field }}`.  With php8 you can even use the nullsafe operator `{{ $model->relationship?->field) }}`
+Do `if-else`, or `{{ $model->relationship->field ?? '' }}` in Blade, or `{{ optional($model->relationship)->field }}`. With php8 you can even use the nullsafe operator `{{ $model->relationship?->field) }}`
 
 ### Use withCount() to Calculate Child Relationships Records
 
@@ -186,7 +188,7 @@ And then, in your Blade file, you will access those number with `{relationship}_
 You may also order by that field:
 
 ```php
-User::withCount('comments')->orderBy('comments_count', 'desc')->get(); 
+User::withCount('comments')->orderBy('comments_count', 'desc')->get();
 ```
 
 ### Extra Filter Query on Relationships
@@ -211,7 +213,7 @@ class ProductTag extends Model
     public function __construct() {
         parent::__construct();
         $this->with = ['product'];
-        
+
         if (auth()->check()) {
             $this->with[] = 'user';
         }
@@ -244,6 +246,7 @@ auth()->user()->posts()->create([
 If you want to rename "pivot" word and call your relationship something else, you just use `->as('name')` in your relationship.
 
 Model:
+
 ```php
 public function podcasts() {
     return $this->belongsToMany('App\Podcast')
@@ -253,6 +256,7 @@ public function podcasts() {
 ```
 
 Controller:
+
 ```php
 $podcasts = $user->podcasts();
 foreach ($podcasts as $podcast) {
@@ -267,7 +271,7 @@ If you have a `belongsTo()` relationship, you can update the Eloquent relationsh
 
 ```php
 // if Project -> belongsTo(User::class)
-$project->user->update(['email' => 'some@gmail.com']); 
+$project->user->update(['email' => 'some@gmail.com']);
 ```
 
 ### Laravel 7+ Foreign Keys
@@ -311,7 +315,7 @@ If your Eloquent relationship names are dynamic and you need to check if relatio
 ```php
 $user = User::first();
 if (method_exists($user, 'roles')) {
-	// Do something with $user->roles()->...
+    // Do something with $user->roles()->...
 }
 ```
 
@@ -331,9 +335,9 @@ Next, specify it in `belongsToMany()` with `->using()` method. Then you could do
 // in app/Models/User.php
 public function roles()
 {
-	return $this->belongsToMany(Role::class)
-	    ->using(RoleUser::class)
-	    ->withPivot(['team_id']);
+    return $this->belongsToMany(Role::class)
+        ->using(RoleUser::class)
+        ->withPivot(['team_id']);
 }
 
 // app/Models/RoleUser.php: notice extends Pivot, not Model
@@ -341,10 +345,10 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class RoleUser extends Pivot
 {
-	public function team()
-	{
-	    return $this->belongsTo(Team::class);
-	}
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
 }
 
 // Then, in Controller, you can do:
@@ -385,9 +389,13 @@ $questions = Question::with(['answers' => function($q) {
 ```
 
 ### Filter hasMany relationships
-Just a code example from my project, showing the possibility of filtering hasMany relationships.<br>
-TagTypes -> hasMany Tags -> hasMany Examples<br>
+
+Just a code example from my project, showing the possibility of filtering hasMany relationships.
+
+TagTypes -> hasMany Tags -> hasMany Examples
+
 And you wanna query all the types, with their tags, but only those that have examples, ordering by most examples.
+
 ```php
 $tag_types = TagType::with(['tags' => function ($query) {
     $query->has('examples')
@@ -397,7 +405,9 @@ $tag_types = TagType::with(['tags' => function ($query) {
 ```
 
 ### Filter by many-to-many relationship pivot column
+
 If you have a many-to-many relationship, and you add an extra column to the pivot table, here's how you can order by it when querying the list.
+
 ```php
 class Tournament extends Model
 {
@@ -407,6 +417,7 @@ class Tournament extends Model
     }
 }
 ```
+
 ```php
 class TournamentsController extends Controller
 
@@ -418,7 +429,9 @@ public function whatever_method() {
 ```
 
 ### A shorter way to write whereHas
+
 Released in Laravel 8.57: a shorter way to write whereHas() with a simple condition inside.
+
 ```php
 // Before
 User::whereHas('posts', function ($query) {
@@ -430,6 +443,7 @@ User::whereRelation('posts', 'published_at', '>', now())->get();
 ```
 
 ### You can add conditions to your relationships
+
 ```php
 class User
 {
@@ -437,13 +451,13 @@ class User
     {
         return $this->hasMany(Post::class);
     }
-    
+
     // with a getter
     public function getPublishedPostsAttribute()
     {
         return $this->posts->filter(fn ($post) => $post->published);
     }
-    
+
     // with a relationship
     public function publishedPosts()
     {
@@ -455,8 +469,11 @@ class User
 Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1441718371335114756)
 
 ### New `whereBelongsTo()` Eloquent query builder method
-Laravel 8.63.0 ships with a new `whereBelongsTo()` Eloquent query builder method. Smiling face with heart-shaped eyes<br>
+
+Laravel 8.63.0 ships with a new `whereBelongsTo()` Eloquent query builder method. Smiling face with heart-shaped eyes
+
 This allows you to remove BelongsTo foreign key names from your queries, and use the relationship method as a single source of truth instead!
+
 ```php
 // From:
 $query->where('author_id', $author->id)
@@ -478,7 +495,9 @@ $query->whereBelongsTo($author, 'author')
 Tip given by [@danjharrin](https://twitter.com/danjharrin/status/1445406334405459974)
 
 ### The `is()` method of one-to-one relationships for comparing models
+
 We can now make comparisons between related models without further database access.
+
 ```php
 // BEFORE: the foreign key is taken from the Post model
 $post->author_id === $user->id;
@@ -526,6 +545,7 @@ $posts = Post::whereHas('user', function ($query) use ($request) {
 Tip given by [@adityaricki](https://twitter.com/adityaricki2)
 
 ### Update an existing pivot record
+
 If you want to update an existing pivot record on the table, use `updateExistingPivot` instead of `syncWithPivotValues`.
 
 ```php
@@ -539,14 +559,16 @@ Schema::create('role_user', function ($table) {
 // first param for the record id
 // second param for the pivot records
 $user->roles()->updateExistingPivot(
-    $id, ['assigned_at' => now()],    
+    $id, ['assigned_at' => now()],
 );
 ```
 
 Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1461414850341621760)
 
 ### Relation that will get the newest (or oldest) item
+
 New in Laravel 8.42: In an Eloquent model can define a relation that will get the newest (or oldest) item of another relation.
+
 ```php
 public function historyItems(): HasMany
 {
@@ -564,6 +586,7 @@ public function latestHistoryItem(): HasOne
 ```
 
 ### Replace your custom queries with ofMany
+
 ```php
 class User extends Authenticable {
     // Get most popular post of user
@@ -576,6 +599,7 @@ class User extends Authenticable {
 Tip given by [@LaravelEloquent](https://twitter.com/LaravelEloquent/status/1493324310328578054)
 
 ### Avoid data leakage when using orWhere on a relationship
+
 ```php
 $user->posts()
     ->where('active', 1)
@@ -584,6 +608,7 @@ $user->posts()
 ```
 
 Returns: ALL posts where votes are greater than or equal to 100 are returned
+
 ```sql
 select * from posts where user_id = ? and active = 1 or votes >= 100
 ```
@@ -600,6 +625,7 @@ $users->posts()
 ```
 
 Returns: Users posts where votes are greater than or equal to 100 are returned
+
 ```sql
 select * from posts where user_id = ? and (active = 1 or votes >= 100)
 ```
