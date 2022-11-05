@@ -249,7 +249,7 @@ Model:
 
 ```php
 public function podcasts() {
-    return $this->belongsToMany('App\Podcast')
+    return $this->belongsToMany(Podcast::class)
         ->as('subscription')
         ->withTimestamps();
 }
