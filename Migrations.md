@@ -70,13 +70,10 @@ If you want to check what migrations are executed or not yet, no need to look at
 Example result:
 
 ```
-+------+------------------------------------------------+-------+
-| Ran? | Migration                                      | Batch |
-+------+------------------------------------------------+-------+
-| Yes  | 2014_10_12_000000_create_users_table           | 1     |
-| Yes  | 2014_10_12_100000_create_password_resets_table | 1     |
-| No   | 2019_08_19_000000_create_failed_jobs_table     |       |
-+------+------------------------------------------------+-------+
+Migration name .......................................................................... Batch / Status  
+2014_10_12_000000_create_users_table ........................................................... [1] Ran  
+2014_10_12_100000_create_password_resets_table ................................................. [1] Ran  
+2019_08_19_000000_create_failed_jobs_table ..................................................... [1] Ran    
 ```
 
 ### Create Migration with Spaces
