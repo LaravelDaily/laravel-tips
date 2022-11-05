@@ -155,8 +155,8 @@ Route::group([
     'prefix' => '{locale}',
     'where' => ['locale' => '[a-zA-Z]{2}']
 ], function () {
-    Route::get('/', 'HomeController@index');
-    Route::get('article/{id}', 'ArticleController@show');
+    Route::get('/', [HomeController::class, 'index']);
+    Route::get('article/{id}', [ArticleController::class, 'show']);
 });
 ```
 
