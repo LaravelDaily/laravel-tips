@@ -598,6 +598,17 @@ Tip given by [@syofyanzuhad](https://github.com/syofyanzuhad)
 
 To change the format of `created_at` you can add a method in your model like this:
 
+Since Laravel 9:
+```php
+protected function createdAtFormatted(): Attribute
+{
+    return Attribute::make(
+        get: fn ($value, $attributes) => $attributes['created_at']->format('H:i d, M Y'),
+    );
+}
+```
+
+Laravel 8 and below:
 ```php
 public function getCreatedAtFormattedAttribute()
 {
@@ -610,6 +621,17 @@ It will return the `created_at` attribute like this: `04:19 23, Aug 2020`.
 
 And also for changing format of `updated_at` attribute, you can add this method :
 
+Since Laravel 9:
+```php
+protected function updatedAtFormatted(): Attribute
+{
+    return Attribute::make(
+        get: fn ($value, $attributes) => $attributes['updated_at']->format('H:i d, M Y'),
+    );
+}
+```
+
+Laravel 8 and below:
 ```php
 public function getUpdatedAtFormattedAttribute()
 {
