@@ -134,8 +134,8 @@ If you want to specify additional logic for not-found routes, instead of just th
 
 ```php
 Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/home', 'HomeController@index');
-    Route::resource('tasks', 'Admin\TasksController');
+    Route::get('/home', [HomeController::class, 'index']);
+    Route::resource('tasks', [Admin\TasksController::class]);
 });
 
 // Some more routes....
