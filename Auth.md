@@ -55,10 +55,14 @@ It's convenient to change the user's API Token when its password changes.
 Model:
 
 ```php
-public function setPasswordAttribute($value)
+protected function password(): Attribute
 {
-    $this->attributes['password'] = $value;
-    $this->attributes['api_token'] = Str::random(100);
+    return Attribute::make(
+            set: function ($value, $attributes) {
+                $value = $value;
+                $attributes['api_token'] = Str::random(100);
+            }
+        );
 }
 ```
 
