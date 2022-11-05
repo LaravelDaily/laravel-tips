@@ -306,7 +306,7 @@ Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/146319061
 when using Form Requests for validation, by default the validation error will redirect back to the previous page, but you can override it.
 Just define the property of `$redirect` or `$redirectRoute`.
 
-[Link to docs](https://laravel.com/docs/8.x/validation#customizing-the-redirect-location)
+[Link to docs](https://laravel.com/docs/master/validation#customizing-the-redirect-location)
 
 ```php
 // The URI that users should be redirected to if validation fails./
