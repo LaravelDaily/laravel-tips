@@ -105,7 +105,7 @@ You can assign a default model in `belongsTo` relationship, to avoid fatal error
 ```php
 public function user()
 {
-    return $this->belongsTo('App\User')->withDefault();
+    return $this->belongsTo(User::class)->withDefault();
 }
 ```
 
