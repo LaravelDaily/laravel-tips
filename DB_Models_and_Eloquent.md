@@ -1602,7 +1602,16 @@ class User extends Model
 {
     // ...
     protected $appends = ['full_name'];
+    
+    // Since Laravel 9
+    protected function full_name(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => $attributes['first_name'] . ' ' . $attributes['last_name'];),
+        );
+    }
 
+    // Laravel 8 and lower
     public function getFullNameAttribute()
     {
         return $this->attribute['first_name'] . ' ' . $this->attributes['last_name'];
