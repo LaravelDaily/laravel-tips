@@ -412,7 +412,7 @@ class AccountController extends Controller
             abort(403);
         }
 
-        // User confirmed by clikcing on the email
+        // User confirmed by clicking on the email
         $user->delete();
 
         return redirect()->route('home');
