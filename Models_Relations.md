@@ -134,13 +134,13 @@ $users = Book::with('author.country')->get();
 You can do Laravel Eager Loading and specify the exact columns you want to get from the relationship.
 
 ```php
-$users = App\Book::with('author:id,name')->get();
+$users = Book::with('author:id,name')->get();
 ```
 
 You can do that even in deeper, second level relationships:
 
 ```php
-$users = App\Book::with('author.country:id,name')->get();
+$users = Book::with('author.country:id,name')->get();
 ```
 
 ### Touch parent updated_at easily
