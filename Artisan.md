@@ -37,16 +37,15 @@ php artisan down
 
 Then people would see default 503 status page.
 
-You may also provide flags, in Laravel 8:
+You may also provide flags, in Laravel 9:
 
 - the path the user should be redirected to
 - the view that should be prerendered
 - secret phrase to bypass maintenance mode
-- status code during maintenance mode
 - retry page reload every X seconds
 
 ```bash
-php artisan down --redirect="/" --render="errors::503" --secret="1630542a-246b-4b66-afa1-dd72a4c43515" --status=200 --retry=60
+php artisan down --redirect="/" --render="errors::503" --secret="1630542a-246b-4b66-afa1-dd72a4c43515" --retry=60
 ```
 
 Before Laravel 8:
