@@ -361,7 +361,7 @@ In addition to Eloquent's `withCount()` method to count related records, you can
 
 ```php
 // if your Book hasMany Reviews...
-$book = App\Book::first();
+$book = Book::first();
 
 $book->loadCount('reviews');
 // Then you get access to $book->reviews_count;
