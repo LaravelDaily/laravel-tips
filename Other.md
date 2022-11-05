@@ -935,7 +935,7 @@ There’s a `withToken` method to attach the `Authorization` header to a request
 
 ```php
 // Booo!
-Http::withHreader([
+Http::withHeader([
     'Authorization' => 'Bearer dQw4w9WgXcq'
 ])
 
