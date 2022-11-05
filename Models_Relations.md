@@ -126,7 +126,7 @@ $post->comments()->saveMany([
 In Laravel you can Eager Load multiple levels in one statement, in this example we not only load the author relation but also the country relation on the author model.
 
 ```php
-$users = App\Book::with('author.country')->get();
+$users = Book::with('author.country')->get();
 ```
 
 ### Eager Loading with Exact Columns
