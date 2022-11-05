@@ -130,7 +130,7 @@ If you want to create a controller with just one action, you can use `__invoke()
 Route:
 
 ```php
-Route::get('user/{id}', 'ShowProfile');
+Route::get('user/{id}', ShowProfile::class);
 ```
 
 Artisan:
