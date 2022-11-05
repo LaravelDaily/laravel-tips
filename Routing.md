@@ -41,11 +41,11 @@ In Routes, you can create a group within a group, assigning a certain middleware
 
 ```php
 Route::group(['prefix' => 'account', 'as' => 'account.'], function() {
-    Route::get('login', 'AccountController@login');
-    Route::get('register', 'AccountController@register');
+    Route::get('login', [AccountController::class, 'login']);
+    Route::get('register', [AccountController::class, 'register']);
 
     Route::group(['middleware' => 'auth'], function() {
-        Route::get('edit', 'AccountController@edit');
+        Route::get('edit', [AccountController::class, 'edit']);
     });
 });
 ```
