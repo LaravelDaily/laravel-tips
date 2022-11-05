@@ -120,7 +120,7 @@ Tip is based on [suggestion](https://github.com/LaravelDaily/laravel-tips/pull/5
 
 ### Route Model Binding: You can define a key
 
-You can do Route model binding like `Route::get('api/users/{user}', function (App\User $user) { … }` - but not only by ID field. If you want `{user}` to be a `username`
+You can do Route model binding like `Route::get('api/users/{user}', function (User $user) { … }` - but not only by ID field. If you want `{user}` to be a `username`
 field, put this in the model:
 
 ```php
