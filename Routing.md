@@ -6,7 +6,6 @@
 - [Wildcard subdomains](#wildcard-subdomains)
 - [What's behind the routes?](#whats-behind-the-routes)
 - [Route Model Binding: You can define a key](#route-model-binding-you-can-define-a-key)
-- [Quickly Navigate from Routes file to Controller](#quickly-navigate-from-routes-file-to-controller)
 - [Route Fallback: When no Other Route is Matched](#route-fallback-when-no-other-route-is-matched)
 - [Route Parameters Validation with RegExp](#route-parameters-validation-with-regexp)
 - [Rate Limiting: Global and for Guests/Users](#rate-limiting-global-and-for-guestsusers)
@@ -127,33 +126,6 @@ field, put this in the model:
 public function getRouteKeyName() {
     return 'username';
 }
-```
-
-### Quickly Navigate from Routes file to Controller
-
-This thing was optional before Laravel 8, and became a standard main syntax of routing in Laravel 8.
-
-Instead of routing like this:
-
-```php
-Route::get('page', 'PageController@action');
-```
-
-You can specify the Controller as a class:
-
-```php
-Route::get('page', [\App\Http\Controllers\PageController::class, 'action']);
-```
-
-Then you will be able to click on **PageController** in PhpStorm, and navigate directly to Controller, instead of searching for it manually.
-
-Or, to make it shorter, add this to top of Routes file:
-
-```php
-use App\Http\Controllers\PageController;
-
-// Then:
-Route::get('page', [PageController::class, 'action']);
 ```
 
 ### Route Fallback: When no Other Route is Matched
