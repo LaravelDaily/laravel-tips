@@ -158,7 +158,7 @@ class ShowProfile extends Controller
 You can `redirect()` not only to URL or specific route, but to a specific Controller's specific method, and even pass the parameters. Use this:
 
 ```php
-return redirect()->action('SomeController@method', ['param' => $value]);
+return redirect()->action([SomeController::class, 'method'], ['param' => $value]);
 ```
 
 ### Use Older Laravel Version
