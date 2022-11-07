@@ -1,13 +1,14 @@
 ## API
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Log and debug)](Log_and_Debug.md) ➡️ [Next (Other)](Other.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Log and debug)](log-and-debug.md) ➡️ [Next (Other)](other.md)
 
 - [API Resources: With or Without "data"?](#api-resources-with-or-without-data)
+- [Conditional Relationship Counts on API Resources](#conditional-relationship-counts-on-api-resources)
 - [API Return "Everything went ok"](#api-return-everything-went-ok)
-- [Avoid N+1 queries in API resources](#avoid-N1-queries-in-API-resources)
+- [Avoid N+1 queries in API resources](#avoid-n1-queries-in-api-resources)
 - [Get Bearer Token from Authorization header](#get-bearer-token-from-authorization-header)
 - [Sorting Your API Results](#sorting-your-api-results)
-- [Customize Exception Handler](#customize-exception-handler-for-api)
+- [Customize Exception Handler For API](#customize-exception-handler-for-api)
 
 ### API Resources: With or Without "data"?
 
@@ -24,6 +25,25 @@ class AppServiceProvider extends ServiceProvider
 ```
 
 Tip given by [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230637544321029)
+
+### Conditional Relationship Counts on API Resources
+
+You may conditionally include the count of a relationship in your resource response by using the whenCounted method. By doing so, the attribute is not included if the relationships' count is missing.
+```php
+public function toArraY($request)
+{
+     return [
+          'id' => $this->id,
+          'name' => $this->name,
+          'email' => $this->email,
+          'posts_count' => $this->whenCounted('posts'),
+          'created_at' => $this->created_at,
+          'updated_at' => $this->updated_at,
+     ];
+}
+```
+
+Tip given by [@mvpopuk)(https://twitter.com/mvpopuk/status/1570480977507504128)
 
 ### API Return "Everything went ok"
 
@@ -187,3 +207,4 @@ There's a method `register()` in `App\Exceptions` class:
         });
     }
 ```
+

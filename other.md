@@ -1,10 +1,19 @@
 ## Other
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (API)](Api.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (API)](api.md)
 
 - [Localhost in .env](#localhost-in-env)
+- [Time value in the past/future](#time-value-in-the-past-future)
+- [Do some work after a response has been sent to the browser](#do-some-work-after-a-response-has-been-sent-to-the-browser)
+- [Redirect with URL fragment](#redirect-with-url-fragment)
+- [Use middleware to adjust incoming request](#use-middleware-to-adjust-incoming-request)
+- [Redirect away from Laravel app](#redirect-away-from-laravel-app)
+- [Blade directive to show data in specific environment](#blade-directive-to-show-data-in-specific-environment)
+- [Schedule Laravel job based on time zone](#schedule-laravel-job-based-on-time-zone)
+- [Use assertModelMissing instead assertDatabaseMissing](#use-assertmodelmissing-instead-assertdatabasemissing)
+- [Various options to format diffForHumans()](#various-options-to-format-diffforhumans)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
-- [Composer: check for newer versions](#composer-check-for-newer-versions)
+- [Composer: Check for Newer Versions](#composer-check-for-newer-versions)
 - [Auto-Capitalize Translations](#auto-capitalize-translations)
 - [Carbon with Only Hours](#carbon-with-only-hours)
 - [Single Action Controllers](#single-action-controllers)
@@ -32,7 +41,7 @@
 - [There are multiple ways to return a view with variables](#there-are-multiple-ways-to-return-a-view-with-variables)
 - [Schedule regular shell commands](#schedule-regular-shell-commands)
 - [HTTP client request without verifying](#http-client-request-without-verifying)
-- [Test that doesn't assert anything ](#test-that-doesnt-assert-anything)
+- [Test that doesn't assert anything](#test-that-doesnt-assert-anything)
 - ["Str::mask()" method](#strmask-method)
 - [Extending Laravel classes](#extending-laravel-classes)
 - [Can feature](#can-feature)
@@ -51,12 +60,12 @@
 - [Get value from session and forget](#get-value-from-session-and-forget)
 - [$request->date() method](#request-date-method)
 - [Use through instead of map when using pagination](#use-through-instead-of-map-when-using-pagination)
-- [Quickly add a bearer token to HTTP request](#quickly-add-a-bearer-token-to-HTTP-request)
+- [Quickly add a bearer token to HTTP request](#quickly-add-a-bearer-token-to-http-request)
 - [Copy file or all files from a folder](#copy-file-or-all-files-from-a-folder)
 - [Sessions has() vs exists() vs missing()](#sessions-has-vs-exists-vs-missing)
 - [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
 - [Use Redis to track page views](#use-redis-to-track-page-views)
-- [to_route() helper function](#to_route-helper-function)
+- [to_route() helper function](#to-route-helper-function)
 - [Pause a long running job when queue worker shuts down](#pause-a-long-running-job-when-queue-worker-shuts-down)
 - [Freezing Time in Laravel Tests](#freezing-time-in-laravel-tests)
 - [New squish helper](#new-squish-helper)
@@ -76,6 +85,190 @@ APP_KEY=base64:9PHz3TL5C4YrdV6Gg/Xkkmx9btaE93j7rQTUZWm2MqU=
 APP_DEBUG=true
 APP_URL=http://localhost
 ```
+
+### Time value in the past/future
+
+If you want to have some time value in the past/future, you can build it by chaining various Laravel/Carbon helpers, like `now()->[add or subtract something]->setTime()`
+
+```php
+$product = Product::factory()->create([
+     'published_at' => now()->addDay()->setTime(14, 00),
+]);
+```
+
+### Do some work after a response has been sent to the browser
+
+You can also use middleware to do some work after a response has been sent to the browser. Such middleware is called Terminable Middleware.
+
+You can make a middleware terminable by defining a `terminate` method on a middleware.
+
+This method will be automatically called after a response is sent to the browser. It will have both request and response as params.
+
+```php
+class TerminatingMiddleware
+{
+    public function handle($request, Closure $next)
+    {
+        return $next($request);
+    }
+ 
+    public function terminate($request, $response)
+    {
+        // ...
+    }
+}
+```
+
+Tip given by [@Laratips1](https://twitter.com/Laratips1/status/1567045288338280448/)
+
+### Redirect with URL fragment
+
+Did you know you can add a URI fragment when redirecting to a route in Laravel?
+
+Super useful when redirecting to a specific section of the page. E.g. reviews section on a product page.
+```php
+return redirect()
+     ->back()
+     ->withFragment('contactForm');
+     // domain.test/url#contactForm
+
+return redirect()
+     ->route('product.show')
+     ->withFragment('reviews');
+     // domain.test/product/23#reviews
+```
+
+Tip given by [@ecrmnn](https://twitter.com/ecrmnn/status/1574813643425751040)
+
+### Use middleware to adjust incoming request
+
+Laravel's middlewares are a great way to transform incoming requests. For example, I decided to rename a model in my application; instead of bumping the API version for a breaking change, I simply convert those requests using the old reference.
+```php
+class ConvertLicenseeIntoContact
+{
+     public function handle(Request $request, Closure $next)
+     {
+          if($request->json('licensee_id')) {
+               $request->json()->set('contact_id', $request->json('licensee_id'));
+          }
+
+          return $next($request);
+     }
+}
+```
+
+Tip given by [@Philo01](https://twitter.com/Philo01/status/1581214787467235329)
+
+### Redirect away from Laravel app
+
+Sometimes, you might need to redirect away from your Laravel application to other websites. In that case, there is a handy away method you can call on the redirect() method...
+
+```php
+redirect()->away('https://www.google.com');
+```
+
+It creates a `RedirectResponse` without any additional URL encoding, validation, or verification.
+
+Tip given by [@Laratips1](https://twitter.com/Laratips1/status/1581887837972361216)
+
+### Blade directive to show data in specific environment
+
+Did you know Laravel has a 'production' blade directive that you can use to show data only when you are in a production environment?
+
+There is also another 'env' directive that you can use to show data in the environment you specify.
+```blade
+@production
+     // I am only visible to the production environment...
+@endproduction
+
+@env('staging')
+     // I am only visible to the staging environment...
+@endenv
+
+@env(['staging', 'production'])
+     // I am only visible to both the staging and production environment...
+@endenv
+```
+
+Tip given by [@Laratips1](https://twitter.com/Laratips1/status/1582615079874220032)
+
+### Schedule Laravel job based on time zone
+
+Do you know you can schedule laravel job based on time zone
+
+Setting Timezone for One Command:
+```php
+$schedule->command('reportg:generate')
+         ->timezone('America/New_York')
+         ->at('2:00');
+```
+
+If you are repeatedly assigning the same timezone to all of your sheduled tasks, you may wish to define a `sheduleTimezone` method in you `app\Console\Kernel` class:
+```php
+protected function sheduleTimezone()
+{
+     return 'America/Chicago';
+}
+```
+
+Tip given by [@binumathew](https://twitter.com/binumathew/status/1584830693791928320)
+
+### Use assertModelMissing instead assertDatabaseMissing
+
+While testing model deletion, use assertModelMissing instead assertDatabaseMissing.
+```php
+/** @test */
+public function allowed_user_can_delete_task()
+{
+     $task = Task::factory()->for($this->project)->create();
+
+     $this->deleteJson($task->path())
+          ->assertNoContent();
+
+     // Instead of assertDatabaseMissing to check if the model missing from the database
+     $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
+
+     // use directly assertModelMIssing
+     $this->assertModelMissing($task);
+}
+```
+
+Tip given by [@h_ik04](https://twitter.com/h_ik04/status/1585593621193129986)
+
+### Various options to format diffForHumans()
+
+In Carbon, did you know you can add various options to format diffForHumans()? [Read the docs for more examples.](https://carbon.nesbot.com/docs/#api-humandiff)
+```php
+$user->created_at->diffForHumans();
+```
+=> `"17 hours ago"`
+
+
+```php
+$user->created_at->diffForHumans([
+     'parts' => 2
+]);
+```
+=> `"17 hours 54 minutes ago"`
+
+
+```php
+$user->created_at->diffForHumans([
+     'parts' => 3
+     'join' => ', ',
+]);
+```
+=> `"17 hoours, 54 minutes, 50 seconds ago"`
+
+
+```php
+$user->created_at->diffForHumans([
+     'parts' => 3,
+     'join' => ', ',
+     'short' => true,
+]);
+```
+=> `"17h, 54m, 50s ago"`
 
 ### When (NOT) to run "composer update"
 
@@ -130,7 +323,7 @@ If you want to create a controller with just one action, you can use `__invoke()
 Route:
 
 ```php
-Route::get('user/{id}', 'ShowProfile');
+Route::get('user/{id}', ShowProfile::class);
 ```
 
 Artisan:
@@ -158,7 +351,7 @@ class ShowProfile extends Controller
 You can `redirect()` not only to URL or specific route, but to a specific Controller's specific method, and even pass the parameters. Use this:
 
 ```php
-return redirect()->action('SomeController@method', ['param' => $value]);
+return redirect()->action([SomeController::class, 'method'], ['param' => $value]);
 ```
 
 ### Use Older Laravel Version
@@ -935,7 +1128,7 @@ There’s a `withToken` method to attach the `Authorization` header to a request
 
 ```php
 // Booo!
-Http::withHreader([
+Http::withHeader([
     'Authorization' => 'Bearer dQw4w9WgXcq'
 ])
 
@@ -1296,3 +1489,4 @@ class CalculateSingleConsignment implements ShouldQueue
 ```
 
 Tip given by [@pauloimon](https://github.com/pauloimon)
+

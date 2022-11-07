@@ -1,8 +1,10 @@
 ## Log and debug
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Factories)](Factories.md) ➡️ [Next (API)](Api.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Factories)](factories.md) ➡️ [Next (API)](api.md)
 
 - [Logging with parameters](#logging-with-parameters)
+- [Log Long Running Laravel Queries](#log-long-running-laravel-queries)
+- [Benchmark class](#benchmark-class)
 - [More convenient DD](#more-convenient-dd)
 - [Log with context](#log-with-context)
 - [Quickly output an Eloquent query in its SQL form](#quickly-output-an-eloquent-query-in-its-sql-form)
@@ -15,6 +17,38 @@ You can write `Log::info()`, or shorter `info()` message with additional paramet
 ```php
 Log::info('User failed to login.', ['id' => $user->id]);
 ```
+
+### Log Long Running Laravel Queries
+
+```php
+DB::enableQueryLog();
+
+DB::whenQueryingForLongerThen(1000, function ($connection) {
+     Log::warning(
+          'Long running queries have been detected.',
+          $connection->getQueryLog()
+     );
+});
+```
+
+Tip given by [@realstevebauman](https://twitter.com/realstevebauman/status/1576980397552185344)
+
+### Benchmark class
+
+In Laravel 9.32 we have a Benchmark class that can measure the time of any task.
+
+It's a pretty useful helper:
+```php
+class OrderController
+{
+     public function index()
+     {
+          return Benchmark::measure(fn () => Order::all()),
+     }
+}
+```
+
+Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1583096196494553088)
 
 ### More convenient DD
 
@@ -78,3 +112,4 @@ public function boot()
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473262634405449730)
+

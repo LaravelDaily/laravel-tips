@@ -1,8 +1,7 @@
 ## Migrations
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Models Relations)](Models_Relations.md) ➡️ [Next (Views)](Views.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Models Relations)](models-relations.md) ➡️ [Next (Views)](views.md)
 
-- [Unsigned Integer](#unsigned-integer)
 - [Order of Migrations](#order-of-migrations)
 - [Migration fields with timezones](#migration-fields-with-timezones)
 - [Database migrations column types](#database-migrations-column-types)
@@ -14,30 +13,10 @@
 - [Output SQL before running migrations](#output-sql-before-running-migrations)
 - [Anonymous Migrations](#anonymous-migrations)
 - [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
-- [Checking For Table / Column Existence](#checking-for-table--column-existence)
+- [Checking For Table / Column Existence](#checking-for-table-column-existence)
 - [Group Columns within an After Method](#group-columns-within-an-after-method)
-- [Add the column in the database table only if it's not present & can drop it if, its present](#add-the-column-in-the-database-table-only-if-its-not-present--can-drop-it-if-its-present)
+- [Add the column in the database table only if it's not present & can drop it if, its present](#add-the-column-in-the-database-table-only-if-its-not-present-can-drop-it-if-its-present)
 - [Method to set the default value for current timestamp](#method-to-set-the-default-value-for-current-timestamp)
-
-### Unsigned Integer
-
-For foreign key migrations instead of `integer()` use `unsignedInteger()` type or `integer()->unsigned()`, otherwise you may get SQL errors.
-
-```php
-Schema::create('employees', function (Blueprint $table) {
-    $table->unsignedInteger('company_id');
-    $table->foreign('company_id')->references('id')->on('companies');
-    // ...
-});
-```
-
-You can also use `unsignedBigInteger()` if that other column is `bigInteger()` type.
-
-```php
-Schema::create('employees', function (Blueprint $table) {
-    $table->unsignedBigInteger('company_id');
-});
-```
 
 ### Order of Migrations
 
@@ -91,13 +70,10 @@ If you want to check what migrations are executed or not yet, no need to look at
 Example result:
 
 ```
-+------+------------------------------------------------+-------+
-| Ran? | Migration                                      | Batch |
-+------+------------------------------------------------+-------+
-| Yes  | 2014_10_12_000000_create_users_table           | 1     |
-| Yes  | 2014_10_12_100000_create_password_resets_table | 1     |
-| No   | 2019_08_19_000000_create_failed_jobs_table     |       |
-+------+------------------------------------------------+-------+
+Migration name .......................................................................... Batch / Status  
+2014_10_12_000000_create_users_table ........................................................... [1] Ran  
+2014_10_12_100000_create_password_resets_table ................................................. [1] Ran  
+2019_08_19_000000_create_failed_jobs_table ..................................................... [1] Ran    
 ```
 
 ### Create Migration with Spaces
@@ -326,3 +302,4 @@ Schema::create('posts', function (Blueprint $table) {
 ```
 
 Tip given by [@iamgurmandeep](https://twitter.com/iamgurmandeep/status/1517152425748148225)
+
