@@ -1474,6 +1474,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Throwable;
 
 class CalculateSingleConsignment implements ShouldQueue
 {
@@ -1481,7 +1482,7 @@ class CalculateSingleConsignment implements ShouldQueue
 
     // ... __construct() method, handle() method, etc.
 
-    public function failed()
+    public function failed(Throwable $exception)
     {
         // Perfom any action here when job has failed
      }
