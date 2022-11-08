@@ -1,8 +1,11 @@
 ## Validation
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Routing)](Routing.md) ➡️ [Next (Collections)](Collections.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Routing)](routing.md) ➡️ [Next (Collections)](collections.md)
 
 - [Image validation](#image-validation)
+- [Add Values to the Form Request After Validation](#add-values-to-the-form-request-after-validation)
+- [Access model binding in FormRequests](#access-model-binding-in-formrequests)
+- [Rule which ensures the field under validation is required if another field is accepted](#rule-which-ensures-the-field-under-validation-is-required-if-another-field-is-accepted)
 - [Custom validation error messages](#custom-validation-error-messages)
 - [Validate dates with "now" or "yesterday" words](#validate-dates-with-now-or-yesterday-words)
 - [Validation Rule with Some Conditions](#validation-rule-with-some-conditions)
@@ -31,6 +34,69 @@ While validating uploaded images, you can specify the dimensions you require.
 ```php
 ['photo' => 'dimensions:max_width=4096,max_height=4096']
 ```
+
+### Add Values to the Form Request After Validation
+
+```php
+class UpdatedBookRequest extends FormRequent
+{
+     public function validated()
+     {
+          return array_merge(parent::validated(), [
+               'user_id' => Auth::user()->id,
+          ]);
+     }
+}
+```
+
+### Access model binding in FormRequests
+
+When using FormRequests, you can always access the binding model by simply using the following expression `$𝘁𝗵𝗶𝘀->{𝗿𝗼𝘂𝘁𝗲-𝗯𝗶𝗻𝗱𝗶𝗻𝗴-𝘃𝗮𝗿𝗶𝗮𝗯𝗹𝗲}`
+
+Here's an example.
+
+```php
+class CommunityController extends Controller
+{
+     // ...
+     public function update(CommunityUpdateRequest $request, Community $community)
+     {
+          $community->update($request->validated());
+
+          return to_route('communities.index')->withMessage('Community updated successfully.');
+     }
+     // ...
+}
+
+class CommunityUpdateRequest extends FormRequest
+{
+     // ...
+     public function rules()
+     {
+          return [
+               'name' => ['required', Rule::unique('communities', 'name')->ignore($this->community)],
+               'description' => ['required', 'min:5'],
+          ];
+     }
+     // ...
+}
+```
+
+Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1574715518501666817)
+
+### Rule which ensures the field under validation is required if another field is accepted
+
+You can use `required_if_accepted` validation rule which ensures the field under validation is required if another field is accepted (a value of yes, on, 1, or true).
+```php
+Validator::make([
+     'is_company' => 'on',
+     'company_name' => 'Apple',
+], [
+     'is_company' => 'required|boolean',
+     'company_name' => 'required_if_accepted:is_company',
+]);
+
+Tip given by [@iamgurmandeep](https://twitter.com/iamgurmandeep/status/1583420332693749761)
 
 ### Custom validation error messages
 
@@ -306,7 +372,7 @@ Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/146319061
 when using Form Requests for validation, by default the validation error will redirect back to the previous page, but you can override it.
 Just define the property of `$redirect` or `$redirectRoute`.
 
-[Link to docs](https://laravel.com/docs/8.x/validation#customizing-the-redirect-location)
+[Link to docs](https://laravel.com/docs/master/validation#customizing-the-redirect-location)
 
 ```php
 // The URI that users should be redirected to if validation fails./
@@ -454,3 +520,4 @@ class RegistrationController extends Controller
 ```
 
 Tip given by [@mattkingshott](https://twitter.com/mattkingshott/status/1518590652682063873)
+

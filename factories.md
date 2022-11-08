@@ -1,6 +1,6 @@
 ## Factories
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Artisan)](Artisan.md) ➡️ [Next (Log and debug)](Log_and_Debug.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Artisan)](artisan.md) ➡️ [Next (Log and debug)](log-and-debug.md)
 
 - [Factory callbacks](#factory-callbacks)
 - [Generate Images with Seeds/Factories](#generate-images-with-seedsfactories)
@@ -141,3 +141,4 @@ class EventSeeder extends Seeder
 ```
 
 Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1514428294418079746)
+

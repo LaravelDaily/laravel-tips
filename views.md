@@ -1,8 +1,10 @@
 ## Views
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Migrations)](Migrations.md) ➡️ [Next (Routing)](Routing.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Migrations)](migrations.md) ➡️ [Next (Routing)](routing.md)
 
 - [$loop variable in foreach](#loop-variable-in-foreach)
+- [You can use Blade to generate more than HTML](#you-can-use-blade-to-generate-more-than-html)
+- [Short attribute syntax for Blade Components](#short-attribute-syntax-for-blade-components)
 - [Does view file exist?](#does-view-file-exist)
 - [Error code Blade pages](#error-code-blade-pages)
 - [View without controllers](#view-without-controllers)
@@ -40,6 +42,37 @@ Inside of foreach loop, check if current entry is first/last by just using `$loo
 
 There are also other properties like `$loop->iteration` or `$loop->count`.
 Learn more on the [official documentation](https://laravel.com/docs/master/blade#the-loop-variable).
+
+### You can use Blade to generate more than HTML
+
+You can use it to generate any dynamic string or file you want. For example, a shell script or a sitemap file.
+
+You only need to call the `render()` method on a view to get the result as a string.
+
+```php
+$script = view('deploy-script')->render();
+
+$ssh = $this->createSshConnection();
+
+info("Executing deploy script...");
+$process = $ssh->execute(explode("\n", $script));
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1566620670888275968/)
+
+### Short attribute syntax for Blade Components
+
+Available from Laravel 9.32.
+
+Current syntax:
+```blade
+<x-profile :user-id="$userId"></x-profile>
+```
+
+Short syntax:
+```blade
+<x-profile :$userId></x-profile>
+```
 
 ### Does view file exist?
 
@@ -376,3 +409,4 @@ This is going to be a nice addition that we can use to clean up our Blade views 
 ```
 
 Tip given by [@VijayGoswami](https://vijaygoswami.in)
+

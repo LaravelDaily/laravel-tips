@@ -1,8 +1,9 @@
 ## Mail
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Auth)](Auth.md) ➡️ [Next (Artisan)](Artisan.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Auth)](auth.md) ➡️ [Next (Artisan)](artisan.md)
 
 - [Testing email into laravel.log](#testing-email-into-laravellog)
+- [You don’t have to store files to use them as email attachments in Laravel](#you-dont-have-to-store-files-to-use-them-as-email-attachments-in-laravel)
 - [Preview Mailables](#preview-mailables)
 - [Preview Mail without Mailables](#preview-mail-without-mailables)
 - [Default Email Subject in Laravel Notifications](#default-email-subject-in-laravel-notifications)
@@ -12,6 +13,26 @@
 ### Testing email into laravel.log
 
 If you want to test email contents in your app but unable or unwilling to set up something like Mailgun, use `.env` parameter `MAIL_DRIVER=log` and all the email will be saved into `storage/logs/laravel.log` file, instead of actually being sent.
+
+### You don’t have to store files to use them as email attachments in Laravel
+
+Simply use **attachData** to add user uploaded files in Mailables.
+
+Here's a snippet from a Mailable class using it.
+```php
+public function build()
+{
+     return $this->subject('Inquiry')
+          ->to('example@example.com')
+          ->markdown('email.inquery')
+          ->attachData(
+               $this->file,
+               $this->file->getClientOriginalName(),
+          );
+}
+```
+
+Tip given by [@ecrmnn](https://twitter.com/ecrmnn/status/1570449885664808961)
 
 ### Preview Mailables
 
@@ -89,3 +110,4 @@ class InvoicePaid extends Notification
 Use the `when` or `unless` methods in you own classes by using the `Illuminate\Support\Traits\Conditionable` trait
 
 Tip given by [@Philo01](https://twitter.com/Philo01/status/1503302749525528582)
+

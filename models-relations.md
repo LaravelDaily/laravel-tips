@@ -1,8 +1,9 @@
 ## Models Relations
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](DB_Models_and_Eloquent.md) ➡️ [Next (Migrations)](Migrations.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (DB Models and Eloquent)](db-models-and-eloquent.md) ➡️ [Next (Migrations)](migrations.md)
 
 - [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
+- [Add where statement to Many-to-Many relation](#add-where-statement-to-many-to-many-relation)
 - [Conditional relationships](#conditional-relationships)
 - [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
 - [Eloquent has() deeper](#eloquent-has-deeper)
@@ -27,14 +28,14 @@
 - [Randomize Relationship Order](#randomize-relationship-order)
 - [Filter hasMany relationships](#filter-hasmany-relationships)
 - [Filter by many-to-many relationship pivot column](#filter-by-many-to-many-relationship-pivot-column)
-- [A shorter way to write whereHas](#a-shorter-way-to-write-whereHas)
+- [A shorter way to write whereHas](#a-shorter-way-to-write-wherehas)
 - [You can add conditions to your relationships](#you-can-add-conditions-to-your-relationships)
 - [New `whereBelongsTo()` Eloquent query builder method](#new-wherebelongsto-eloquent-query-builder-method)
 - [The `is()` method of one-to-one relationships for comparing models](#the-is-method-of-one-to-one-relationships-for-comparing-models)
 - [`whereHas()` multiple connections](#wherehas-multiple-connections)
 - [Update an existing pivot record](#update-an-existing-pivot-record)
 - [Relation that will get the newest (or oldest) item](#relation-that-will-get-the-newest-or-oldest-item)
-- [Replace your custom queries with `->ofMany`](#replace-your-custom-queries-with-ofmany)
+- [Replace your custom queries with ofMany](#replace-your-custom-queries-with-ofmany)
 - [Avoid data leakage when using orWhere on a relationship](#avoid-data-leakage-when-using-orwhere-on-a-relationship)
 
 ### OrderBy on Eloquent relationships
@@ -52,6 +53,30 @@ public function productsByName()
     return $this->hasMany(Product::class)->orderBy('name');
 }
 ```
+
+### Add where statement to Many-to-Many relation
+
+In your many-to-many relationships, you can add where statements to your pivot table using the `wherePivot` method.
+
+```php
+class Developer extends Model
+{
+     // Get all clients related to this developer
+     public function clients()
+     {
+          return $this->belongsToMany(Clients::class);
+     }
+
+     // Get only local clients
+     public function localClients()
+     {
+          return $this->belongsToMany(Clients::class)
+               ->wherePivot('is_local', true);
+     }
+}
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1582904416457269248)
 
 ### Conditional relationships
 
@@ -105,7 +130,7 @@ You can assign a default model in `belongsTo` relationship, to avoid fatal error
 ```php
 public function user()
 {
-    return $this->belongsTo('App\User')->withDefault();
+    return $this->belongsTo(User::class)->withDefault();
 }
 ```
 
@@ -126,7 +151,7 @@ $post->comments()->saveMany([
 In Laravel you can Eager Load multiple levels in one statement, in this example we not only load the author relation but also the country relation on the author model.
 
 ```php
-$users = App\Book::with('author.country')->get();
+$users = Book::with('author.country')->get();
 ```
 
 ### Eager Loading with Exact Columns
@@ -134,13 +159,13 @@ $users = App\Book::with('author.country')->get();
 You can do Laravel Eager Loading and specify the exact columns you want to get from the relationship.
 
 ```php
-$users = App\Book::with('author:id,name')->get();
+$users = Book::with('author:id,name')->get();
 ```
 
 You can do that even in deeper, second level relationships:
 
 ```php
-$users = App\Book::with('author.country:id,name')->get();
+$users = Book::with('author.country:id,name')->get();
 ```
 
 ### Touch parent updated_at easily
@@ -249,7 +274,7 @@ Model:
 
 ```php
 public function podcasts() {
-    return $this->belongsToMany('App\Podcast')
+    return $this->belongsToMany(Podcast::class)
         ->as('subscription')
         ->withTimestamps();
 }
@@ -361,7 +386,7 @@ In addition to Eloquent's `withCount()` method to count related records, you can
 
 ```php
 // if your Book hasMany Reviews...
-$book = App\Book::first();
+$book = Book::first();
 
 $book->loadCount('reviews');
 // Then you get access to $book->reviews_count;
@@ -631,3 +656,4 @@ select * from posts where user_id = ? and (active = 1 or votes >= 100)
 ```
 
 Tip given by [@BonnickJosh](https://twitter.com/BonnickJosh/status/1494779780562096139)
+

@@ -1,11 +1,12 @@
 ## Collections
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Validation)](Validation.md) ➡️ [Next (Auth)](Auth.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Validation)](validation.md) ➡️ [Next (Auth)](auth.md)
 
 - [Use groupBy on Collections with Custom Callback Function](#use-groupby-on-collections-with-custom-callback-function)
+- [Laravel Scopes can be combined using "Higher Order" orWhere Method](#laravel-scopes-can-be-combined-using-higher-order-orwhere-method)
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
-- [Serial no. in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
+- [Serial no in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
 - [Higher order collection methods](#higher-order-collection-methods)
 - [Higher order collection message](#higher-order-collection-message)
 - [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
@@ -24,6 +25,24 @@ $users = User::all()->groupBy(function($item) {
 ```
 
 ⚠️ Notice: it is done on a `Collection` class, so performed **AFTER** the results are fetched from the database.
+
+### Laravel Scopes can be combined using "Higher Order" orWhere Method
+
+Following example from the Docs.
+
+Before:
+```php
+User::popular()->orWhere(function (Builder $query) {
+     $query->active();
+})->get()
+```
+
+After:
+```php
+User::popular()->orWhere->active()->get();
+```
+
+Tip given by [@TheLaravelDev](https://twitter.com/TheLaravelDev/status/1564608208102199298/)
 
 ### Multiple Collection Methods in a Row
 
@@ -147,3 +166,4 @@ Collection::times(7, function ($number) {
 ```
 
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1509447909602906116)
+

@@ -1,6 +1,6 @@
 ## Auth
 
-⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Collections)](Collections.md) ➡️ [Next (Mail)](Mail.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Collections)](collections.md) ➡️ [Next (Mail)](mail.md)
 
 - [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
 - [More Events on User Registration](#more-events-on-user-registration)
@@ -39,7 +39,7 @@ class EventServiceProvider extends ServiceProvider
 
 ### Did you know about Auth::once()?
 
-You can login with user only for ONE REQUEST, using method `Auth::once()`.  
+You can login with user only for ONE REQUEST, using method `Auth::once()`.
 No sessions or cookies will be utilized, which means this method may be helpful when building a stateless API.
 
 ```php
@@ -55,10 +55,14 @@ It's convenient to change the user's API Token when its password changes.
 Model:
 
 ```php
-public function setPasswordAttribute($value)
+protected function password(): Attribute
 {
-    $this->attributes['password'] = $value;
-    $this->attributes['api_token'] = Str::random(100);
+    return Attribute::make(
+            set: function ($value, $attributes) {
+                $value = $value;
+                $attributes['api_token'] = Str::random(100);
+            }
+        );
 }
 ```
 
@@ -81,3 +85,4 @@ Gate::before(function($user, $ability) {
     }
 });
 ```
+

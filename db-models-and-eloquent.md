@@ -1,8 +1,15 @@
 ## DB Models and Eloquent
 
-⬆️ [Go to main menu](README.md#laravel-tips) ➡️ [Next (Models Relations)](Models_Relations.md)
+⬆️ [Go to main menu](README.md#laravel-tips) ➡️ [Next (Models Relations)](models-relations.md)
 
-- [Reuse or clone query](#reuse-or-clone-query)
+- [Reuse or clone query()](#reuse-or-clone-query)
+- [Remember to use bindings in your raw queries](#remember-to-use-bindings-in-your-raw-queries)
+- [Small cheat-sheet for using Full-Text Search with Laravel on MySQL](#small-cheat-sheet-for-using-full-text-search-with-laravel-on-mysql)
+- [Merging eloquent collections](#merging-eloquent-collections)
+- [Perform operation without modifying updated_at field](#perform-operation-without-modifying-updated_at-field)
+- [You can write transaction-aware code](#you-can-write-transaction-aware-code)
+- [Eloquent scopes inside of other relationships](#eloquent-scopes-inside-of-other-relationships)
+- [New `rawValue()` method since Laravel 9.37](#new-rawvalue-method-since-laravel-937)
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
 - [No timestamp columns](#no-timestamp-columns)
@@ -31,7 +38,7 @@
 - [Use DB Transactions](#use-db-transactions)
 - [Update or Create](#update-or-create)
 - [Forget Cache on Save](#forget-cache-on-save)
-- [Change Format of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
+- [Change Format Of Created_at and Updated_at](#change-format-of-created_at-and-updated_at)
 - [Storing Array Type into JSON](#storing-array-type-into-json)
 - [Make a Copy of the Model](#make-a-copy-of-the-model)
 - [Reduce Memory](#reduce-memory)
@@ -48,9 +55,9 @@
 - [How to prevent “property of non-object” error](#how-to-prevent-property-of-non-object-error)
 - [Get original attributes after mutating an Eloquent record](#get-original-attributes-after-mutating-an-eloquent-record)
 - [A simple way to seed a database](#a-simple-way-to-seed-a-database)
-- [The crossJoinSub method of the query constructor](#the-crossJoinSub-method-of-the-query-constructor)
-- [Order by Pivot Fields](#order-by-pivot-fields)
+- [The crossJoinSub method of the query constructor](#the-crossjoinsub-method-of-the-query-constructor)
 - [Belongs to Many Pivot table naming](#belongs-to-many-pivot-table-naming)
+- [Order by Pivot Fields](#order-by-pivot-fields)
 - [Find a single record from a database](#find-a-single-record-from-a-database)
 - [Automatic records chunking](#automatic-records-chunking)
 - [Updating the model without dispatching events](#updating-the-model-without-dispatching-events)
@@ -66,7 +73,7 @@
 - [Order based on a related model's average or count](#order-based-on-a-related-models-average-or-count)
 - [Return transactions result](#return-transactions-result)
 - [Remove several global scopes from query](#remove-several-global-scopes-from-query)
-- [Order JSON column attribute](#order-JSON-column-attribute)
+- [Order JSON column attribute](#order-json-column-attribute)
 - [Get single column's value from the first result](#get-single-columns-value-from-the-first-result)
 - [Check if altered value changed key](#check-if-altered-value-changed-key)
 - [New way to define accessor and mutator](#new-way-to-define-accessor-and-mutator)
@@ -121,6 +128,168 @@ $active_products = $query->clone()->where('status', 1)->get(); // it will not mo
 $inactive_products = $query->clone()->where('status', 0)->get(); // so we will get inactive products from $query
 
 ```
+
+### Remember to use bindings in your raw queries
+
+You can pass an array of bindings to most raw query methods to avoid SQL injection.
+
+```php
+// This is vulnerable to SQL injection
+$fullname = request('full_name');
+User::whereRaw("CONCAT(first_name, last_name) = $fullName")->get();
+
+// Use bindings
+User::whereRaw("CONCAT(first_name, last_name) = ?", [request('full_name')])->get();
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1565806352219328513)
+
+### Small cheat-sheet for using Full-Text Search with Laravel on MySQL
+
+Migration
+```php
+Schema::create('comments', function (Blueprint $table) {
+     $table->id();
+     $table->string('title');
+     $table->text('description');
+
+     $table->fullText(['title', 'description']);
+});
+```
+
+Natural language
+
+Search for `something`
+```php
+Comment::whereFulltext(['title', 'descriptiong'], 'something')->get();
+```
+
+Natural language with Query Expansion
+
+Search for `something` and use the results to perform a larger query
+```php
+Comment::whereFulltext(['title', 'description'], 'something', ['expanded' => true])->get();
+```
+
+Boolean mode
+
+Search for `something` and exclude `else`
+```php
+Comment::whereFulltext(['title', 'description'], '+something -else', ['mode' => 'boolean'])->get();
+```
+
+Tip given by [@w3Nicolas](https://twitter.com/w3Nicolas/status/1566694849767772160/)
+
+### Merging eloquent collections
+
+The Eloquent collection's merge method uses the id to avoid duplicated models.
+
+But if you are merging collections of different Models, it can cause get you unexpected results.
+
+Use the base collection method instead.
+
+```php
+$videos = Video::all();
+$images = Image::all();
+
+// If there are videos with the same id as images they will get replaced
+// You'll end up with missing videos
+$allMedia = $videos->merge($images);
+
+// call `toBase()` in your eloquent collection to use the base merge method instead
+$allMedia = $videos->toBase()->merge($images);
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1568392184772296706)
+
+### Perform operation without modifying updated_at field
+
+If you would like to perform model operations without the model having its `updated_at` timestamp modified, you may operate on the model within a closure given to the `withoutTimestamps` method.
+
+Available from Laravel 9.31.
+
+```php
+$user = User::first();
+
+// `updated_at` is not changed...
+
+User::withoutTimestamps(
+     fn () => $user->update(['reserved_at' => now()])
+);
+```
+
+Tip given by [@LaravelEloquent](https://twitter.com/LaravelEloquent/status/1573787406528126976)
+
+### You can write transaction-aware code
+
+Using `DB::afterCommit` method you can write code that will only be executed if the transaction gets committed and discarded if the transaction is rolled back.
+
+If there is no transaction, the code will be executed right away.
+```php
+DB::transaction(function () {
+     $user = User::create([...]);
+
+     $user->teams()->create([...]);
+});
+```
+
+```php
+class User extends Model
+{
+     protected static function booted()
+     {
+          static::created(function ($user) {
+               // Will send the email only if the
+               // transaction is committed
+               DB::afterCoommit(function () use ($user) {
+                    Mail::send(new WelcomeEmail($user));
+               });
+          });
+     }
+}
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1583960872602390528)
+
+### Eloquent scopes inside of other relationships
+
+Did you know that you can use Eloquent scopes inside of defining other relationships?
+
+**app/Models/Lesson.php**:
+```php
+public function scopePublished($query)
+{
+     return $query->where('is_published', true);
+}
+```
+
+**app/Models/Course.php**:
+```php
+public function lessons(): HasMany
+{
+     return $this->hasMany(Lesson::class);
+}
+
+public function publishedLessons(): HasMany
+{
+     return $this->lessons()->published();
+}
+```
+
+### New `rawValue()` method since Laravel 9.37
+
+Laravel 9.37 has a new `rawValue()` method to get a value from a SQL expression. Here are some examples from the pull request:
+```php
+$first = TripModel::orderBy('date_at', 'ASC')
+     ->rawValue('YEAR(`date_at`)');
+$last = TripMOdel::orderBy('date_at', 'DESC')
+     ->rawValue('YEAR(`date_at`)');
+
+$fullname = UserMOdel::where('id', $id)
+     ->rawValue('CONCAT(`first_name`, " ", `last_name`)');
+```
+
+Tip given by [@LoydRG](https://twitter.com/LoydRG/status/1587689148768567298)
 
 ### Eloquent where date methods
 
@@ -598,6 +767,17 @@ Tip given by [@syofyanzuhad](https://github.com/syofyanzuhad)
 
 To change the format of `created_at` you can add a method in your model like this:
 
+Since Laravel 9:
+```php
+protected function createdAtFormatted(): Attribute
+{
+    return Attribute::make(
+        get: fn ($value, $attributes) => $attributes['created_at']->format('H:i d, M Y'),
+    );
+}
+```
+
+Laravel 8 and below:
 ```php
 public function getCreatedAtFormattedAttribute()
 {
@@ -610,6 +790,17 @@ It will return the `created_at` attribute like this: `04:19 23, Aug 2020`.
 
 And also for changing format of `updated_at` attribute, you can add this method :
 
+Since Laravel 9:
+```php
+protected function updatedAtFormatted(): Attribute
+{
+    return Attribute::make(
+        get: fn ($value, $attributes) => $attributes['updated_at']->format('H:i d, M Y'),
+    );
+}
+```
+
+Laravel 8 and below:
 ```php
 public function getUpdatedAtFormattedAttribute()
 {
@@ -1581,6 +1772,15 @@ class User extends Model
     // ...
     protected $appends = ['full_name'];
 
+    // Since Laravel 9
+    protected function full_name(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => $attributes['first_name'] . ' ' . $attributes['last_name'];),
+        );
+    }
+
+    // Laravel 8 and lower
     public function getFullNameAttribute()
     {
         return $this->attribute['first_name'] . ' ' . $this->attributes['last_name'];
@@ -1869,3 +2069,4 @@ class RatingSorter extends Sorter
 ```
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1521461317940350976)
+

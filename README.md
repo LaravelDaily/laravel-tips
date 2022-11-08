@@ -22,22 +22,21 @@ Or if you want the Chinese version:
 [中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
 
 ---
+**Update 8 November 2022**: Currently there are **341 tips** divided into 14 sections.
 
-**Update 17 October 2022**: Currently there are **314 tips** divided into 14 sections.
+## Table of contents
 
-## Table of Contents
-
-- [DB Models and Eloquent](DB_Models_and_Eloquent.md) (87 tips)
-- [Models Relations](Models_Relations.md) (34 tips)
-- [Migrations](Migrations.md) (16 tips)
-- [Views](Views.md) (17 tips)
-- [Routing](Routing.md) (32 tips)
-- [Validation](Validation.md) (21 tips)
-- [Collections](Collections.md) (8 tips)
-- [Auth](Auth.md) (5 tips)
-- [Mail](Mail.md) (6 tips)
-- [Artisan](Artisan.md) (7 tips)
-- [Factories](Factories.md) (8 tips)
-- [Log and debug](Log_and_Debug.md) (5 tips)
-- [API](Api.md) (6 tips)
-- [Other](Other.md) (62 tips)
+- [DB Models and Eloquent](db-models-and-eloquent.md) (94 tips)
+- [Models Relations](models-relations.md) (35 tips)
+- [Migrations](migrations.md) (15 tips)
+- [Views](views.md) (19 tips)
+- [Routing](routing.md) (33 tips)
+- [Validation](validation.md) (24 tips)
+- [Collections](collections.md) (9 tips)
+- [Auth](auth.md) (5 tips)
+- [Mail](mail.md) (7 tips)
+- [Artisan](artisan.md) (7 tips)
+- [Factories](factories.md) (8 tips)
+- [Log and debug](log-and-debug.md) (7 tips)
+- [API](api.md) (7 tips)
+- [Other](other.md) (71 tips)
