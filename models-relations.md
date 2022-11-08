@@ -12,7 +12,7 @@
 - [Use hasMany to create Many](#use-hasmany-to-create-many)
 - [Multi level Eager Loading](#multi-level-eager-loading)
 - [Eager Loading with Exact Columns](#eager-loading-with-exact-columns)
-- [Touch parent updated_at easily](#touch-parent-updated-at-easily)
+- [Touch parent updated_at easily](#touch-parent-updated_at-easily)
 - [Always Check if Relationship Exists](#always-check-if-relationship-exists)
 - [Use withCount() to Calculate Child Relationships Records](#use-withcount-to-calculate-child-relationships-records)
 - [Extra Filter Query on Relationships](#extra-filter-query-on-relationships)

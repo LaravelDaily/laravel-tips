@@ -8,7 +8,7 @@
 - [Does view file exist?](#does-view-file-exist)
 - [Error code Blade pages](#error-code-blade-pages)
 - [View without controllers](#view-without-controllers)
-- [Blade @auth](#blade-at-auth)
+- [Blade @auth](#blade-auth)
 - [Two-level $loop variable in Blade](#two-level-loop-variable-in-blade)
 - [Create Your Own Blade Directive](#create-your-own-blade-directive)
 - [Blade Directives: IncludeIf, IncludeWhen, IncludeFirst](#blade-directives-includeif-includewhen-includefirst)

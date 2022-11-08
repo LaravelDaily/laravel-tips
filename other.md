@@ -3,7 +3,7 @@
 ⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (API)](api.md)
 
 - [Localhost in .env](#localhost-in-env)
-- [Time value in the past/future](#time-value-in-the-past-future)
+- [Time value in the past/future](#time-value-in-the-pastfuture)
 - [Do some work after a response has been sent to the browser](#do-some-work-after-a-response-has-been-sent-to-the-browser)
 - [Redirect with URL fragment](#redirect-with-url-fragment)
 - [Use middleware to adjust incoming request](#use-middleware-to-adjust-incoming-request)
@@ -65,7 +65,7 @@
 - [Sessions has() vs exists() vs missing()](#sessions-has-vs-exists-vs-missing)
 - [Test that you are passing the correct data to a view](#test-that-you-are-passing-the-correct-data-to-a-view)
 - [Use Redis to track page views](#use-redis-to-track-page-views)
-- [to_route() helper function](#to-route-helper-function)
+- [to_route() helper function](#to_route-helper-function)
 - [Pause a long running job when queue worker shuts down](#pause-a-long-running-job-when-queue-worker-shuts-down)
 - [Freezing Time in Laravel Tests](#freezing-time-in-laravel-tests)
 - [New squish helper](#new-squish-helper)

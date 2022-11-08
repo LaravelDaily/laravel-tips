@@ -4,7 +4,7 @@
 
 - [Route group within a group](#route-group-within-a-group)
 - [Declare a resolveRouteBinding method in your Model](#declare-a-resolveroutebinding-method-in-your-model)
-- [assign withTrashed() to Route::resource() method](#assign-withtrashed-to-route-resource-method)
+- [assign withTrashed() to Route::resource() method](#assign-withtrashed-to-routeresource-method)
 - [Skip Input Normalization](#skip-input-normalization)
 - [Wildcard subdomains](#wildcard-subdomains)
 - [What's behind the routes?](#whats-behind-the-routes)

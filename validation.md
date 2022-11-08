@@ -4,7 +4,7 @@
 
 - [Image validation](#image-validation)
 - [Add Values to the Form Request After Validation](#add-values-to-the-form-request-after-validation)
-- [Access model binding in FormRequests](#access-model-binding-in-form-requests)
+- [Access model binding in FormRequests](#access-model-binding-in-formrequests)
 - [Rule which ensures the field under validation is required if another field is accepted](#rule-which-ensures-the-field-under-validation-is-required-if-another-field-is-accepted)
 - [Custom validation error messages](#custom-validation-error-messages)
 - [Validate dates with "now" or "yesterday" words](#validate-dates-with-now-or-yesterday-words)
@@ -23,7 +23,7 @@
 - [Form Requests for validation redirection](#form-requests-for-validation-redirection)
 - [Mac validation rule](#mac-validation-rule)
 - [Validate email with TLD domain required](#validate-email-with-tld-domain-required)
-- [New array validation rule required_array_keys](#new-array-validation-rule-required-array-keys)
+- [New array validation rule required_array_keys](#new-array-validation-rule-required_array_keys)
 - [Position placeholder in validation messages](#position-placeholder-in-validation-messages)
 - [Exclude validation value](#exclude-validation-value)
 

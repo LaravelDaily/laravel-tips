@@ -13,9 +13,9 @@
 - [Output SQL before running migrations](#output-sql-before-running-migrations)
 - [Anonymous Migrations](#anonymous-migrations)
 - [You can add "comment" about a column inside your migrations](#you-can-add-comment-about-a-column-inside-your-migrations)
-- [Checking For Table / Column Existence](#checking-for-table-column-existence)
+- [Checking For Table / Column Existence](#checking-for-table--column-existence)
 - [Group Columns within an After Method](#group-columns-within-an-after-method)
-- [Add the column in the database table only if it's not present & can drop it if, its present](#add-the-column-in-the-database-table-only-if-its-not-present-can-drop-it-if-its-present)
+- [Add the column in the database table only if it's not present & can drop it if, its present](#add-the-column-in-the-database-table-only-if-its-not-present--can-drop-it-if-its-present)
 - [Method to set the default value for current timestamp](#method-to-set-the-default-value-for-current-timestamp)
 
 ### Order of Migrations
