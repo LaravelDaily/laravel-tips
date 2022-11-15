@@ -11,6 +11,7 @@
 - [Higher order collection message](#higher-order-collection-message)
 - [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
 - [Static times method](#static-times-method)
+- [Collection Paginate](#collection-paginate)
 
 ### Use groupBy on Collections with Custom Callback Function
 
@@ -167,3 +168,25 @@ Collection::times(7, function ($number) {
 
 Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1509447909602906116)
 
+### Collection Paginate
+
+Since laravel 9, you can create your own paginate.
+
+```php
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+
+public static function collectionPaginate(Collection $collection, int $perPage, int $currentPage): LengthAwarePaginator
+{
+    $totalPages = ceil($collection->count() / $perPage);
+    $currentPage = min($totalPages, $currentPage);
+    $skip = ($currentPage - 1) * $perPage;
+    $take = min($collection->count(), $perPage);
+    $collection = $collection->skip($skip)
+        ->take($take)
+        ->values();
+    return new LengthAwarePaginator($collection, $totalPages, $perPage);
+}
+```
+
+Tip given by [@sajaddp](https://gist.github.com/sajaddp/870dcd345d1e456349eaf45ca118c890)
