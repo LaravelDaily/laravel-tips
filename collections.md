@@ -170,7 +170,7 @@ Tip given by [@Teacoders](https://twitter.com/Teacoders/status/15094479096029061
 
 ### Collection Paginate
 
-Since laravel 9, you can create your own paginate.
+Since laravel 5.1, you can create your own paginate.
 
 ```php
 use Illuminate\Pagination\LengthAwarePaginator;
