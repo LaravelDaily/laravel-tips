@@ -178,13 +178,20 @@ use Illuminate\Support\Collection;
 
 public static function collectionPaginate(Collection $collection, int $perPage, int $currentPage): LengthAwarePaginator
 {
+    $perPage = max($perPage, 1);
     $totalPages = ceil($collection->count() / $perPage);
-    $currentPage = min($totalPages, $currentPage);
+    $currentPage = min($totalPages, max($currentPage, 1));
+
     $skip = ($currentPage - 1) * $perPage;
     $take = min($collection->count(), $perPage);
+
     $collection = $collection->skip($skip)
         ->take($take)
         ->values();
     return new LengthAwarePaginator($collection, $totalPages, $perPage);
 }
+```
+Example:
+```php
+collectionPaginate(collect([...]), 12, 1);
 ```
