@@ -188,5 +188,3 @@ public static function collectionPaginate(Collection $collection, int $perPage, 
     return new LengthAwarePaginator($collection, $totalPages, $perPage);
 }
 ```
-
-Tip given by [@sajaddp](https://gist.github.com/sajaddp/870dcd345d1e456349eaf45ca118c890)
