@@ -30,7 +30,7 @@ Tip given by [@phillipmwaniki](https://twitter.com/phillipmwaniki/status/1445230
 
 You may conditionally include the count of a relationship in your resource response by using the whenCounted method. By doing so, the attribute is not included if the relationships' count is missing.
 ```php
-public function toArraY($request)
+public function toArray($request)
 {
      return [
           'id' => $this->id,
@@ -43,7 +43,7 @@ public function toArraY($request)
 }
 ```
 
-Tip given by [@mvpopuk)(https://twitter.com/mvpopuk/status/1570480977507504128)
+Tip given by [@mvpopuk](https://twitter.com/mvpopuk/status/1570480977507504128)
 
 ### API Return "Everything went ok"
 
