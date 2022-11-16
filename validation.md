@@ -95,6 +95,7 @@ Validator::make([
      'is_company' => 'required|boolean',
      'company_name' => 'required_if_accepted:is_company',
 ]);
+```
 
 Tip given by [@iamgurmandeep](https://twitter.com/iamgurmandeep/status/1583420332693749761)
 
