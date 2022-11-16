@@ -86,3 +86,14 @@ Gate::before(function($user, $ability) {
 });
 ```
 
+If you want to do something in your Gate when there is no user at all, you need to add a type hint for `$user` allowing it to be `null`. For example, if you have a role called Anonymous for your non-logged-in users:
+
+```php
+Gate::before(function (?User $user, $ability) {
+    if ($user === null) {
+        $role = Role::findByName('Anonymous');
+        return $role->hasPermissionTo($ability) ? true : null;
+    }
+    return $user->hasRole('Super Admin') ? true : null;
+});
+```
