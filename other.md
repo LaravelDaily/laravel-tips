@@ -258,7 +258,7 @@ $user->created_at->diffForHumans([
      'join' => ', ',
 ]);
 ```
-=> `"17 hoours, 54 minutes, 50 seconds ago"`
+=> `"17 hours, 54 minutes, 50 seconds ago"`
 
 
 ```php
