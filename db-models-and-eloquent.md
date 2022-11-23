@@ -161,7 +161,7 @@ Natural language
 
 Search for `something`
 ```php
-Comment::whereFulltext(['title', 'descriptiong'], 'something')->get();
+Comment::whereFulltext(['title', 'description'], 'something')->get();
 ```
 
 Natural language with Query Expansion
