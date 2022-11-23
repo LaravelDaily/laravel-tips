@@ -89,7 +89,7 @@ The Laravel factory has a very useful `for()` method. You can use it to create `
 public function run()
 {
     Product::factory()
-        ->count(3);
+        ->count(3)
         ->for(Category::factory()->create())
         ->create();
 }

@@ -735,7 +735,7 @@ class MigrationsTest extends TestCase
         $this->expectNotToPerformAssertions();
 
 
-       Artisan::call('migrate:fresh', ['--path' => '/database/migrations/task1']);
+        Artisan::call('migrate:fresh', ['--path' => '/database/migrations/task1']);
     }
 }
 ```
@@ -910,7 +910,7 @@ DateTime::createFromFormat('Y-m-d', '2021-10-12');
 // 2021-10-12 00:00:00.0
 DateTime::createFromFormat('!Y-m-d', '2021-10-12');
 
-2021-10-12 21:00:00.0
+// 2021-10-12 21:00:00.0
 DateTime::createFromFormat('!Y-m-d H', '2021-10-12');
 ```
 

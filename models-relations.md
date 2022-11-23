@@ -445,11 +445,12 @@ class Tournament extends Model
 
 ```php
 class TournamentsController extends Controller
-
-public function whatever_method() {
-    $tournaments = Tournament::with(['countries' => function($query) {
+{
+    public function whatever_method() {
+        $tournaments = Tournament::with(['countries' => function($query) {
             $query->orderBy('position');
         }])->latest()->get();
+    }
 }
 ```
 

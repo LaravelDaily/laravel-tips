@@ -910,7 +910,7 @@ class Category extends Model
 
     public function products()
     {
-    return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 }
 ```
@@ -1665,6 +1665,7 @@ protected function title(): Attribute
     return new Attribute(
         get: fn ($value) => strtoupper($value),
         set: fn ($value) => strtolower($value),
+    );
 }
 ```
 
@@ -2056,7 +2057,7 @@ class RatingSorter extends Sorter
         $query
             ->selectRaw('AVG(product_ratings.rating) AS avg_rating')
             ->join('product_ratings', 'products.id', '=', 'product_ratings.product_id')
-            ->groupBy('products.id');
+            ->groupBy('products.id')
             ->when(
                 $this->direction === SortDirections::Desc,
                 fn () => $query->orderByDesc('avg_rating')
