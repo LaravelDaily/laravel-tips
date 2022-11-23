@@ -282,10 +282,10 @@ Laravel 9.37 has a new `rawValue()` method to get a value from a SQL expression.
 ```php
 $first = TripModel::orderBy('date_at', 'ASC')
      ->rawValue('YEAR(`date_at`)');
-$last = TripMOdel::orderBy('date_at', 'DESC')
+$last = TripModel::orderBy('date_at', 'DESC')
      ->rawValue('YEAR(`date_at`)');
 
-$fullname = UserMOdel::where('id', $id)
+$fullname = UserModel::where('id', $id)
      ->rawValue('CONCAT(`first_name`, " ", `last_name`)');
 ```
 
@@ -543,7 +543,7 @@ Tip given by [@sachinkiranti](https://raisachin.com.np)
 
 ### Find Many and return specific columns
 
-Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specificied columns, not all columns of model:
+Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specified columns, not all columns of model:
 
 ```php
 // Will return Eloquent Model with first_name and email only
@@ -556,7 +556,7 @@ Tip given by [@tahiriqbalnajam](https://github.com/tahiriqbalnajam)
 
 ### Find by Key
 
-You can also find multiple records with `whereKey()` method which takes care of which field is exactly your primary key (`id` is the default but you may override it in Eloquent model):
+You can also find multiple records with `whereKey()` method which takes care of which field is exactly your primary key (`id` is the default, but you may override it in Eloquent model):
 
 ```php
 $users = User::whereKey([1,2,3])->get();
@@ -1674,7 +1674,7 @@ Tip given by [@Teacoders](https://twitter.com/Teacoders/status/14736978084568514
 
 In case you are going to use the same accessors and mutators in many models , You can use custom casts instead.
 
-Just create a `class` that implements `CastsAttributes` interface. The class should have two methods, the first is `get` to specify how models should be retrieved from the database and the second is `set` to specify how the the value will be stored in the database.
+Just create a `class` that implements `CastsAttributes` interface. The class should have two methods, the first is `get` to specify how models should be retrieved from the database and the second is `set` to specify how the value will be stored in the database.
 
 ```php
 <?php

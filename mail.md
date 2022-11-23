@@ -24,7 +24,7 @@ public function build()
 {
      return $this->subject('Inquiry')
           ->to('example@example.com')
-          ->markdown('email.inquery')
+          ->markdown('email.inquiry')
           ->attachData(
                $this->file,
                $this->file->getClientOriginalName(),

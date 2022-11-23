@@ -203,9 +203,9 @@ $schedule->command('reportg:generate')
          ->at('2:00');
 ```
 
-If you are repeatedly assigning the same timezone to all of your sheduled tasks, you may wish to define a `sheduleTimezone` method in you `app\Console\Kernel` class:
+If you are repeatedly assigning the same timezone to all of your schedule tasks, you may wish to define a `scheduleTimezone` method in you `app\Console\Kernel` class:
 ```php
-protected function sheduleTimezone()
+protected function scheduleTimezone()
 {
      return 'America/Chicago';
 }
@@ -228,7 +228,7 @@ public function allowed_user_can_delete_task()
      // Instead of assertDatabaseMissing to check if the model missing from the database
      $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
 
-     // use directly assertModelMIssing
+     // use directly assertModelMissing
      $this->assertModelMissing($task);
 }
 ```
@@ -523,11 +523,11 @@ protected function schedule(Schedule $schedule)
 
 If you want to search Laravel Docs for some keyword, by default it gives you only the TOP 5 results. Maybe there are more?
 
-If you want to see ALL results, you may go to the Github Laravel docs repository and search there directly. https://github.com/laravel/docs
+If you want to see ALL results, you may go to the GitHub Laravel docs repository and search there directly. https://github.com/laravel/docs
 
 ### Filter route:list
 
-New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619)
+New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619))
 
 ### Blade directive for not repeating yourself
 
@@ -694,9 +694,9 @@ We can schedule regular shell commands within Laravel scheduled command
 
 class Kernel extends ConsoleKernel
 {
-    protected function shedule(Schedule $shedule)
+    protected function schedule(Schedule $schedule)
     {
-        $shedule->exec('node /home/forge/script.js')->daily();
+        $schedule->exec('node /home/forge/script.js')->daily();
     }
 }
 ```
@@ -735,7 +735,7 @@ class MigrationsTest extends TestCase
         $this->expectNotToPerformAssertions();
 
 
-       Artisan::call('migrate:fresh', ['--path' => '/databse/migrations/task1']);
+       Artisan::call('migrate:fresh', ['--path' => '/database/migrations/task1']);
     }
 }
 ```
@@ -802,7 +802,7 @@ Tip given by [@sky_0xs](https://twitter.com/sky_0xs/status/1458179766192853001)
 
 ### Temporary download URLs
 
-You can use temporary download URLs for your cloud storage resources to prevent unwanted access. For example, when a user wants to download a file, we redirect to an s3 resource but have the URL expire in 5 seconds.
+You can use temporary download URLs for your cloud storage resources to prevent unwanted access. For example, when a user wants to download a file, we redirect to a s3 resource but have the URL expire in 5 seconds.
 
 ```php
 public function download(File $file)
@@ -818,7 +818,7 @@ Tip given by [@Philo01](https://twitter.com/Philo01/status/1458791323889197064)
 
 ### Dealing with deeply-nested arrays
 
-If you have an complex array, you can use `data_get()` helper function to retrieve a value from a nested array using "dot" notation and wildcard.
+If you have a complex array, you can use `data_get()` helper function to retrieve a value from a nested array using "dot" notation and wildcard.
 
 ```php
 $data = [
@@ -1272,7 +1272,7 @@ Route::get('redirectRoute', function() {
 
 ```
 
-This helper work in the same way as `redirect()->route('home')`, but it is more concise than a old way.
+This helper work in the same way as `redirect()->route('home')`, but it is more concise than an old way.
 
 Tip given by [@CatS0up](https://github.com/CatS0up)
 
@@ -1484,7 +1484,7 @@ class CalculateSingleConsignment implements ShouldQueue
 
     public function failed(Throwable $exception)
     {
-        // Perfom any action here when job has failed
+        // Perform any action here when job has failed
      }
 }
 ```

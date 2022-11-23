@@ -530,7 +530,7 @@ foreach(glob(dirname(__FILE__).'/web/*', GLOB_NOSORT) as $route_file){
 }
 ```
 
-Now every file inside _/routes/web/_ act as a web router file and you can organize your routes into diferent files.
+Now every file inside _/routes/web/_ act as a web router file and you can organize your routes into different files.
 
 ### Route resources grouping
 
@@ -620,11 +620,11 @@ If for some reason, your URL is having query parameters, you can retrieve the UR
 
 ```php
 // Original URL: https://www.amitmerchant.com?search=laravel&lang=en&sort=desc
-$urlWithQUeryString = $request->fullUrlWithoutQuery([
+$urlWithQueryString = $request->fullUrlWithoutQuery([
     'lang',
     'sort'
 ]);
-echo $urlWithQUeryString;
+echo $urlWithQueryString;
 // Outputs: https://www.amitmerchant.com?search=laravel
 ```
 
