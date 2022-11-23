@@ -1373,13 +1373,13 @@ User::create(['id' => 1]);
 User::create(['id' => 2);
 User::create(['id' => 3]);
 
-// Retrives the user...
+// Retrieves the user...
 $user = User::findOrFail(1);
 
 // Throws a 404 because the user doesn't exist...
 User::findOrFail(99);
 
-// Retrives all 3 users...
+// Retrieves all 3 users...
 $users = User::findOrFail([1, 2, 3]);
 
 // Throws because it is unable to find *all* of the users
@@ -1740,7 +1740,7 @@ $book = Book::whereCount('authors')
             ->orderBy('authors_count', 'DESC')
             ->having('modules_count', '>', 10)
             ->firstOr(function() {
-                // THe Sky is the Limit ...
+                // The Sky is the Limit ...
 
                 // You can perform any action here
             });
@@ -1750,7 +1750,7 @@ Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1487757487566639113/)
 
 ### Directly convert created_at date to human readable format
 
-Did you know you can directly convert created_at date to human readble format like 1 miniute ago, 1 month ago using diffForHumans() function. Laravel eloquent by default enables Carbon instance on created_at field.
+Did you know you can directly convert created_at date to human readable format like 1 minute ago, 1 month ago using diffForHumans() function. Laravel eloquent by default enables Carbon instance on created_at field.
 
 ```php
 $post = Post::whereId($id)->first();
