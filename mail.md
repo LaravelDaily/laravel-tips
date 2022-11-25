@@ -24,7 +24,7 @@ public function build()
 {
      return $this->subject('Inquiry')
           ->to('example@example.com')
-          ->markdown('email.inquery')
+          ->markdown('email.inquiry')
           ->attachData(
                $this->file,
                $this->file->getClientOriginalName(),
@@ -98,7 +98,7 @@ class InvoicePaid extends Notification
     {
         return (new MailMessage)
             ->success()
-            ->line('We've received your payment)
+            ->line('We\'ve received your payment')
             ->when($user->isOnMonthlyPaymentPlan(), function (MailMessage $message) {
                 $message->action('Save 20% by paying yearly', route('account.billing'));
             })

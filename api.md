@@ -70,7 +70,7 @@ This will only append the department if it’s already loaded in the Employee mo
 Without `whenLoaded()` there is always a query for the department
 
 ```php
-class EmplyeeResource extends JsonResource
+class EmployeeResource extends JsonResource
 {
     public function toArray($request): array
     {

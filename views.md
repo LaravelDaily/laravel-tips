@@ -198,7 +198,7 @@ This will try to load adminlte.header, if missing - will load default.header
 
 ### Use Laravel Blade-X variable binding to save even more space
 
-```php
+```blade
 // Using include, the old way
 @include("components.post", ["title" => $post->title])
 
@@ -213,7 +213,7 @@ Tip given by [@anwar_nairi](https://twitter.com/anwar_nairi/status/1442441888787
 
 ### Blade components props
 
-```php
+```blade
 // button.blade.php
 @props(['rounded' => false])
 
@@ -236,7 +236,7 @@ Tip given by [@godismyjudge95](https://twitter.com/godismyjudge95/status/1448825
 
 ### Blade Autocomplete typehint
 
-```php
+```blade
 @php
     /* @var App\Models\User $user */
 @endphp
@@ -253,7 +253,7 @@ Tip given by [@freekmurze](https://twitter.com/freekmurze/status/145546666392774
 
 Did you know that if you pass colon (:) before the component parameter, you can directly pass variables without print statement `{{ }}`?
 
-```php
+```blade
 <x-navbar title="{{ $title }}"/>
 
 // you can do instead
@@ -376,7 +376,7 @@ In Laravel 9, you'll be able to use the cool new "checked" Blade directive.
 
 This is going to be a nice addition that we can use to clean up our Blade views a little bit
 
-```php
+```blade
 // Before Laravel 9:
 <input type="radio" name="active" value="1" {{ old('active', $user->active) ? 'checked' : '' }}/>
 <input type="radio" name="active" value="0" {{ old('active', $user->active) ? '' : 'checked' }}/>
@@ -394,7 +394,7 @@ In Laravel 9, you'll be able to use the cool new "selected" Blade directive for 
 
 This is going to be a nice addition that we can use to clean up our Blade views a little bit
 
-```php
+```blade
 // Before Laravel 9:
 <select name="country">
     <option value="India" {{ old('country') ?? $country == 'India' ? 'selected' : '' }}>India</option>

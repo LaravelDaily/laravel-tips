@@ -282,10 +282,10 @@ Laravel 9.37 has a new `rawValue()` method to get a value from a SQL expression.
 ```php
 $first = TripModel::orderBy('date_at', 'ASC')
      ->rawValue('YEAR(`date_at`)');
-$last = TripMOdel::orderBy('date_at', 'DESC')
+$last = TripModel::orderBy('date_at', 'DESC')
      ->rawValue('YEAR(`date_at`)');
 
-$fullname = UserMOdel::where('id', $id)
+$fullname = UserModel::where('id', $id)
      ->rawValue('CONCAT(`first_name`, " ", `last_name`)');
 ```
 
@@ -543,7 +543,7 @@ Tip given by [@sachinkiranti](https://raisachin.com.np)
 
 ### Find Many and return specific columns
 
-Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specificied columns, not all columns of model:
+Eloquent method `find()` may accept multiple parameters, and then it returns a Collection of all records found with specified columns, not all columns of model:
 
 ```php
 // Will return Eloquent Model with first_name and email only
@@ -556,7 +556,7 @@ Tip given by [@tahiriqbalnajam](https://github.com/tahiriqbalnajam)
 
 ### Find by Key
 
-You can also find multiple records with `whereKey()` method which takes care of which field is exactly your primary key (`id` is the default but you may override it in Eloquent model):
+You can also find multiple records with `whereKey()` method which takes care of which field is exactly your primary key (`id` is the default, but you may override it in Eloquent model):
 
 ```php
 $users = User::whereKey([1,2,3])->get();
@@ -910,7 +910,7 @@ class Category extends Model
 
     public function products()
     {
-    return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 }
 ```
@@ -1373,13 +1373,13 @@ User::create(['id' => 1]);
 User::create(['id' => 2);
 User::create(['id' => 3]);
 
-// Retrives the user...
+// Retrieves the user...
 $user = User::findOrFail(1);
 
 // Throws a 404 because the user doesn't exist...
 User::findOrFail(99);
 
-// Retrives all 3 users...
+// Retrieves all 3 users...
 $users = User::findOrFail([1, 2, 3]);
 
 // Throws because it is unable to find *all* of the users
@@ -1665,6 +1665,7 @@ protected function title(): Attribute
     return new Attribute(
         get: fn ($value) => strtoupper($value),
         set: fn ($value) => strtolower($value),
+    );
 }
 ```
 
@@ -1674,7 +1675,7 @@ Tip given by [@Teacoders](https://twitter.com/Teacoders/status/14736978084568514
 
 In case you are going to use the same accessors and mutators in many models , You can use custom casts instead.
 
-Just create a `class` that implements `CastsAttributes` interface. The class should have two methods, the first is `get` to specify how models should be retrieved from the database and the second is `set` to specify how the the value will be stored in the database.
+Just create a `class` that implements `CastsAttributes` interface. The class should have two methods, the first is `get` to specify how models should be retrieved from the database and the second is `set` to specify how the value will be stored in the database.
 
 ```php
 <?php
@@ -1740,7 +1741,7 @@ $book = Book::whereCount('authors')
             ->orderBy('authors_count', 'DESC')
             ->having('modules_count', '>', 10)
             ->firstOr(function() {
-                // THe Sky is the Limit ...
+                // The Sky is the Limit ...
 
                 // You can perform any action here
             });
@@ -1750,7 +1751,7 @@ Tip given by [@bhaidar](https://twitter.com/bhaidar/status/1487757487566639113/)
 
 ### Directly convert created_at date to human readable format
 
-Did you know you can directly convert created_at date to human readble format like 1 miniute ago, 1 month ago using diffForHumans() function. Laravel eloquent by default enables Carbon instance on created_at field.
+Did you know you can directly convert created_at date to human readable format like 1 minute ago, 1 month ago using diffForHumans() function. Laravel eloquent by default enables Carbon instance on created_at field.
 
 ```php
 $post = Post::whereId($id)->first();
@@ -2056,7 +2057,7 @@ class RatingSorter extends Sorter
         $query
             ->selectRaw('AVG(product_ratings.rating) AS avg_rating')
             ->join('product_ratings', 'products.id', '=', 'product_ratings.product_id')
-            ->groupBy('products.id');
+            ->groupBy('products.id')
             ->when(
                 $this->direction === SortDirections::Desc,
                 fn () => $query->orderByDesc('avg_rating')
