@@ -9,6 +9,7 @@
 - [Get Bearer Token from Authorization header](#get-bearer-token-from-authorization-header)
 - [Sorting Your API Results](#sorting-your-api-results)
 - [Customize Exception Handler For API](#customize-exception-handler-for-api)
+- [Force JSON Response For API Requests](#force-json-response-for-api-requests)
 
 ### API Resources: With or Without "data"?
 
@@ -145,6 +146,7 @@ Route::get('dogs', function (Request $request) {
     return $query->paginate(20);
 });
 ```
+---
 
 ### Customize Exception Handler For API
 
@@ -207,4 +209,42 @@ There's a method `register()` in `App\Exceptions` class:
         });
     }
 ```
+
+Tip given by [ferasbbm](https://github.com/ferasbbm)
+
+---
+
+### Force JSON Response For API Requests
+
+If you have built an API and it encounters an error when the request does not contain "Accept: application/JSON " HTTP Header then the error will be returned as HTML or redirect response on API routes, so for avoid it we can force all API responses to JSON.
+
+The first step is creating middleware by running this command:
+
+```console
+php artisan make:middleware ForceJsonResponse
+```
+
+Write this code on the handle function in `App/Http/Middleware/ForceJsonResponse.php` file:
+
+```php
+public function handle($request, Closure $next)
+{
+    $request->headers->set('Accept', 'application/json');
+    return $next($request);
+}
+```
+
+Second, register the created middleware in app/Http/Kernel.php file:
+
+```php
+protected $middlewareGroups = [
+        
+        'api' => [
+            \App\Http\Middleware\ForceJsonResponse::class,
+        ],
+    ];
+```
+
+Tip given by [ferasbbm](https://github.com/ferasbbm)
+
 
