@@ -237,12 +237,11 @@ public function handle($request, Closure $next)
 Second, register the created middleware in app/Http/Kernel.php file:
 
 ```php
-protected $middlewareGroups = [
-        
-        'api' => [
-            \App\Http\Middleware\ForceJsonResponse::class,
-        ],
-    ];
+protected $middlewareGroups = [        
+    'api' => [
+        \App\Http\Middleware\ForceJsonResponse::class,
+    ],
+];
 ```
 
 Tip given by [ferasbbm](https://github.com/ferasbbm)
