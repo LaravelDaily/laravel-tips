@@ -22,7 +22,7 @@ Or if you want the Chinese version:
 [中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
 
 ---
-**Update 8 November 2022**: Currently there are **341 tips** divided into 14 sections.
+**Update 26 November 2022**: Currently there are **342 tips** divided into 14 sections.
 
 ## Table of contents
 
