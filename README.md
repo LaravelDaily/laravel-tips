@@ -38,5 +38,5 @@ Or if you want the Chinese version:
 - [Artisan](artisan.md) (7 tips)
 - [Factories](factories.md) (8 tips)
 - [Log and debug](log-and-debug.md) (7 tips)
-- [API](api.md) (7 tips)
+- [API](api.md) (8 tips)
 - [Other](other.md) (71 tips)
