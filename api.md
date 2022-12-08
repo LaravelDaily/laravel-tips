@@ -11,6 +11,8 @@
 - [Customize Exception Handler For API](#customize-exception-handler-for-api)
 - [Force JSON Response For API Requests](#force-json-response-for-api-requests)
 - [API Versioning](#api-versioning)
+- [Best Practices For API](#best-practices-for-api)
+    - [Use Response Class](#use-response-class)
 
 ### API Resources: With or Without "data"?
 
@@ -351,3 +353,35 @@ routes
 ```
 
 Tip given by [Feras Elsharif](https://github.com/ferasbbm)
+
+---
+
+### Best Practices For API
+
+#### Use Response Class
+A Response instance inherits from the `Symfony\Component\HttpFoundation\Response` class, which provides a variety of methods for building HTTP responses like: 2xx,4xx,5xx as aliases,so its make your code more readable and cleaner.
+See the following examples:
+
+```php
+use Symfony\Component\HttpFoundation\Response;
+.
+.
+.
+
+/* 
+* Instead of this
+ return response()->json(['data'], 404)
+ */
+ return response()->json(['data'], Response::HTTP_NOT_FOUND)
+
+//------------------------------------
+
+/* 
+* Instead of this
+ return response()->json(['data'], 201)
+ */
+ return response()->json(['data'], Response::HTTP_CREATED)
+```
+
+Tip given by [Feras Elsharif](https://github.com/ferasbbm)
+
