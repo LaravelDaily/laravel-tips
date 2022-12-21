@@ -116,7 +116,7 @@ Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473262634405
 
 ### Discover all events fired in one request
 
-If you want to implement a new listener to especific event but you dont know what is your name, u can log all events fired during the request.
+If you want to implement a new listener to a specific event but you don't know its name, you can log all events fired during the request.
 
 You can use the `\Illuminate\Support\Facades\Event::listen()` method on `boot()` method of `app/Providers/EventServiceProvider.php` to catch all events fired.
 
