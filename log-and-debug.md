@@ -120,7 +120,8 @@ If you want to implement a new listener to a specific event but you don't know i
 
 You can use the `\Illuminate\Support\Facades\Event::listen()` method on `boot()` method of `app/Providers/EventServiceProvider.php` to catch all events fired.
 
-> Important: Do not use the Log::* methods to not make a infinite loop (or skip all Log::* events)
+**Important:** If you use the `Log` facade within this event listener then you will need to exclude events named `Illuminate\Log\Events\MessageLogged` to avoid an infinite loop. 
+(Example: `if ($event == 'Illuminate\\Log\\Events\\MessageLogged') return;`)
 
 ```php
 public function boot()
