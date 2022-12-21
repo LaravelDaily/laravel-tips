@@ -9,6 +9,7 @@
 - [Log with context](#log-with-context)
 - [Quickly output an Eloquent query in its SQL form](#quickly-output-an-eloquent-query-in-its-sql-form)
 - [Log all the database queries during development](#log-all-the-database-queries-during-development)
+- [Discover all events fired in one request](#discover-all-events-fired-in-one-request)
 
 ### Logging with parameters
 
@@ -113,3 +114,32 @@ public function boot()
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1473262634405449730)
 
+### Discover all events fired in one request
+
+If you want to implement a new listener to a specific event but you don't know its name, you can log all events fired during the request.
+
+You can use the `\Illuminate\Support\Facades\Event::listen()` method on `boot()` method of `app/Providers/EventServiceProvider.php` to catch all events fired.
+
+**Important:** If you use the `Log` facade within this event listener then you will need to exclude events named `Illuminate\Log\Events\MessageLogged` to avoid an infinite loop. 
+(Example: `if ($event == 'Illuminate\\Log\\Events\\MessageLogged') return;`)
+
+```php
+// Include Event...
+use Illuminate\Support\Facades\Event;
+
+// In your EventServiceProvider class...
+public function boot()
+{
+    parent::boot();
+
+    Event::listen('*', function ($event, array $data) {
+        // Log the event class
+        error_log($event);
+
+        // Log the event data delegated to listener parameters
+        error_log(json_encode($data, JSON_PRETTY_PRINT));
+    });
+}
+```
+
+Tip given by [@MuriloChianfa](https://github.com/MuriloChianfa)
