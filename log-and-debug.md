@@ -124,6 +124,10 @@ You can use the `\Illuminate\Support\Facades\Event::listen()` method on `boot()`
 (Example: `if ($event == 'Illuminate\\Log\\Events\\MessageLogged') return;`)
 
 ```php
+// Include Event...
+use Illuminate\Support\Facades\Event;
+
+// In your EventServiceProvider class...
 public function boot()
 {
     parent::boot();
