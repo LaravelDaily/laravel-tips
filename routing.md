@@ -675,3 +675,40 @@ Route::controller(UsersController::class)->group(function () {
 
 Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1514943541612527616)
 
+### Controller groups with name route and url 
+```php
+
+// Before
+Route::get('posts/index', [PostController::class, 'index'])->name('post.index');
+Route::get('posts/create', [PostController::class, 'create'])->name('post.create');
+Route::get('posts/edit/{id}', [PostController::class, 'edit'])->name('post.edit');
+
+Route::post('posts/store', [PostController::class, 'store'])->name('post.store');
+Route::post('posts/update/{id}', [PostController::class, 'update'])->name('post.update');
+Route::post('posts/destroy/{id}', [PostController::class, 'destroy'])->name('post.destroy');
+
+
+// Post
+  Route::controller(PostController::class)->group(function () {
+    // prefix (for url)
+    Route::prefix('posts')->group(function () {
+    	// prefix (for route)
+        Route::name('post.')->group(function () {
+          	// url : https://yourapp.com/posts/index
+            Route::get('index', 'index')->name('index'); // route('post.index')
+          	// url : https://yourapp.com/posts/index
+            Route::get('create', 'create')->name('create'); // route('post.index')
+            // url : https://yourapp.com/posts/edit
+            Route::get('edit/{id}', 'edit')->name('edit'); // route('post.edit' , ['id' => $id])
+          	// url : https://yourapp.com/posts/store
+            Route::post('store', 'store')->name('store'); // route('post.store')
+            // url : https://yourapp.com/posts/update
+            Route::post('update/{id}', 'update')->name('update'); // route('post.update', ['id' => $id])
+            // url : https://yourapp.com/posts/destroy
+            Route::post('destroy/{id}', 'destroy')->name('destroy'); // route('post.destroy', ['id' => $id])
+
+        });
+    });
+});
+```
+Tip given by [@bdj-razik](https://www.linkedin.com/in/bdj-razik)
