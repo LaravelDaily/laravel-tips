@@ -3,6 +3,7 @@
 ⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Collections)](collections.md) ➡️ [Next (Mail)](mail.md)
 
 - [Check Multiple Permissions at Once](#check-multiple-permissions-at-once)
+- [Authenticate users with more options](#authenticate-users-with-more-options)
 - [More Events on User Registration](#more-events-on-user-registration)
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
 - [Change API Token on users password update](#change-api-token-on-users-password-update)
@@ -19,6 +20,24 @@ In addition to `@can` Blade directive, did you know you can check multiple permi
     // The current user can create a post
 @endcanany
 ```
+
+### Authenticate users with more options
+
+If you only want to authenticate users that are also "activated", for example, it's as simple as passing an extra argument to `Auth::attempt()`.
+
+No need for complex middleware or global scopes.
+
+```php
+Auth::attempt(
+    [
+        ...$request->only('email', 'password'),
+        fn ($query) => $query->whereNotNull('activated_at')
+    ],
+    $this->boolean('remember')
+);
+```
+
+Tip given by [@LukeDowning19](https://twitter.com/LukeDowning19)
 
 ### More Events on User Registration
 
@@ -97,3 +116,4 @@ Gate::before(function (?User $user, $ability) {
     return $user->hasRole('Super Admin') ? true : null;
 });
 ```
+

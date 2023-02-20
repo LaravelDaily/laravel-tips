@@ -12,6 +12,7 @@
 - [Schedule Laravel job based on time zone](#schedule-laravel-job-based-on-time-zone)
 - [Use assertModelMissing instead assertDatabaseMissing](#use-assertmodelmissing-instead-assertdatabasemissing)
 - [Various options to format diffForHumans()](#various-options-to-format-diffforhumans)
+- [Create custom disks at runtime](#create-custom-disks-at-runtime)
 - [When (NOT) to run "composer update"](#when-not-to-run-composer-update)
 - [Composer: Check for Newer Versions](#composer-check-for-newer-versions)
 - [Auto-Capitalize Translations](#auto-capitalize-translations)
@@ -270,6 +271,22 @@ $user->created_at->diffForHumans([
 ```
 => `"17h, 54m, 50s ago"`
 
+### Create custom disks at runtime
+
+Did you know that you can create custom disks at runtime without the need to have the config in your config/filesystems file?
+
+This can be handy to manage files in custom paths without the need of adding them to the config.
+
+```php
+$avatarDisk = Storage::build([
+    'driver' => 'local',
+    'root' => storage_path('app/avatars'),
+]);
+$avatarDisk->put('user_avatar.jpg', $image);
+```
+
+Tip given by [@wendell_adriel](https://twitter.com/wendell_adriel/)
+
 ### When (NOT) to run "composer update"
 
 Not so much about Laravel, but... Never run `composer update` on production live server, it's slow and will "break" repository. Always run `composer update` locally on your computer, commit new `composer.lock` to the repository, and run `composer install` on the live server.
@@ -527,7 +544,7 @@ If you want to see ALL results, you may go to the GitHub Laravel docs repository
 
 ### Filter route:list
 
-New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619))
+New in Laravel 8.34: `php artisan route:list` gets additional flag `--except-path`, so you would filter out the routes you don't want to see. [See original PR](https://github.com/laravel/framework/pull/36619)
 
 ### Blade directive for not repeating yourself
 
@@ -735,7 +752,7 @@ class MigrationsTest extends TestCase
         $this->expectNotToPerformAssertions();
 
 
-        Artisan::call('migrate:fresh', ['--path' => '/database/migrations/task1']);
+       Artisan::call('migrate:fresh', ['--path' => '/database/migrations/task1']);
     }
 }
 ```

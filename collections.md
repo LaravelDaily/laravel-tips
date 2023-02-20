@@ -7,7 +7,6 @@
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
 - [Serial no in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
-- [Higher order collection methods](#higher-order-collection-methods)
 - [Higher order collection message](#higher-order-collection-message)
 - [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
 - [Static times method](#static-times-method)
@@ -89,27 +88,6 @@ We can use foreach collection items index as serial no (SL) in pagination.
 ```
 
 it will solve the issue of next pages(?page=2&...) index count from continue.
-
-### Higher order collection methods
-
-Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax. This example calculates the
-price per group of products on an offer.
-
-```php
-$offer = [
-        'name'  => 'offer1',
-        'lines' => [
-            ['group' => 1, 'price' => 10],
-            ['group' => 1, 'price' => 20],
-            ['group' => 2, 'price' => 30],
-            ['group' => 2, 'price' => 40],
-            ['group' => 3, 'price' => 50],
-            ['group' => 3, 'price' => 60]
-        ]
-];
-
-$totalPerGroup = collect($offer['lines'])->groupBy('group')->map(fn($group) => $group->sum('price'));
-```
 
 ### Higher order collection message
 

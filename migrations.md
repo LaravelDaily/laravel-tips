@@ -297,7 +297,7 @@ Schema::create('posts', function (Blueprint $table) {
     $table->id();
     $table->string('title');
     $table->timestamp('added_at')->useCurrent();
-    $table->timespamps();
+    $table->timestamps();
 });
 ```
 

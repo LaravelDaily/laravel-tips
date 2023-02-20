@@ -22,21 +22,21 @@ Or if you want the Chinese version:
 [中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
 
 ---
-**Update 20 December 2022**: Currently there are **344 tips** divided into 14 sections.
+**Update 20 February 2023**: Currently there are **352 tips** divided into 14 sections.
 
 ## Table of contents
 
-- [DB Models and Eloquent](db-models-and-eloquent.md) (94 tips)
-- [Models Relations](models-relations.md) (35 tips)
+- [DB Models and Eloquent](db-models-and-eloquent.md) (97 tips)
+- [Models Relations](models-relations.md) (36 tips)
 - [Migrations](migrations.md) (15 tips)
-- [Views](views.md) (19 tips)
+- [Views](views.md) (20 tips)
 - [Routing](routing.md) (33 tips)
 - [Validation](validation.md) (24 tips)
-- [Collections](collections.md) (9 tips)
-- [Auth](auth.md) (5 tips)
+- [Collections](collections.md) (8 tips)
+- [Auth](auth.md) (6 tips)
 - [Mail](mail.md) (7 tips)
-- [Artisan](artisan.md) (7 tips)
+- [Artisan](artisan.md) (9 tips)
 - [Factories](factories.md) (8 tips)
 - [Log and debug](log-and-debug.md) (8 tips)
 - [API](api.md) (9 tips)
-- [Other](other.md) (71 tips)
+- [Other](other.md) (72 tips)

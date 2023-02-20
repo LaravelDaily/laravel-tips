@@ -5,6 +5,7 @@
 - [$loop variable in foreach](#loop-variable-in-foreach)
 - [You can use Blade to generate more than HTML](#you-can-use-blade-to-generate-more-than-html)
 - [Short attribute syntax for Blade Components](#short-attribute-syntax-for-blade-components)
+- [Share one variable with multiple views](#share-one-variable-with-multiple-views)
 - [Does view file exist?](#does-view-file-exist)
 - [Error code Blade pages](#error-code-blade-pages)
 - [View without controllers](#view-without-controllers)
@@ -74,6 +75,29 @@ Short syntax:
 <x-profile :$userId></x-profile>
 ```
 
+### Share one variable with multiple views
+
+Have you ever needed to share one variable with multiple views in Laravel? Here's a simple solution for that.
+
+```php
+use App\Models\Post;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function boot()
+    {
+        if (Schema::hasTable('posts')) {
+            View::share('recentPosts', Post::latest()->take(3)->get());
+        }
+    }
+}
+```
+
+Tip given by [@codewithdary](https://twitter.com/codewithdary)
+
 ### Does view file exist?
 
 You can check if View file exists before actually loading it.
@@ -92,7 +116,7 @@ return view()->first(['custom.dashboard', 'dashboard'], $data);
 
 ### Error code Blade pages
 
-If you want to create a specific error page for some HTTP code, like 500 - just create a blade file with this code as filename, in `resources/views/errors/500.blade.php`, or `403.blade.php` etc, and it will automatically be loaded in case of that error code.
+If you want to create a specific error page for some HTTP code, like 503 - just create a blade file with this code as filename, in `resources/views/errors/503.blade.php`, or `403.blade.php` etc, and it will automatically be loaded in case of that error code.
 
 ### View without controllers
 

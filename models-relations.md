@@ -4,6 +4,7 @@
 
 - [OrderBy on Eloquent relationships](#orderby-on-eloquent-relationships)
 - [Add where statement to Many-to-Many relation](#add-where-statement-to-many-to-many-relation)
+- [Get the newest (or oldest) item of another relation](#get-the-newest-or-oldest-item-of-another-relation)
 - [Conditional relationships](#conditional-relationships)
 - [Raw DB Queries: havingRaw()](#raw-db-queries-havingraw)
 - [Eloquent has() deeper](#eloquent-has-deeper)
@@ -77,6 +78,28 @@ class Developer extends Model
 ```
 
 Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo/status/1582904416457269248)
+
+### Get the newest (or oldest) item of another relation
+
+Since Laravel 8.42, in an Eloquent model, you can define a relation that will get the newest (or oldest) item of another relation.
+
+```php
+/**
+ * Get the user's latest order.
+ */
+public function latestOrder()
+{
+    return $this->hasOne(Order::class)->latestOfMany();
+}
+
+/**
+ * Get the user's oldest order.
+ */
+public function oldestOrder()
+{
+    return $this->hasOne(Order::class)->oldestOfMany();
+}
+```
 
 ### Conditional relationships
 

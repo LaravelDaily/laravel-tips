@@ -3,6 +3,8 @@
 ⬆️ [Go to main menu](README.md#laravel-tips) ⬅️ [Previous (Mail)](mail.md) ➡️ [Next (Factories)](factories.md)
 
 - [Artisan command parameters](#artisan-command-parameters)
+- [Execute a Closure after command runs without errors or has any errors](#execute-a-closure-after-command-runs-without-errors-or-has-any-errors)
+- [Run artisan commands on specific environments](#run-artisan-commands-on-specific-environments)
 - [Maintenance Mode](#maintenance-mode)
 - [Artisan command help](#artisan-command-help)
 - [Exact Laravel version](#exact-laravel-version)
@@ -26,6 +28,34 @@ $name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
 // One of the listed options with default index
 $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
 ```
+
+### Execute a Closure after command runs without errors or has any errors
+
+With Laravel scheduler you can execute a Closure when a command runs without errors with the onSuccess() method and also when a command has any errors with the onFailure() method.
+
+```php
+protected function schedule(Schedule $schedule)
+{
+    $schedule->command('newsletter:send')
+        ->mondays()
+        ->onSuccess(fn () => resolve(SendNewsletterSlackNotification::class)->handle(true))
+        ->onFailure(fn () => resolve(SendNewsletterSlackNotification::class)->handle(false));
+}
+```
+
+Tip given by [@wendell_adriel](https://twitter.com/wendell_adriel)
+
+### Run artisan commands on specific environments
+
+Take control of your Laravel scheduled commands. Run them on specific environments for ultimate flexibility.
+
+```php
+$schedule->command('reports:send')
+    ->daily()
+    ->environments(['production', 'staging']);
+```
+
+Tip given by [@LaraShout](https://twitter.com/LaraShout)
 
 ### Maintenance Mode
 

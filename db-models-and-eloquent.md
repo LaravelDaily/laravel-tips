@@ -10,6 +10,9 @@
 - [You can write transaction-aware code](#you-can-write-transaction-aware-code)
 - [Eloquent scopes inside of other relationships](#eloquent-scopes-inside-of-other-relationships)
 - [New `rawValue()` method since Laravel 9.37](#new-rawvalue-method-since-laravel-937)
+- [Load data faster when the targeted value is an integer](#load-data-faster-when-the-targeted-value-is-an-integer)
+- [Load data completed between two timestamps](#load-data-completed-between-two-timestamps)
+- [Pass a raw query to order your results](#pass-a-raw-query-to-order-your-results)
 - [Eloquent where date methods](#eloquent-where-date-methods)
 - [Increments and decrements](#increments-and-decrements)
 - [No timestamp columns](#no-timestamp-columns)
@@ -241,7 +244,7 @@ class User extends Model
           static::created(function ($user) {
                // Will send the email only if the
                // transaction is committed
-               DB::afterCommit(function () use ($user) {
+               DB::afterCoommit(function () use ($user) {
                     Mail::send(new WelcomeEmail($user));
                });
           });
@@ -290,6 +293,50 @@ $fullname = UserModel::where('id', $id)
 ```
 
 Tip given by [@LoydRG](https://twitter.com/LoydRG/status/1587689148768567298)
+
+### Load data faster when the targeted value is an integer
+
+Instead of using the 𝘄𝗵𝗲𝗿𝗲𝗜𝗻() method to load a large range of data when the targeted value is an integer, use 𝘄𝗵𝗲𝗿𝗲𝗜𝗻𝘁𝗲𝗴𝗲𝗿𝗜𝗻𝗥𝗮𝘄() which is faster than 𝘄𝗵𝗲𝗿𝗲𝗜𝗻().
+
+```php
+// instead of using whereIn
+Product::whereIn('id', range(1, 50))->get();
+
+// use WhereIntegerInRaw method for faster loading
+Product::whereIntegerInRaw('id', range(1, 50))->get();
+```
+
+Tip given by [@LaraShout](https://twitter.com/LaraShout)
+
+### Load data completed between two timestamps
+
+Use 𝘄𝗵𝗲𝗿𝗲𝗕𝗲𝘁𝘄𝗲𝗲𝗻 to load records between two timestamps, you can pass the fallback value using the null coalescing operator (??).
+
+```php
+// Load tasks completed between two timestamps
+Task::whereBetween('completed_at', [
+    $request->from ?? '2023-01-01',
+    $request->to ??  today()->toDateTimeString(),
+]);
+```
+
+Tip given by [@LaraShout](https://twitter.com/LaraShout)
+
+### Pass a raw query to order your results
+
+You can pass a raw query to order your results.
+
+For example, sorting tasks by how long before the due date they were completed.
+
+```php
+// Sort tasks by the task was completed before the due date
+$tasks = Task::query()
+    ->whereNotNull('completed_at')
+    ->oorderByRaw('due_at - completed_at DESC')
+    ->get();
+```
+
+Tip given by [@cosmeescobedo](https://twitter.com/cosmeescobedo)
 
 ### Eloquent where date methods
 
@@ -1134,11 +1181,11 @@ $post->author->name ?? ''
 // But you can do it on Eloquent relationship level:
 // this relation will return an empty App\Author model if no author is attached to the post
 public function author() {
-    return $this->belongsTo('App\Author')->withDefault();
+    return $this->belongsTo(Author::class)->withDefault();
 }
 // or
 public function author() {
-    return $this->belongsTo('App\Author')->withDefault([
+    return $this->belongsTo(Author::class)->withDefault([
         'name' => 'Guest Author'
     ]);
 }
