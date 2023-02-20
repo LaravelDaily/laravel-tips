@@ -244,7 +244,7 @@ class User extends Model
           static::created(function ($user) {
                // Will send the email only if the
                // transaction is committed
-               DB::afterCoommit(function () use ($user) {
+               DB::afterCommit(function () use ($user) {
                     Mail::send(new WelcomeEmail($user));
                });
           });
