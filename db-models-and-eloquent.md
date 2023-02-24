@@ -332,7 +332,7 @@ For example, sorting tasks by how long before the due date they were completed.
 // Sort tasks by the task was completed before the due date
 $tasks = Task::query()
     ->whereNotNull('completed_at')
-    ->oorderByRaw('due_at - completed_at DESC')
+    ->orderByRaw('due_at - completed_at DESC')
     ->get();
 ```
 
@@ -1417,7 +1417,7 @@ Nice if you need to retrieve a specific set of models and don't want to have to 
 
 ```php
 User::create(['id' => 1]);
-User::create(['id' => 2);
+User::create(['id' => 2]);
 User::create(['id' => 3]);
 
 // Retrieves the user...
