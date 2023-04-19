@@ -1508,3 +1508,18 @@ class CalculateSingleConsignment implements ShouldQueue
 
 Tip given by [@pauloimon](https://github.com/pauloimon)
 
+
+### Ignore Database when Job has failed
+
+If you ever need to bypass database when a job fails, you can do one of the below things to skip database:
+- Set env `QUEUE_FAILED_DRIVER` with value `null`. Works from Laravel 8 and above.
+- Set the `failed` value to `null` in `config/queue.php` file, replacing the array (like below code). This one works for Laravel 7 and older.
+
+```php
+    'failed' => null,
+```
+
+Why you would want this? For applications where you do not need to store failed jobs and they needs to have very high TPS, skipping database can be very favourable as we are not hitting database, saving times & prevent database going down.
+
+Tip given by [@a-h-abid](https://github.com/a-h-abid)
+
