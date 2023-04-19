@@ -22,7 +22,7 @@ Or if you want the Chinese version:
 [中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
 
 ---
-**Update 20 February 2023**: Currently there are **352 tips** divided into 14 sections.
+**Update 19 April 2023**: Currently there are **353 tips** divided into 14 sections.
 
 ## Table of contents
 
@@ -39,4 +39,4 @@ Or if you want the Chinese version:
 - [Factories](factories.md) (8 tips)
 - [Log and debug](log-and-debug.md) (8 tips)
 - [API](api.md) (9 tips)
-- [Other](other.md) (72 tips)
+- [Other](other.md) (73 tips)
