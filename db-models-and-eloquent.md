@@ -99,6 +99,7 @@
 - [New scalar() method](#new-scalar-method)
 - [Select specific columns](#select-specific-columns)
 - [Chain conditional clauses to the query without writing if-else statements](#chain-conditional-clauses-to-the-query-without-writing-if-else-statements)
+- [Override Connection Attribute in Models](#override-connection-attribute-in-models)
 
 ### Reuse or clone query()
 
@@ -2118,3 +2119,37 @@ class RatingSorter extends Sorter
 
 Tip given by [@mmartin_joo](https://twitter.com/mmartin_joo/status/1521461317940350976)
 
+### Override Connection Attribute in Models
+
+Overriding the database connection attribute for individual models in Laravel can be a powerful technique. Here are a few use cases where you might find it especially handy:
+
+#### 1. Multiple Database Connections
+
+If your application uses multiple database connections (e.g., MySQL, PostgreSQL, or different instances of the same database), you may want to specify which connection should be used for a particular model. By overriding the `$connection` property, you can easily manage these connections and ensure your models are interacting with the appropriate databases.
+
+#### 2. Data Sharding
+
+In cases where you're using data sharding to distribute your data across multiple databases, you might have different models that map to different shards. Overriding the connection attribute in each model allows you to define which shard should be used without affecting other models or the default connection.
+
+#### 3. Third-Party Integration
+
+When integrating with third-party services that provide their own database, you may need to use a specific connection for a model representing data from that service. Overriding the connection attribute in that model will ensure it connects to the right database while keeping your application's default settings intact.
+
+#### 4. Multi-Tenancy Applications
+
+In a multi-tenant application, you may have separate databases for each tenant. By overriding the `$connection` property dynamically in your models, you can easily switch between tenant databases based on the current user, ensuring data isolation and proper resource management.
+
+To override the connection attribute in a model, define the `$connection` property within the class:
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class CustomModel extends Model
+{
+    protected $connection = 'your_custom_connection';
+}
+```
