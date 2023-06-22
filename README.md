@@ -18,6 +18,8 @@ Hey, like these tips? Also, check out my premium [Laravel courses](https://larav
 
 ---
 
+## Other Versions
+
 - [Chinese version](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
 - [Spanish version](https://github.com/ErickMUOSD/laravel-tips-spanish)
 - [Laravel tips in terminal](https://github.com/godruoyi/laravel-tips)
