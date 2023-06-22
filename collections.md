@@ -7,10 +7,10 @@
 - [Multiple Collection Methods in a Row](#multiple-collection-methods-in-a-row)
 - [Calculate Sum with Pagination](#calculate-sum-with-pagination)
 - [Serial no in foreach loop with pagination](#serial-no-in-foreach-loop-with-pagination)
-- [Higher order collection methods](#higher-order-collection-methods)
 - [Higher order collection message](#higher-order-collection-message)
 - [Get an existing key or insert a value if it doesn't exist and return the value](#get-an-existing-key-or-insert-a-value-if-it-doesnt-exist-and-return-the-value)
 - [Static times method](#static-times-method)
+- [Paginate from array method](#Paginate-from-array-method)
 
 ### Use groupBy on Collections with Custom Callback Function
 
@@ -90,27 +90,6 @@ We can use foreach collection items index as serial no (SL) in pagination.
 
 it will solve the issue of next pages(?page=2&...) index count from continue.
 
-### Higher order collection methods
-
-Collections have higher order methods, this are methods that can be chained , like `groupBy()` , `map()` ... Giving you a fluid syntax. This example calculates the
-price per group of products on an offer.
-
-```php
-$offer = [
-        'name'  => 'offer1',
-        'lines' => [
-            ['group' => 1, 'price' => 10],
-            ['group' => 1, 'price' => 20],
-            ['group' => 2, 'price' => 30],
-            ['group' => 2, 'price' => 40],
-            ['group' => 3, 'price' => 50],
-            ['group' => 3, 'price' => 60]
-        ]
-];
-
-$totalPerGroup = collect($offer['lines'])->groupBy('group')->map(fn($group) => $group->sum('price'));
-```
-
 ### Higher order collection message
 
 Collections also provide support for "higher order messages", which are short-cuts for performing common actions on collections.
@@ -165,5 +144,30 @@ Collection::times(7, function ($number) {
 // Output: [01-04-2022, 02-04-2022, ..., 07-04-2022]
 ```
 
-Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1509447909602906116)
+### Paginate from array method
 
+This method enables you to do all things that the official paginate do but with Arrays.
+
+```php
+use Illuminate\Pagination\LengthAwarePaginator;
+```
+
+```php
+public function paginate($perPage, $total = null, $page = null, $pageName = 'page')
+    {
+        $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+
+        return new LengthAwarePaginator(
+            $this->forPage($page, $perPage),
+            $total ?: $this->count(),
+            $perPage,
+            $page,
+            [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => $pageName,
+            ]
+        );
+    }
+```
+
+Tip given by [@Teacoders](https://twitter.com/Teacoders/status/1509447909602906116)
