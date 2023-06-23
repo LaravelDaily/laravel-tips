@@ -18,11 +18,12 @@ Hey, like these tips? Also, check out my premium [Laravel courses](https://larav
 
 ---
 
-Or if you want the Chinese version:
-[中文版本](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
+## Other Versions
 
-Or if you want the **Spanish**  version:
-[Spanish version](https://github.com/ErickMUOSD/laravel-tips-spanish)
+- [Chinese version](https://github.com/Lysice/laravel-tips-chinese/blob/master/README-zh.md)
+- [Spanish version](https://github.com/ErickMUOSD/laravel-tips-spanish)
+- [Laravel tips in terminal](https://github.com/godruoyi/laravel-tips)
+- [Laravel tips in Raycast](https://github.com/godruoyi/laravel-tips-raycast)
 
 
 ---
