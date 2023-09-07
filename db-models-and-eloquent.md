@@ -101,6 +101,7 @@
 - [Chain conditional clauses to the query without writing if-else statements](#chain-conditional-clauses-to-the-query-without-writing-if-else-statements)
 - [Override Connection Attribute in Models](#override-connection-attribute-in-models)
 - [Using Column Names in Where Clauses (Dynamic Where Clauses)](#using-column-names-in-where-clauses-dynamic-where-clauses)
+- [Using firstOrCreate()](#using-firstorcreate)
 
 ### Reuse or clone query()
 
@@ -2173,4 +2174,49 @@ class UserController extends Controller
     }
 }
 ```
+
 Tip given by [@MNurullahSaglam](https://twitter.com/MNurullahSaglam/status/1699763337586749585)
+
+### Using firstOrCreate()
+
+You can use firstOrCreate() to find the first record matching the attributes or create it if it doesn't exist.
+
+#### Example Scenario
+
+Assume that you are importing a CSV file and you want to create a category if it doesn't exist.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
+{
+    public function example(Request $request)
+    {
+        // instead of
+        $category = Category::where('name', $request->name)->first();
+        
+        if (!$category) {
+            $category = Category::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+            ]);
+        }
+        
+        // you can use
+        $category = Category::firstOrCreate([
+            'name' => $request->name,
+        ], [
+            'slug' => Str::slug($request->name),
+        ]);
+
+        return $category;
+    }
+}
+```
+
+Tip given by [@MNurullahSaglam](https://twitter.com/MNurullahSaglam/status/1699773783748366478)
