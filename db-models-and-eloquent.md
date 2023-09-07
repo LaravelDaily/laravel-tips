@@ -100,7 +100,7 @@
 - [Select specific columns](#select-specific-columns)
 - [Chain conditional clauses to the query without writing if-else statements](#chain-conditional-clauses-to-the-query-without-writing-if-else-statements)
 - [Override Connection Attribute in Models](#override-connection-attribute-in-models)
-- [Using Column Names in Where Clauses](#using-column-names-in-where-clauses)
+- [Using Column Names in Where Clauses (Dynamic Where Clauses)](#using-column-names-in-where-clauses-dynamic-where-clauses)
 
 ### Reuse or clone query()
 
