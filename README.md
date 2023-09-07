@@ -27,11 +27,11 @@ Hey, like these tips? Also, check out my premium [Laravel courses](https://larav
 
 
 ---
-**Update 24 April 2023**: Currently there are **355 tips** divided into 14 sections.
+**Update 24 April 2023**: Currently there are **356 tips** divided into 14 sections.
 
 ## Table of contents
 
-- [DB Models and Eloquent](db-models-and-eloquent.md) (99 tips)
+- [DB Models and Eloquent](db-models-and-eloquent.md) (100 tips)
 - [Models Relations](models-relations.md) (36 tips)
 - [Migrations](migrations.md) (15 tips)
 - [Views](views.md) (20 tips)
