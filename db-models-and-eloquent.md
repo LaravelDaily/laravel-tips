@@ -100,6 +100,7 @@
 - [Select specific columns](#select-specific-columns)
 - [Chain conditional clauses to the query without writing if-else statements](#chain-conditional-clauses-to-the-query-without-writing-if-else-statements)
 - [Override Connection Attribute in Models](#override-connection-attribute-in-models)
+- [Using Column Names in Where Clauses](#using-column-names-in-where-clauses)
 
 ### Reuse or clone query()
 
@@ -2153,3 +2154,23 @@ class CustomModel extends Model
     protected $connection = 'your_custom_connection';
 }
 ```
+### Using Column Names in Where Clauses (Dynamic Where Clauses)
+
+You can use column names in where clause to make dynamic where clauses. In the following example, we use ```whereName('John')``` instead of ```where('name', 'John')```.
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+
+class UserController extends Controller
+{
+    public function example()
+    {
+        return User::whereName('John')->get();
+    }
+}
+```
+Tip given by [@MNurullahSaglam](https://twitter.com/MNurullahSaglam/status/1699763337586749585)
