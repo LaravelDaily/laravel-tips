@@ -675,3 +675,49 @@ Route::controller(UsersController::class)->group(function () {
 
 Tip given by [@justsanjit](https://twitter.com/justsanjit/status/1514943541612527616)
 
+### Global strip_tags Validation
+If you want no HTML Input in your Laravel-project, you can create a middleware wich escapes HTML for any input.
+
+Create Middleware:
+```bash
+php artisan make:middleware StripTags
+```
+
+The `handle()` methode of the new created class should look like this:
+
+```php
+public function handle(Request $request, Closure $next): Response
+    {
+        $input = $request->all();
+        array_walk_recursive($input, function(&$input) {
+            $input = strip_tags($input);
+        });
+        $request->merge($input);
+        return $next($request);
+    }
+```
+After that you add the StripTags Middleware in your `Kernel.php`. For example like this:
+```php
+/**
+* The application's global HTTP middleware stack.
+*
+* These middleware are run during every request to your application.
+*
+* @var array<int, class-string|string>
+*/
+protected $middleware = [
+// \App\Http\Middleware\TrustHosts::class,
+\App\Http\Middleware\TrustProxies::class,
+\Illuminate\Http\Middleware\HandleCors::class,
+\App\Http\Middleware\PreventRequestsDuringMaintenance::class,
+\Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+\App\Http\Middleware\TrimStrings::class,
+\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+// This:
+\App\Http\Middleware\StripTags::class,
+];
+```
+
+Now on each Request all HTML will be removed. 
+
+I find this code in my own (older) project. I am sure that this is a tip from the Internet. I cant give any credits for that, cause i do not know the source anymore.
