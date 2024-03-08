@@ -17,6 +17,7 @@
 - [Group Columns within an After Method](#group-columns-within-an-after-method)
 - [Add the column in the database table only if it's not present & can drop it if, its present](#add-the-column-in-the-database-table-only-if-its-not-present--can-drop-it-if-its-present)
 - [Method to set the default value for current timestamp](#method-to-set-the-default-value-for-current-timestamp)
+- [Run a specific migration](#Run-a-specific-migration)
 
 ### Order of Migrations
 
@@ -302,4 +303,15 @@ Schema::create('posts', function (Blueprint $table) {
 ```
 
 Tip given by [@iamgurmandeep](https://twitter.com/iamgurmandeep/status/1517152425748148225)
+
+
+### Run a specific migration
+
+You can use `--path=relative-path/` to run a specific migration
+
+```php
+// Artisan command
+php artisan migrate --path=database/migrations/2024_03_07_082332_add_original_quantity_to_purchase_order_line_items_table.php
+```
+
 
