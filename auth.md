@@ -8,6 +8,7 @@
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
 - [Change API Token on users password update](#change-api-token-on-users-password-update)
 - [Override Permissions for Super Admin](#override-permissions-for-super-admin)
+- [Multi-Authentication for Different User Types](#multi-authentication-for-different-user-types)
 
 ### Check Multiple Permissions at Once
 
@@ -117,3 +118,66 @@ Gate::before(function (?User $user, $ability) {
 });
 ```
 
+### Multi-Authentication for Different User Types
+
+You can leverage Laravel's built-in "guards" and "providers" configuration to customize authentication for different user types or models.
+
+For example, if you have multiple user types like "User" and "Admin", each requiring different authentication logic, you can define separate guards and providers for them in the config/auth.php file.
+
+Here's a basic example:
+```php
+// config/auth.php
+
+'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
+    ],
+
+    'api' => [
+        'driver' => 'token',
+        'provider' => 'users',
+    ],
+
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
+],
+
+'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
+    ],
+
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Admin::class,
+    ],
+],
+```
+
+With this setup, you can authenticate regular users using the 'web' guard and the 'users' provider and authenticate administrators using the 'admin' guard and the 'admins' provider.
+
+Then, in your controllers or routes, you can specify which guard to use for authentication:
+```php
+// Regular user authentication
+if (Auth::guard('web')->attempt($credentials)) {
+    // Authentication passed
+}
+
+// Admin authentication
+if (Auth::guard('admin')->attempt($credentials)) {
+    // Authentication passed
+}
+
+// Routes:
+Route::middleware(['auth:web'])->group(function () {
+    // Routes accessible to regular users
+});
+
+Route::middleware(['auth:admin'])->group(function () {
+    // Routes accessible to administrators
+});
+```
