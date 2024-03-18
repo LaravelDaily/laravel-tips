@@ -27,7 +27,7 @@ Hey, like these tips? Also, check out my premium [Laravel courses](https://larav
 
 
 ---
-**Update 8 September 2023**: Currently there are **356 tips** divided into 14 sections.
+**Update 18 March 2024**: Currently there are **357 tips** divided into 14 sections.
 
 ## Table of contents
 
@@ -40,7 +40,7 @@ Hey, like these tips? Also, check out my premium [Laravel courses](https://larav
 - [Collections](collections.md) (8 tips)
 - [Auth](auth.md) (6 tips)
 - [Mail](mail.md) (7 tips)
-- [Artisan](artisan.md) (9 tips)
+- [Artisan](artisan.md) (10 tips)
 - [Factories](factories.md) (8 tips)
 - [Log and debug](log-and-debug.md) (8 tips)
 - [API](api.md) (9 tips)
