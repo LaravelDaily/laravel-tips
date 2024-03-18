@@ -11,7 +11,7 @@
 - [Launch Artisan command from anywhere](#launch-artisan-command-from-anywhere)
 - [Hide your custom command](#hide-your-custom-command)
 - [Skip method](#skip-method)
-- [Connect to database via CLI](#connect-to-database-cli)
+- [Connect to database via CLI](#connect-to-database-via-cli)
 
 ### Artisan command parameters
 
