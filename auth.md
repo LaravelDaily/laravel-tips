@@ -8,6 +8,7 @@
 - [Did you know about Auth::once()?](#did-you-know-about-authonce)
 - [Change API Token on users password update](#change-api-token-on-users-password-update)
 - [Override Permissions for Super Admin](#override-permissions-for-super-admin)
+- [Custom Authentication Events](#custom-authentication-events)
 
 ### Check Multiple Permissions at Once
 
@@ -117,3 +118,52 @@ Gate::before(function (?User $user, $ability) {
 });
 ```
 
+### Custom Authentication Events
+
+Laravel's authentication system fires various events during the authentication process, allowing you to hook into these events and perform additional actions or custom logic.
+
+For example, you might want to log users Login. 
+You can achieve this by listening to the `Illuminate\Auth\Events\Login` event.
+
+To implement it:
+1. Create event listener classes for the events. You can generate these classes using Artisan commands:
+```bash
+php artisan make:listener LogSuccessfulLogin
+```
+2. Write the logic to execute when the events occur:
+```php
+// app/Listeners/LogSuccessfulLogin.php
+namespace App\Listeners;
+
+use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\Events\Login;
+
+class LogSuccessfulLogin
+{
+    public function handle(Login $event)
+    {
+        // Log the successful login
+        Log::info("User with ID ".$event->user->id." successfully logged in.");
+    }
+}
+```
+3. Register your event listeners in the `EventServiceProvider`:
+```php
+// app/Providers/EventServiceProvider.php
+namespace App\Providers;
+
+use Illuminate\Auth\Events\Login;
+use App\Listeners\LogSuccessfulLogin;
+
+class EventServiceProvider extends ServiceProvider
+{
+    protected $listen = [
+        Login::class => [
+            LogSuccessfulLogin::class,
+        ]
+    ];
+
+    // Other event listeners...
+}
+```
+Now, whenever a user logs in to your application, you can get noticed by checking the Laravel log file at `/storage/logs/laravel.log`.
