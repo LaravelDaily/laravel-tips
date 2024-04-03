@@ -147,6 +147,9 @@ class LogSuccessfulLogin
     }
 }
 ```
+
+For Laravel version 10.x or older, you need to register the newly created event listener manually:
+
 3. Register your event listeners in the `EventServiceProvider`:
 ```php
 // app/Providers/EventServiceProvider.php
