@@ -113,9 +113,9 @@ public function comments()
     return $this->hasMany(Comment::class);
 }
 
-public function approved_comments()
+public function approvedComments()
 {
-    return $this->hasMany(Comment::class)->where('approved', 1);
+    return $this->comments()->where('approved', 1);
 }
 ```
 
