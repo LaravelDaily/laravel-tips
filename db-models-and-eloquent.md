@@ -124,7 +124,7 @@ $active_products = $query->where('status', 1)->get(); // this line modified the 
 $inactive_products = $query->where('status', 0)->get(); // so here we will not find any inactive products
 ```
 
-But, after getting `$active products` the `$query` will be modified. So, `$inactive_products` will not find any inactive products from `$query` and that will return blank collection every time. Cause, that will try to find inactive products from `$active_products` (`$query` will return active products only).
+But, after getting `$active_products` the `$query` will be modified. So, `$inactive_products` will not find any inactive products from `$query` and that will return blank collection every time. Cause, that will try to find inactive products from `$active_products` (`$query` will return active products only).
 
 For solve this issue, we can query multiple time by reusing this `$query` object.
 So, We need to clone this `$query` before doing any `$query` modification action.
